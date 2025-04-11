@@ -10,7 +10,6 @@ jobs:
   main_branch:
     name: Main Branch Build
     runs-on: ubuntu-latest
-    needs: debug
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
