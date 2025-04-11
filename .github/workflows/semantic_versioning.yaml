@@ -58,6 +58,15 @@ jobs:
     name: Create doc
     runs-on: ubuntu-latest
     needs: semantise_the_shit
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
