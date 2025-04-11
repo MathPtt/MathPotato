@@ -7,10 +7,6 @@ on:
       - main
 
 jobs:
-  debug:
-    name: Debug
-    runs-on: ubuntu-latest
-
   main_branch:
     name: Main Branch Build
     runs-on: ubuntu-latest
