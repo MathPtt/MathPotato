@@ -2,7 +2,7 @@ name: Fetaure Branch Build
 run-name: Feature Branch Build
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
