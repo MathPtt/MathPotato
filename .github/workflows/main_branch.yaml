@@ -1,0 +1,58 @@
+name: Main Branch Build
+run-name: Main Branch Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+  main_branch:
+    name: Main Branch Build
+    runs-on: ubuntu-latest
+    needs: debug
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checking out code
+        uses: actions/checkout@v4
+
+      - name: Seting up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      # - name: Building
+      #   run: |
+      #     cargo build
+      #
+      # - name: Testing
+      #   run: |
+      #     cargo test
+
+      - name: Documentation
+        run: |
+          cargo doc --no-deps
+
+      - name: Doc prep
+        run: |
+          echo '<meta http-equiv="refresh" content="0. url=./MathPotato/index.html">' > target/doc/index.html
+
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          publish_dir: ./target/doc

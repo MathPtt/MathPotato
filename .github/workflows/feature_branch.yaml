@@ -1,0 +1,40 @@
+name: Feature Branch Build
+run-name: Feature Branch Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "============="
+          echo "=== Debug ==="
+          echo "============="
+          echo "github ref: " ${{ vars.GITHUB_REF }}
+          echo "dotnet version: " ${{ vars.DOTNET_VERSION }}
+          echo "event name: " ${{ github.event_name }}
+
+  feature_branch:
+    name: Feature Branch Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setting up Dotnet ${{ vars.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
+
+      - run: dotnet --version
+
+      - run: dotnet restore Potato.sln
+
+      - run: dotnet build Potato.sln
+
+      - run: dotnet test Potato.sln
