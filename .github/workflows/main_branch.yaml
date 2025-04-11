@@ -30,13 +30,13 @@ jobs:
           toolchain: stable
           override: true
 
-      # - name: Building
-      #   run: |
-      #     cargo build
-      #
-      # - name: Testing
-      #   run: |
-      #     cargo test
+      - name: Building
+        run: |
+          cargo build
+
+      - name: Testing
+        run: |
+          cargo test
 
       - name: Documentation
         run: |

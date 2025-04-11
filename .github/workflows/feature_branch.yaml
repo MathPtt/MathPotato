@@ -1,40 +1,30 @@
-name: Feature Branch Build
+name: Fetaure Branch Build
 run-name: Feature Branch Build
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  debug:
-    name: Debug
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "============="
-          echo "=== Debug ==="
-          echo "============="
-          echo "github ref: " ${{ vars.GITHUB_REF }}
-          echo "dotnet version: " ${{ vars.DOTNET_VERSION }}
-          echo "event name: " ${{ github.event_name }}
-
-  feature_branch:
+  main_branch:
     name: Feature Branch Build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checking out code
+        uses: actions/checkout@v4
 
-      - name: Setting up Dotnet ${{ vars.DOTNET_VERSION }}
-        uses: actions/setup-dotnet@v4
+      - name: Seting up Rust
+        uses: actions-rs/toolchain@v1
         with:
-          dotnet-version: ${{ vars.DOTNET_VERSION }}
+          toolchain: stable
+          override: true
 
-      - run: dotnet --version
+      - name: Building
+        run: |
+          cargo build
 
-      - run: dotnet restore Potato.sln
-
-      - run: dotnet build Potato.sln
-
-      - run: dotnet test Potato.sln
+      - name: Testing
+        run: |
+          cargo test

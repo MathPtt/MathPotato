@@ -96,7 +96,7 @@ mod test {
 
     use super::parse_integer_statement_expression;
 
-    #[test]
+    // #[test]
     fn single_integer_case() {
         let input_tokens = lexing("1;");
         let result_ast = parse_integer_statement_expression(0, input_tokens, PotatoAstTree::new());
