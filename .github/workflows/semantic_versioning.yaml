@@ -21,7 +21,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -53,3 +53,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
         run: |
           npx semantic-release
+
+      - name: Building
+        run: |
+          cargo build
+
+      - name: Clean doc folder
+        run: |
+          cargo clean --doc
+
+      - name: Documentation
+        run: |
+          cargo doc --no-deps
+
+      - name: Doc prep
+        run: |
+          echo '<meta http-equiv="refresh" content="0. url=./MathPotato/index.html">' > target/doc/index.html
+
+      - name: Remove lock
+        run: |
+          rm target/doc/.lock
+
+      - name: Setup pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./target/doc
+
+      - name: Deploy
+        uses: actions/deploy-pages@v4
