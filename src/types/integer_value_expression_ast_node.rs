@@ -13,7 +13,7 @@ use uuid::Uuid;
 /// Integer var_name2 = 1 + 2;
 /// Integer var_name3 = (1 + 2 - 12) * 4;
 /// ```
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Eq, Default, Clone)]
 pub struct IntegerValueExpressionAstNode {
     pub guid: Uuid,
     pub value: i32,

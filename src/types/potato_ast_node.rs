@@ -13,13 +13,25 @@ use super::{
 /// -`IntegerStatementAstNode` - when integer value, `i32`, assignment is happening.
 /// - `IntegerValueExpressionAstNode` - represents an Integer, `i32`, value in the AST tree.
 ///
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Eq, Debug, Default, Clone)]
 pub enum PotatoAstNode {
     /// represents an integer value assignment,
     /// like `Integer asd = 1 + 2;`
     IntegerStatementAstNode(IntegerStatementAstNode),
     /// Represents an Integer, `i32`, value in the AST
     IntegerValueExpressionAstNode(IntegerValueExpressionAstNode),
+    /// represents a `null` like value
+    #[default]
+    None,
+}
+
+#[derive(PartialEq, Eq, Debug, Default, Clone)]
+pub enum PotatoAstNodeKind {
+    /// represents an integer value assignment,
+    /// like `Integer asd = 1 + 2;`
+    IntegerStatementAstNode,
+    /// Represents an Integer, `i32`, value in the AST
+    IntegerValueExpressionAstNode,
     /// represents a `null` like value
     #[default]
     None,

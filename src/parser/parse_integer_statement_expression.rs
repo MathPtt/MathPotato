@@ -90,13 +90,13 @@ mod test {
         types::{
             ast_tree::PotatoAstTree,
             integer_value_expression_ast_node::IntegerValueExpressionAstNode,
-            potato_ast_node::PotatoAstNode,
+            potato_ast_node::{PotatoAstNode, PotatoAstNodeKind},
         },
     };
 
     use super::parse_integer_statement_expression;
 
-    // #[test]
+    #[test]
     fn single_integer_case() {
         let input_tokens = lexing("1;");
         let result_ast = parse_integer_statement_expression(0, input_tokens, PotatoAstTree::new());
@@ -110,18 +110,28 @@ mod test {
             Err(error) => panic!("{:#?}", error),
             Ok(result_ast_ok) => {
                 assert_eq!(result_ast_ok.len(), 1);
-                let expected_node = expected_ast.get(node_1_guid).unwrap_or_else(|_| {
-                    panic!(
-                        "{}",
-                        format!("No elem in expected result with id: {}", node_1_guid)
+                let expected_node = expected_ast
+                    .get(
+                        node_1_guid,
+                        PotatoAstNodeKind::IntegerValueExpressionAstNode,
                     )
-                });
-                let result_node = result_ast_ok.get(node_1_guid).unwrap_or_else(|_| {
-                    panic!(
-                        "{}",
-                        format!("No elem in test result with id: {}", node_1_guid)
+                    .unwrap_or_else(|| {
+                        panic!(
+                            "{}",
+                            format!("No elem in expected result with id: {}", node_1_guid)
+                        )
+                    });
+                let result_node = result_ast_ok
+                    .get(
+                        node_1_guid,
+                        PotatoAstNodeKind::IntegerValueExpressionAstNode,
                     )
-                });
+                    .unwrap_or_else(|| {
+                        panic!(
+                            "{}",
+                            format!("No elem in test result with id: {}", node_1_guid)
+                        )
+                    });
             }
         }
     }
