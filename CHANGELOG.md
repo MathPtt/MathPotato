@@ -1,3 +1,10 @@
+## [0.0.8](https://github.com/MathPtt/MathPotato/compare/0.0.7...0.0.8) (2025-04-15)
+
+
+### Bug Fixes
+
+* manual ([#9](https://github.com/MathPtt/MathPotato/issues/9)) ([427f7d2](https://github.com/MathPtt/MathPotato/commit/427f7d2a19ba1dfeaa3b502053798c9368b53ad6))
+
 ## [0.0.7](https://github.com/MathPtt/MathPotato/compare/0.0.6...0.0.7) (2025-04-15)
 
 
