@@ -93,13 +93,18 @@ jobs:
         run: |
           rm target/doc/.lock
 
+      - name: Building Manual
+        run: |
+          cargo install mdbook
+          mdbook build docs
+
+      - name: Copy Api to Manual
+        run: |
+          mkdir -p docs/book/api
+          cp -r target/doc/* docs/book/api/
+
       - name: Setup pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifacts
-        uses: actions/upload-pages-artifact@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./target/doc
-
-      - name: Deploy
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.TOKEN_FOR_SEMANTIC_RELEASE }}
+          publish_dir: docs/book
