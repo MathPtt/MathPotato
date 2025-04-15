@@ -1,6 +1,6 @@
 use core::fmt;
 
-#[derive(PartialEq, Clone, Debug, Default)]
+#[derive(PartialEq, Clone, Eq, Debug, Default)]
 pub enum PotatoTokenTypes {
     SignOpenParentheses,
     SignCloseParentheses,

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use super::potato_ast_node::PotatoAstNode;
+use super::potato_ast_node::{PotatoAstNode, PotatoAstNodeKind};
 
 pub struct PotatoAstTree {
     last_changed: Option<Uuid>,
@@ -79,13 +79,18 @@ impl PotatoAstTree {
     pub fn get_nodes(self) -> HashMap<Uuid, PotatoAstNode> {
         self.tree.clone()
     }
-    pub fn get(self, key: Uuid) -> Result<PotatoAstNode, PotatoAstTreeError> {
+    pub fn get(self, key: Uuid, expected_type: PotatoAstNodeKind) -> Option<PotatoAstNode> {
         match self.tree.get(&key) {
-            None => Err(PotatoAstTreeError::new(format!(
-                "There is no item in tree with key: {}",
-                key
-            ))),
-            Some(r) => Ok(r.clone()),
+            None => None,
+            Some(r) => match expected_type {
+                PotatoAstNodeKind::IntegerValueExpressionAstNode => match r {
+                    PotatoAstNode::IntegerValueExpressionAstNode(_) => Some(r.clone()),
+                    PotatoAstNode::IntegerStatementAstNode(_) => None,
+                    PotatoAstNode::None => None,
+                },
+                PotatoAstNodeKind::IntegerStatementAstNode => None,
+                PotatoAstNodeKind::None => None,
+            },
         }
     }
 }
