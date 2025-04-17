@@ -1,10 +1,8 @@
 # Summary
 
 [Introduction](./introduction.md)
-
-- [Versioning](./versioning.md)
-- [Contributing](./contributing.md)
-- [API](https://mathptt.github.io/MathPotato/api/MathPotato/index.html)
+[Versioning](./versioning.md)
+[Contributing](./contributing.md)
 
 # Reference
 
