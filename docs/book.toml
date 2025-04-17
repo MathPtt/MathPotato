@@ -4,3 +4,6 @@ language = "en"
 multilingual = false
 src = "src"
 title = "MathPotato Programming Language Manual"
+
+[build]
+create-missing = true
