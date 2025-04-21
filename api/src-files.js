@@ -1,0 +1,3 @@
+var srcIndex = new Map(JSON.parse('[["MathPotato",["",[["lexer",[],["lexer.rs","mod.rs"]],["parser",[],["mod.rs","parse_integer_statement.rs","parse_integer_statement_expression.rs","parser_error.rs"]],["types",[],["ast_tree.rs","infix_expression_node.rs","integer_statement_ast_node.rs","integer_value_expression_ast_node.rs","mod.rs","patterns.rs","potato_ast_node.rs","potato_token.rs","potato_token_types.rs","variable_state_enum.rs"]]],["main.rs"]]]]'));
+createSrcSidebar();
+//{"start":36,"fragment_lengths":[418]}
