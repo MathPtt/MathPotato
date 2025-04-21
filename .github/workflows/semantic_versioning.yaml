@@ -93,14 +93,22 @@ jobs:
         run: |
           rm target/doc/.lock
 
-      - name: Building Manual
+      - name: Setting up Dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.x.x"
+
+      - name: Install DocFX
         run: |
-          cargo install mdbook
-          mdbook build docs
+          dotnet tool update -g docfx
+
+      - name: Build Manual
+        run: |
+          docfx docs/docfx.json --output docs/_site
 
       - name: Copy Api to Manual
         run: |
-          mkdir -p docs/book/api
+          mkdir -p docs/_site/api
           cp -r target/doc/* docs/book/api/
 
       - name: Setup pages
