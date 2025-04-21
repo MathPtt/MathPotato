@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["is_integer_value","is_token_semicolon","is_token_whitespace","lexing","tokenize"]};
