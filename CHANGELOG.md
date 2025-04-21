@@ -1,3 +1,10 @@
+## [0.0.14](https://github.com/MathPtt/MathPotato/compare/0.0.13...0.0.14) (2025-04-21)
+
+
+### Bug Fixes
+
+* doc publish script ([#15](https://github.com/MathPtt/MathPotato/issues/15)) ([2410493](https://github.com/MathPtt/MathPotato/commit/2410493fe5005b3d2ff4ad505d4bbb147079a200))
+
 ## [0.0.13](https://github.com/MathPtt/MathPotato/compare/0.0.12...0.0.13) (2025-04-21)
 
 
