@@ -1,3 +1,10 @@
+## [0.0.12](https://github.com/MathPtt/MathPotato/compare/0.0.11...0.0.12) (2025-04-21)
+
+
+### Bug Fixes
+
+* docfx is the new docsite ([#13](https://github.com/MathPtt/MathPotato/issues/13)) ([17692df](https://github.com/MathPtt/MathPotato/commit/17692df9c33159a644073b7b3a51ad9f8466c282))
+
 ## [0.0.11](https://github.com/MathPtt/MathPotato/compare/0.0.10...0.0.11) (2025-04-17)
 
 
