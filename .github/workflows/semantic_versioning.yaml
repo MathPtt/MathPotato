@@ -109,7 +109,7 @@ jobs:
       - name: Copy Api to Manual
         run: |
           mkdir -p docs/_site/api
-          cp -r target/doc/* docs/book/api/
+          cp -r target/doc/* docs/_site/api/
 
       - name: Setup pages
         uses: peaceiris/actions-gh-pages@v4
