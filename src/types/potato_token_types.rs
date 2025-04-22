@@ -7,7 +7,7 @@ pub enum PotatoTokenTypes {
     SignSemicolon,
     OperationAddition,
     OperationDivision,
-    KeywordInteger,
+    KeywordI32,
     SignAssignment,
     LiteralValueVariableIdentifier,
     LiteralIntegerValue,
@@ -28,7 +28,7 @@ impl fmt::Display for PotatoTokenTypes {
             }
             PotatoTokenTypes::OperationAddition => write!(f, "PotatoTokenTypes::OperationAddition"),
             PotatoTokenTypes::OperationDivision => write!(f, "PotatoTokenTypes::OperationDivision"),
-            PotatoTokenTypes::KeywordInteger => write!(f, "PotatoTokenTypes::KeywordInteger"),
+            PotatoTokenTypes::KeywordI32 => write!(f, "PotatoTokenTypes::KeywordI32"),
             PotatoTokenTypes::SignAssignment => write!(f, "PotatoTokenTypes::SignAssignment"),
             PotatoTokenTypes::LiteralValueVariableIdentifier => {
                 write!(f, "PotatoTokenTypes::LiteralValueVariableIdentifier")

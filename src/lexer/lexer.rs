@@ -1,6 +1,6 @@
 use crate::types::{
     patterns::{
-        KEYWORD_INTEGER, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
+        KEYWORD_I32, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
         SIGN_OPEN_PARENTHESES, SIGN_SEMICOLON, WHITESPACE,
     },
     potato_token::PotatoToken,
@@ -59,8 +59,8 @@ fn tokenize(s: &str) -> PotatoToken {
             token_type: PotatoTokenTypes::OperationDivision,
             literal_value: s.to_string(),
         },
-        KEYWORD_INTEGER => PotatoToken {
-            token_type: PotatoTokenTypes::KeywordInteger,
+        KEYWORD_I32 => PotatoToken {
+            token_type: PotatoTokenTypes::KeywordI32,
             literal_value: s.to_string(),
         },
         _ => {
@@ -102,11 +102,11 @@ mod tests {
             expected: Vec<PotatoToken>,
         }
         let test_data = vec![CharToTokensData {
-            input: String::from("Integer asd = 6;"),
+            input: String::from("i32 asd = 6;"),
             expected: vec![
                 PotatoToken {
-                    token_type: PotatoTokenTypes::KeywordInteger,
-                    literal_value: String::from("Integer"),
+                    token_type: PotatoTokenTypes::KeywordI32,
+                    literal_value: String::from("i32"),
                 },
                 PotatoToken {
                     token_type: PotatoTokenTypes::LiteralValueVariableIdentifier,
@@ -189,7 +189,7 @@ mod tests {
             CharToTokenData {
                 input: String::from("Integer"),
                 expected: PotatoToken {
-                    token_type: PotatoTokenTypes::KeywordInteger,
+                    token_type: PotatoTokenTypes::KeywordI32,
                     literal_value: String::from("Integer"),
                 },
             },

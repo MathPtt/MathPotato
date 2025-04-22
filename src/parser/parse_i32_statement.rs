@@ -1,10 +1,9 @@
 use crate::types::{
-    ast_tree::PotatoAstTree, integer_statement_ast_node::IntegerStatementAstNode,
-    potato_ast_node::PotatoAstNode, potato_token::PotatoToken,
-    potato_token_types::PotatoTokenTypes,
+    integer_statement_ast_node::IntegerStatementAstNode, math_potato_ast_tree::MathPotatoAstTree,
+    potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
 
-use super::parser_error::PotatoParserError;
+use super::parser_error::MathPotatoParserError;
 
 /// Parses an integer variable assignment.
 ///
@@ -27,10 +26,10 @@ use super::parser_error::PotatoParserError;
 /// * usize value represents the continuation position (after the `;` closing the variable
 ///     assignment)
 /// * IntegerVariableAssignmentNode represents the Abstract Syntax Tree
-pub fn parse_integer_statement(
+pub fn parse_i32_statement(
     i: usize,
     tokens: &[PotatoToken],
-) -> Result<(usize, PotatoAstTree), PotatoParserError> {
+) -> Result<(usize, MathPotatoAstTree), MathPotatoParserError> {
     let mut integer_statement_ast_node = IntegerStatementAstNode::default();
     // The first token must be "Integer"
     match tokens
@@ -39,10 +38,10 @@ pub fn parse_integer_statement(
         .ok_or_else(|| create_error_message(i))
     {
         Ok(token) => match token.token_type {
-            PotatoTokenTypes::KeywordInteger => {}
+            PotatoTokenTypes::KeywordI32 => {}
             _ => panic!(
                 "The keyword is invalid, it should be {}",
-                PotatoTokenTypes::KeywordInteger
+                PotatoTokenTypes::KeywordI32
             ),
         },
         Err(e) => panic!("{}", e),

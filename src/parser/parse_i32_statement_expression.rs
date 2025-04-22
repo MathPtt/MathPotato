@@ -4,7 +4,7 @@ use crate::types::{
     potato_token_types::PotatoTokenTypes,
 };
 
-use super::parser_error::PotatoParserError;
+use super::parser_error::MathPotatoParserError;
 
 /// Parses integer, i32, statement expression based on the tokens provided by the lexer.
 ///
@@ -24,11 +24,11 @@ use super::parser_error::PotatoParserError;
 /// ```
 /// Integer asd = 5;
 /// ```
-pub fn parse_integer_statement_expression(
+pub fn parse_i32_statement_expression(
     i: usize,
     tokens: Vec<PotatoToken>,
     mut ast: PotatoAstTree,
-) -> Result<PotatoAstTree, PotatoParserError> {
+) -> Result<PotatoAstTree, MathPotatoParserError> {
     match tokens.get(i).cloned().ok_or_else(|| error_message(i)) {
         Err(e) => panic!("{}", e),
 
@@ -44,7 +44,7 @@ pub fn parse_integer_statement_expression(
                         let Ok(_) = ast.add_node(integer_value_expression_node) else {
                             panic!("Adding node to AST tree has failed")
                         };
-                        match parse_integer_statement_expression(i + 1, tokens, ast) {
+                        match parse_i32_statement_expression(i + 1, tokens, ast) {
                                 Ok(r) => Ok(r),
                                 Err(err) => {
                                     panic!("Error: {:#?}", err);
@@ -52,10 +52,10 @@ pub fn parse_integer_statement_expression(
                             }
                         },
                         PotatoAstNode::IntegerValueExpressionAstNode(_) =>
-                            Err(PotatoParserError::new(
+                            Err(MathPotatoParserError::new(
                                 String::from("A value, like Integer value, cannot follow directly another value, like Integer."))),
                         PotatoAstNode::IntegerStatementAstNode(_) =>
-                            Err(PotatoParserError::new(
+                            Err(MathPotatoParserError::new(
                                 String::from("Syntax error. The `Integer` string is present between `Integer` and `;`, and this is not allowed"))),
                     },
                     PotatoTokenTypes::SignSemicolon => Ok(ast),
@@ -94,12 +94,12 @@ mod test {
         },
     };
 
-    use super::parse_integer_statement_expression;
+    use super::parse_i32_statement_expression;
 
     #[test]
     fn single_integer_case() {
         let input_tokens = lexing("1;");
-        let result_ast = parse_integer_statement_expression(0, input_tokens, PotatoAstTree::new());
+        let result_ast = parse_i32_statement_expression(0, input_tokens, PotatoAstTree::new());
         let mut expected_ast = PotatoAstTree::new();
         let node_1_guid = Uuid::new_v4();
         let node_1 = PotatoAstNode::IntegerValueExpressionAstNode(
