@@ -1,11 +1,13 @@
+use core::panic;
+
 use uuid::Uuid;
 
 use crate::{
     lexer::lexer::lexing,
     types::{
-        i32_ast_node::I32AstNode, math_potato_ast_node_types_enum::MathPotatoAstNodeType,
-        math_potato_ast_tree::MathPotatoAstTree, potato_token::PotatoToken,
-        potato_token_types::PotatoTokenTypes,
+        i32_ast_node::I32AstNode, infix_operation_ast_node::InfixOperationAstNode,
+        math_potato_ast_node_types_enum::AstNodeType, math_potato_ast_tree::MathPotatoAstTree,
+        potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
     },
 };
 
@@ -58,7 +60,9 @@ pub fn parse_i32_statement_expression(
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationAddition => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
+                            panic!(
+                                "Syntax error! The first character of an expression cannot be +!"
+                            )
                         }
                         PotatoTokenTypes::KeywordI32 => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
@@ -77,16 +81,25 @@ pub fn parse_i32_statement_expression(
                     }
                 }
                 Some(cont_node) => {
+                    // once we matched the actual token type
+                    // we are going to match on continuation node too.
+
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
                             match cont_node.1 {
-                                MathPotatoAstNodeType::I32AstNode => {
+                                AstNodeType::I32AstNode => {
                                     // this is a syntax error, since two number type cannot follow each other
                                     Err(MathPotatoParserError::new(String::from(
                                         "Syntax error! Two number type cannot follow each other!",
                                     )))
                                 }
-                                MathPotatoAstNodeType::None => {
+                                AstNodeType::InfixOperationAstNode => {
+                                    // this happens when we are right after the `+` sign in the
+                                    // following example:
+                                    // `i32 variable_name = 1 + 3;`
+                                    panic!("Deal with it later.")
+                                }
+                                AstNodeType::None => {
                                     panic!("we have a cont node, but the type is none")
                                 }
                             }
@@ -94,25 +107,54 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::SignAssignment => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
-                        PotatoTokenTypes::OperationDivision => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::OperationAddition => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::KeywordI32 => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
                         PotatoTokenTypes::SignCloseParentheses => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::SignOpenParentheses => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::SignSemicolon => Ok(ast),
+                        PotatoTokenTypes::OperationDivision => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationAddition => {
+                            match cont_node.1 {
+                                AstNodeType::I32AstNode => {
+                                    // this means we are at the `+` in the following example
+                                    // `i32 variable_name = 1 + 2`
+                                    // we are going to create a infix operation node and
+                                    // the continuation node will be a child to it
+                                    // and the new node will be the parent of the continuation node
+                                    match ast.get_i32_node(cont_node.1) {
+                                        None => panic!(
+                                            "There is no i32 continuation node with {}",
+                                            cont_node.0
+                                        ),
+                                        Some(n) => {
+                                            let inode = InfixOperationAstNode::new_with_type_and_left_child_node(
+                                                AstNodeType::InfixOperationAstNode,
+                                                cont_node.1,
+                                                cont_node.0
+                                            );
+                                        }
+                                    }
+                                }
+                                AstNodeType::InfixOperationAstNode => {
+                                    panic!("Syntax error! Infix operation node cannot follow another one.")
+                                }
+                                AstNodeType::None => {
+                                    panic!("The continuation node type is None.")
+                                }
+                            }
+
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::KeywordI32 => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
                         PotatoTokenTypes::None => todo!(),
                     }
                 }
@@ -164,8 +206,8 @@ fn single_value_then_return_single_node_in_ast() {
             assert_eq!(cont_node.value, 3);
             assert_eq!(cont_node.child_uuid, Uuid::nil());
             assert_eq!(cont_node.parent_uuid, Uuid::nil());
-            assert_eq!(cont_node.parent_type, MathPotatoAstNodeType::None);
-            assert_eq!(cont_node.child_type, MathPotatoAstNodeType::None);
+            assert_eq!(cont_node.parent_type, AstNodeType::None);
+            assert_eq!(cont_node.child_type, AstNodeType::None);
         }
     }
 }

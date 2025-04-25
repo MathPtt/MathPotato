@@ -1,19 +1,23 @@
 use uuid::Uuid;
 
-use crate::parser::parser_error::MathPotatoParserError;
+use crate::parser::parser_error::ParserError;
 
 use super::{
     i32_ast_node::I32AstNode,
     i32_ast_tree::I32AstTree,
-    math_potato_ast_node_types_enum::MathPotatoAstNodeType,
+    infix_operation_ast_node::InfixOperationAstNode,
+    infix_operation_ast_tree::InfixOperationAstTree,
+    math_potato_ast_node_types_enum::AstNodeType,
     math_potato_ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
+    math_potato_infix_operation_enum::InfixOperationType,
 };
 
 #[derive(Clone, Debug)]
 pub struct MathPotatoAstTree {
     last_changed_node_id: Uuid,
-    last_changed_node_type: MathPotatoAstNodeType,
+    last_changed_node_type: AstNodeType,
     i32_tree: I32AstTree,
+    infix_operation_tree: InfixOperationAstTree,
 }
 
 impl MathPotatoAstTree {
@@ -21,10 +25,10 @@ impl MathPotatoAstTree {
         MathPotatoAstTree {
             last_changed_node_id: Uuid::nil(),
             i32_tree: I32AstTree::new(),
-            last_changed_node_type: MathPotatoAstNodeType::None,
+            last_changed_node_type: AstNodeType::None,
         }
     }
-    pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), MathPotatoParserError> {
+    pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParserError> {
         self.last_changed_node_type = tree.last_changed_node_type;
         self.last_changed_node_id = tree.last_changed_node_id;
 
@@ -41,7 +45,7 @@ impl MathPotatoAstTree {
 
         Ok(())
     }
-    pub fn get_continuation_node_id_and_type(&self) -> Option<(Uuid, MathPotatoAstNodeType)> {
+    pub fn get_continuation_node_id_and_type(&self) -> Option<(Uuid, AstNodeType)> {
         if self.last_changed_node_id == Uuid::nil() {
             None
         } else {
@@ -55,7 +59,7 @@ impl MathPotatoAstTree {
         self.i32_tree.get_node_by_id(id)
     }
 
-    pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(), MathPotatoParserError> {
+    pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(), ParserError> {
         let uuid = Uuid::new_v4();
         self.last_changed_node_id = uuid;
         match self.i32_tree.put(uuid, node) {
@@ -65,5 +69,12 @@ impl MathPotatoAstTree {
     }
     pub fn i32_tree_len(&self) -> usize {
         self.i32_tree.len()
+    }
+
+    pub fn put_infix_node(&self, inode: InfixOperationAstNode) -> _ {
+        let key = Uuid::new_v4();
+        self.infix_operation_tree.put(key, inode);
+        self.last_changed_node_type = AstNodeType::InfixOperationAstNode;
+        self.last_changed_node_id = key;
     }
 }

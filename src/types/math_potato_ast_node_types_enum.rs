@@ -12,7 +12,8 @@
 /// type of it. The type is marked with this AstNodeType. This way the interpreter will know in
 /// which HashMap it should do a search for the child or the parent.
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub enum MathPotatoAstNodeType {
+pub enum AstNodeType {
     I32AstNode,
+    InfixOperationAstNode,
     None,
 }
