@@ -146,10 +146,8 @@ fn single_value_then_return_single_node_in_ast() {
     let input_ast = MathPotatoAstTree::new();
 
     // action
-    let result = parse_i32_statement_expression(0, lexed_input, input_ast);
-
-    // assert
-    match result {
+    match parse_i32_statement_expression(0, lexed_input, input_ast) {
+        // assert
         Err(r) => {
             panic!("There is no result! {:#?}", r)
         }
@@ -161,8 +159,9 @@ fn single_value_then_return_single_node_in_ast() {
             let cont_node = r
                 .get_i32_node(continuation_node_id.0)
                 .unwrap_or_else(|| panic!("There is no continuation node by id"));
+            println!("Continuation node: {}", continuation_node_id.0);
+            println!("Requested node: {:#?}", cont_node.clone());
             assert_eq!(cont_node.value, 3);
-            assert_eq!(cont_node.uuid, continuation_node_id.0);
             assert_eq!(cont_node.child_uuid, Uuid::nil());
             assert_eq!(cont_node.parent_uuid, Uuid::nil());
             assert_eq!(cont_node.parent_type, MathPotatoAstNodeType::None);

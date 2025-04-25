@@ -187,10 +187,10 @@ mod tests {
                 },
             },
             CharToTokenData {
-                input: String::from("Integer"),
+                input: String::from("i32"),
                 expected: PotatoToken {
                     token_type: PotatoTokenTypes::KeywordI32,
-                    literal_value: String::from("Integer"),
+                    literal_value: String::from("i32"),
                 },
             },
             CharToTokenData {

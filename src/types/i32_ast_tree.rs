@@ -44,11 +44,11 @@ impl I32AstTree {
         }
     }
 
-    pub(crate) fn get_node_by_id(&self, id: Uuid) -> Option<I32AstNode> {
+    pub fn get_node_by_id(&self, id: Uuid) -> Option<I32AstNode> {
         self.tree.get(&id).cloned()
     }
 
-    pub(crate) fn get_tree_count(&self) -> usize {
+    pub fn get_tree_count(&self) -> usize {
         self.tree.clone().len()
     }
 }
