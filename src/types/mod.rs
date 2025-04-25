@@ -1,4 +1,3 @@
-pub mod ast_tree_traits;
 pub mod i32_ast_node;
 pub mod i32_ast_tree;
 pub mod infix_expression_node;
@@ -6,6 +5,7 @@ pub mod integer_statement_ast_node;
 pub mod integer_value_expression_ast_node;
 pub mod math_potato_ast_node_types_enum;
 pub mod math_potato_ast_tree;
+pub mod math_potato_ast_tree_traits;
 pub mod patterns;
 pub mod potato_ast_node;
 pub mod potato_token;

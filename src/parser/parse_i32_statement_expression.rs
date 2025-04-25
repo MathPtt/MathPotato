@@ -1,8 +1,12 @@
-use crate::types::{
-    i32_ast_node::I32AstNode, integer_value_expression_ast_node::IntegerValueExpressionAstNode,
-    math_potato_ast_node_types_enum::MathPotatoAstNodeType,
-    math_potato_ast_tree::MathPotatoAstTree, potato_ast_node::PotatoAstNode,
-    potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
+use uuid::Uuid;
+
+use crate::{
+    lexer::lexer::lexing,
+    types::{
+        i32_ast_node::I32AstNode, math_potato_ast_node_types_enum::MathPotatoAstNodeType,
+        math_potato_ast_tree::MathPotatoAstTree, potato_token::PotatoToken,
+        potato_token_types::PotatoTokenTypes,
+    },
 };
 
 use super::parser_error::MathPotatoParserError;
@@ -34,45 +38,84 @@ pub fn parse_i32_statement_expression(
         Err(e) => panic!("{}", e),
 
         Ok(token) => {
-            let continuation_node_details = ast.get_continuation_node_id_and_type().unwrap();
-            match token.token_type {
-                PotatoTokenTypes::LiteralIntegerValue => match continuation_node_details.1 {
-                    MathPotatoAstNodeType::I32AstNode => {
-                        // this is a syntax error, since two number type cannot follow each other
-                        Err(MathPotatoParserError::new(String::from(
-                            "Syntax error! Two number type cannot follow each other!",
-                        )))
+            match ast.get_continuation_node_id_and_type() {
+                // this means that we are processing the first character!
+                None => {
+                    match token.token_type {
+                        PotatoTokenTypes::LiteralIntegerValue => {
+                            // this is the case when we right after the `=` sign and the expression
+                            // tree is empty
+                            ast.put_i32_ast_node(I32AstNode::new_with_value(parse_literal_to_i32(
+                                &token,
+                            )))
+                            .unwrap_or_else(|_| panic!("Cannot add i32 ast node to AST tree"));
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignAssignment => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationDivision => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationAddition => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::KeywordI32 => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignCloseParentheses => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignOpenParentheses => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignSemicolon => Ok(ast),
+                        PotatoTokenTypes::None => todo!(),
                     }
-                    MathPotatoAstNodeType::None => {
-                        // this is the case when we right after the `=` sign and the expression
-                        // tree is empty
-                        ast.put_i32_ast_node(I32AstNode::new_with_value(parse_literal_to_i32(
-                            &token,
-                        )));
-                        parse_i32_statement_expression(i + 1, tokens, ast)
+                }
+                Some(cont_node) => {
+                    match token.token_type {
+                        PotatoTokenTypes::LiteralIntegerValue => {
+                            match cont_node.1 {
+                                MathPotatoAstNodeType::I32AstNode => {
+                                    // this is a syntax error, since two number type cannot follow each other
+                                    Err(MathPotatoParserError::new(String::from(
+                                        "Syntax error! Two number type cannot follow each other!",
+                                    )))
+                                }
+                                MathPotatoAstNodeType::None => {
+                                    panic!("we have a cont node, but the type is none")
+                                }
+                            }
+                        }
+                        PotatoTokenTypes::SignAssignment => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationDivision => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationAddition => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::KeywordI32 => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignCloseParentheses => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignOpenParentheses => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::SignSemicolon => Ok(ast),
+                        PotatoTokenTypes::None => todo!(),
                     }
-                },
-                PotatoTokenTypes::SignAssignment => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
                 }
-                PotatoTokenTypes::OperationDivision => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
-                }
-                PotatoTokenTypes::OperationAddition => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
-                }
-                PotatoTokenTypes::KeywordI32 => parse_i32_statement_expression(i + 1, tokens, ast),
-                PotatoTokenTypes::SignCloseParentheses => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
-                }
-                PotatoTokenTypes::LiteralValueVariableIdentifier => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
-                }
-                PotatoTokenTypes::SignOpenParentheses => {
-                    parse_i32_statement_expression(i + 1, tokens, ast)
-                }
-                PotatoTokenTypes::SignSemicolon => Ok(ast),
-                PotatoTokenTypes::None => todo!(),
             }
         }
     }
@@ -91,6 +134,39 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
                 "Error while parsing literal value to i32. Error message is {}",
                 e
             );
+        }
+    }
+}
+
+#[test]
+fn single_value_then_return_single_node_in_ast() {
+    // arrange
+    let input = String::from("3;");
+    let lexed_input = lexing(&input);
+    let input_ast = MathPotatoAstTree::new();
+
+    // action
+    let result = parse_i32_statement_expression(0, lexed_input, input_ast);
+
+    // assert
+    match result {
+        Err(r) => {
+            panic!("There is no result! {:#?}", r)
+        }
+        Ok(r) => {
+            assert_eq!(r.i32_tree_len(), 1);
+            let continuation_node_id = r
+                .get_continuation_node_id_and_type()
+                .unwrap_or_else(|| panic!("There is no continuation node!"));
+            let cont_node = r
+                .get_i32_node(continuation_node_id.0)
+                .unwrap_or_else(|| panic!("There is no continuation node by id"));
+            assert_eq!(cont_node.value, 3);
+            assert_eq!(cont_node.uuid, continuation_node_id.0);
+            assert_eq!(cont_node.child_uuid, Uuid::nil());
+            assert_eq!(cont_node.parent_uuid, Uuid::nil());
+            assert_eq!(cont_node.parent_type, MathPotatoAstNodeType::None);
+            assert_eq!(cont_node.child_type, MathPotatoAstNodeType::None);
         }
     }
 }

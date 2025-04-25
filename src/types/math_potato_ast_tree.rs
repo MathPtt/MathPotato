@@ -3,8 +3,10 @@ use uuid::Uuid;
 use crate::parser::parser_error::MathPotatoParserError;
 
 use super::{
-    ast_tree_traits::TypedAstTreeGetKeys, i32_ast_node::I32AstNode, i32_ast_tree::I32AstTree,
+    i32_ast_node::I32AstNode,
+    i32_ast_tree::I32AstTree,
     math_potato_ast_node_types_enum::MathPotatoAstNodeType,
+    math_potato_ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
 };
 
 #[derive(Clone, Debug)]
@@ -53,13 +55,15 @@ impl MathPotatoAstTree {
         self.i32_tree.get_node_by_id(id)
     }
 
-    pub(crate) fn put_i32_ast_node(
-        &mut self,
-        node: I32AstNode,
-    ) -> Result<(), MathPotatoParserError> {
-        match self.i32_tree.put(Uuid::new_v4(), node) {
+    pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(), MathPotatoParserError> {
+        let uuid = Uuid::new_v4();
+        self.last_changed_node_id = uuid;
+        match self.i32_tree.put(uuid, node) {
             Ok(_) => Ok(()),
             Err(e) => Err(e),
         }
+    }
+    pub fn i32_tree_len(&self) -> usize {
+        self.i32_tree.len()
     }
 }

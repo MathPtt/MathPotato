@@ -5,8 +5,8 @@ use uuid::Uuid;
 use crate::parser::parser_error::MathPotatoParserError;
 
 use super::{
-    ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeGetSize},
     i32_ast_node::I32AstNode,
+    math_potato_ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
 };
 
 #[derive(Clone, Debug)]
@@ -25,7 +25,8 @@ impl I32AstTree {
             .into_iter()
             .filter_map(|uuid| self.tree.get(&uuid).cloned().map(|res| (uuid, res.clone())))
             .collect();
-        if res.iter().count() > 0 {
+
+        if !res.is_empty() {
             Some(res)
         } else {
             None
@@ -46,11 +47,15 @@ impl I32AstTree {
     pub(crate) fn get_node_by_id(&self, id: Uuid) -> Option<I32AstNode> {
         self.tree.get(&id).cloned()
     }
+
+    pub(crate) fn get_tree_count(&self) -> usize {
+        self.tree.clone().len()
+    }
 }
 
-impl TypedAstTreeGetSize for I32AstTree {
-    fn size(self) -> usize {
-        self.tree.iter().count()
+impl TypedAstTreeLen for I32AstTree {
+    fn len(&self) -> usize {
+        self.tree.len()
     }
 }
 
