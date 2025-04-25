@@ -3,7 +3,7 @@ use crate::types::{
     potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
 
-use super::parser_error::MathPotatoParserError;
+use super::parser_error::ParserError;
 
 /// Parses an integer variable assignment.
 ///
@@ -29,7 +29,7 @@ use super::parser_error::MathPotatoParserError;
 pub fn parse_i32_statement(
     i: usize,
     tokens: &[PotatoToken],
-) -> Result<(usize, MathPotatoAstTree), MathPotatoParserError> {
+) -> Result<(usize, MathPotatoAstTree), ParserError> {
     let mut integer_statement_ast_node = IntegerStatementAstNode::default();
     // The first token must be "Integer"
     match tokens

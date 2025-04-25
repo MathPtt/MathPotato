@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use crate::parser::parser_error::MathPotatoParserError;
+use crate::parser::parser_error::ParserError;
 
 use super::{
     i32_ast_node::I32AstNode,
@@ -35,10 +35,10 @@ impl I32AstTree {
     pub fn put_all(&mut self, l: HashMap<Uuid, I32AstNode>) {
         l.into_iter().map(|i| self.tree.insert(i.0, i.1));
     }
-    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(), MathPotatoParserError> {
+    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(), ParserError> {
         match self.tree.insert(uuid, node) {
             None => Ok(()),
-            Some(_) => Err(MathPotatoParserError::new(String::from(
+            Some(_) => Err(ParserError::new(String::from(
                 "There is an item in the HashMap with the same key.",
             ))),
         }

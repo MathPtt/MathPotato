@@ -11,7 +11,7 @@ use crate::{
     },
 };
 
-use super::parser_error::MathPotatoParserError;
+use super::parser_error::ParserError;
 
 /// Parses integer, i32, statement expression based on the tokens provided by the lexer.
 ///
@@ -35,7 +35,7 @@ pub fn parse_i32_statement_expression(
     i: usize,
     tokens: Vec<PotatoToken>,
     mut ast: MathPotatoAstTree,
-) -> Result<MathPotatoAstTree, MathPotatoParserError> {
+) -> Result<MathPotatoAstTree, ParserError> {
     match tokens.get(i).cloned().ok_or_else(|| error_message(i)) {
         Err(e) => panic!("{}", e),
 
@@ -89,7 +89,7 @@ pub fn parse_i32_statement_expression(
                             match cont_node.1 {
                                 AstNodeType::I32AstNode => {
                                     // this is a syntax error, since two number type cannot follow each other
-                                    Err(MathPotatoParserError::new(String::from(
+                                    Err(ParserError::new(String::from(
                                         "Syntax error! Two number type cannot follow each other!",
                                     )))
                                 }
@@ -136,6 +136,7 @@ pub fn parse_i32_statement_expression(
                                                 cont_node.1,
                                                 cont_node.0
                                             );
+                                            let inode_id = ast.put_infix_node(inode);
                                         }
                                     }
                                 }

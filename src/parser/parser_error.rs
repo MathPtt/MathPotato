@@ -1,9 +1,9 @@
 #[derive(Debug)]
-pub struct MathPotatoParserError {
+pub struct ParserError {
     details: String,
 }
 
-impl MathPotatoParserError {
+impl ParserError {
     pub fn new(details: String) -> Self {
         Self { details }
     }

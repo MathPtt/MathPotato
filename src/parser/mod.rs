@@ -1,4 +1,4 @@
-use parser_error::MathPotatoParserError;
+use parser_error::ParserError;
 
 use crate::types::{
     math_potato_ast_tree::MathPotatoAstTree, potato_token::PotatoToken,
@@ -9,7 +9,7 @@ pub mod parse_i32_statement;
 pub mod parse_i32_statement_expression;
 pub mod parser_error;
 
-pub fn parse(tokens: Vec<PotatoToken>) -> Result<MathPotatoAstTree, MathPotatoParserError> {
+pub fn parse(tokens: Vec<PotatoToken>) -> Result<MathPotatoAstTree, ParserError> {
     let math_potato_ast_tree = MathPotatoAstTree::new();
     for (i, t) in tokens.iter().enumerate() {
         if t.token_type == PotatoTokenTypes::KeywordI32 {
