@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use super::math_potato_ast_node_types_enum::AstNodeType;
+use super::ast_node_types_enum::AstNodeType;
 
 /// Represents an i32 value of the language.
 #[derive(Clone, Debug)]

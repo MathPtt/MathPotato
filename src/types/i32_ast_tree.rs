@@ -5,8 +5,8 @@ use uuid::Uuid;
 use crate::parser::parser_error::ParserError;
 
 use super::{
+    ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
     i32_ast_node::I32AstNode,
-    math_potato_ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
 };
 
 #[derive(Clone, Debug)]
@@ -35,9 +35,9 @@ impl I32AstTree {
     pub fn put_all(&mut self, l: HashMap<Uuid, I32AstNode>) {
         l.into_iter().map(|i| self.tree.insert(i.0, i.1));
     }
-    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(), ParserError> {
-        match self.tree.insert(uuid, node) {
-            None => Ok(()),
+    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParserError> {
+        match self.tree.insert(uuid, node.clone()) {
+            None => Ok((uuid, node)),
             Some(_) => Err(ParserError::new(String::from(
                 "There is an item in the HashMap with the same key.",
             ))),
@@ -50,6 +50,25 @@ impl I32AstTree {
 
     pub fn get_tree_count(&self) -> usize {
         self.tree.clone().len()
+    }
+
+    pub(crate) fn overwrite(
+        &mut self,
+        id: Uuid,
+        node: I32AstNode,
+    ) -> Result<(Uuid, I32AstNode), ParserError> {
+        match self.tree.get(&id) {
+            None => Err(ParserError::new(format!(
+                "There is no I32AstNode with id {}.",
+                id
+            ))),
+            Some(_) => match self.tree.insert(id, node) {
+                None => panic!(
+                    "This case should not happen as the previous operation would have caught it."
+                ),
+                Some(r) => Ok((id, r)),
+            },
+        }
     }
 }
 

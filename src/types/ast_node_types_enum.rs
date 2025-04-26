@@ -1,3 +1,5 @@
+use std::default;
+
 /// This enum represents the possible values in the language.
 ///
 /// The language manages the types in a way where all of the types have their own HashMap to be
@@ -11,9 +13,10 @@
 /// value of the variable) happens. The nodes know the Uuid value of the parent and what is the
 /// type of it. The type is marked with this AstNodeType. This way the interpreter will know in
 /// which HashMap it should do a search for the child or the parent.
-#[derive(Clone, PartialEq, Eq, Debug)]
+#[derive(Clone, Default, PartialEq, Eq, Debug)]
 pub enum AstNodeType {
     I32AstNode,
     InfixOperationAstNode,
+    #[default]
     None,
 }

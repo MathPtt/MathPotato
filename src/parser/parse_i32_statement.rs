@@ -1,5 +1,5 @@
 use crate::types::{
-    integer_statement_ast_node::IntegerStatementAstNode, math_potato_ast_tree::MathPotatoAstTree,
+    ast_tree::MathPotatoAstTree, integer_statement_ast_node::IntegerStatementAstNode,
     potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
 

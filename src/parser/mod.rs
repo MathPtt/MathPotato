@@ -1,8 +1,7 @@
 use parser_error::ParserError;
 
 use crate::types::{
-    math_potato_ast_tree::MathPotatoAstTree, potato_token::PotatoToken,
-    potato_token_types::PotatoTokenTypes,
+    ast_tree::MathPotatoAstTree, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
 
 pub mod parse_i32_statement;
