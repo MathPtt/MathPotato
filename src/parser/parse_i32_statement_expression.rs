@@ -215,9 +215,8 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 #[test]
 fn value_and_infixoperation() {
     // arrange
-    let input = String::from("3+;");
+    let input = String::from("3 +;");
     let lexed_input = lexing(&input);
-    println!("==== lexing result: {:#?}", lexed_input);
     let input_ast = MathPotatoAstTree::new();
 
     // action
