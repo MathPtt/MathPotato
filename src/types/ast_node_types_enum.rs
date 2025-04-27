@@ -1,5 +1,3 @@
-use std::default;
-
 /// This enum represents the possible values in the language.
 ///
 /// The language manages the types in a way where all of the types have their own HashMap to be

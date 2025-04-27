@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use crate::parser::parser_error::ParserError;
+use crate::parser::parser_error::ParseError;
 
 use super::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
@@ -19,7 +19,7 @@ impl InfixOperationAstTree {
         &mut self,
         key: Uuid,
         value: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParserError> {
+    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
         match self.tree.insert(key, value) {
             None => Ok((key, self.tree.get(&key).unwrap().clone())),
             Some(_) => panic!(

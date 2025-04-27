@@ -130,8 +130,6 @@ mod tests {
             let result = lexing(&d.input);
             assert_ne!(result.len(), 0);
             for (i, r) in d.expected.iter().enumerate() {
-                println!("{}", r.token_type);
-                println!("{}", &result[i].token_type);
                 assert_eq!(r, &result[i]);
             }
         }

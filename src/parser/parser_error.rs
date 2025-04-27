@@ -1,9 +1,9 @@
 #[derive(Debug)]
-pub struct ParserError {
-    details: String,
+pub struct ParseError {
+    pub details: String,
 }
 
-impl ParserError {
+impl ParseError {
     pub fn new(details: String) -> Self {
         Self { details }
     }

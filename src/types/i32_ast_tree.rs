@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use crate::parser::parser_error::ParserError;
+use crate::parser::parser_error::ParseError;
 
 use super::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
@@ -32,13 +32,15 @@ impl I32AstTree {
             None
         }
     }
+
     pub fn put_all(&mut self, l: HashMap<Uuid, I32AstNode>) {
-        l.into_iter().map(|i| self.tree.insert(i.0, i.1));
+        let _ = l.into_iter().map(|i| self.tree.insert(i.0, i.1));
     }
-    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParserError> {
+
+    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParseError> {
         match self.tree.insert(uuid, node.clone()) {
             None => Ok((uuid, node)),
-            Some(_) => Err(ParserError::new(String::from(
+            Some(_) => Err(ParseError::new(String::from(
                 "There is an item in the HashMap with the same key.",
             ))),
         }
@@ -56,9 +58,9 @@ impl I32AstTree {
         &mut self,
         id: Uuid,
         node: I32AstNode,
-    ) -> Result<(Uuid, I32AstNode), ParserError> {
+    ) -> Result<(Uuid, I32AstNode), ParseError> {
         match self.tree.get(&id) {
-            None => Err(ParserError::new(format!(
+            None => Err(ParseError::new(format!(
                 "There is no I32AstNode with id {}.",
                 id
             ))),

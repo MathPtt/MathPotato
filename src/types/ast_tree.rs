@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::parser::parser_error::ParserError;
+use crate::parser::parser_error::ParseError;
 
 use super::{
     ast_node_types_enum::AstNodeType,
@@ -32,7 +32,7 @@ impl MathPotatoAstTree {
             infix_operation_tree: InfixOperationAstTree::new(),
         }
     }
-    pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParserError> {
+    pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {
         self.last_changed_node_type = tree.last_changed_node_type;
         self.last_changed_node_id = tree.last_changed_node_id;
 
@@ -63,14 +63,14 @@ impl MathPotatoAstTree {
         self.i32_tree.get_node_by_id(id)
     }
 
-    pub fn put_i32_ast_node(
-        &mut self,
-        node: I32AstNode,
-    ) -> Result<(Uuid, I32AstNode), ParserError> {
+    pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParseError> {
         let uuid = Uuid::new_v4();
-        self.last_changed_node_id = uuid;
         match self.i32_tree.put(uuid, node) {
-            Ok(r) => Ok(r),
+            Ok(r) => {
+                self.last_changed_node_id = uuid;
+                self.last_changed_node_type = AstNodeType::I32AstNode;
+                Ok(r)
+            }
             Err(e) => Err(e),
         }
     }
@@ -81,7 +81,7 @@ impl MathPotatoAstTree {
         &mut self,
         id: Uuid,
         node: I32AstNode,
-    ) -> Result<(Uuid, I32AstNode), ParserError> {
+    ) -> Result<(Uuid, I32AstNode), ParseError> {
         match self.i32_tree.overwrite(id, node) {
             Err(err) => Err(err),
             Ok(res) => Ok(res),
@@ -91,7 +91,7 @@ impl MathPotatoAstTree {
     pub fn put_infix_node(
         &mut self,
         inode: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParserError> {
+    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
         let key = Uuid::new_v4();
         match self.infix_operation_tree.put(key, inode) {
             Err(err) => Err(err),
@@ -110,9 +110,9 @@ impl MathPotatoAstTree {
         &mut self,
         id: Uuid,
         node_type: AstNodeType,
-    ) -> Result<(Uuid, AstNodeType), ParserError> {
+    ) -> Result<(Uuid, AstNodeType), ParseError> {
         if self.root_node_id != Uuid::nil() && self.root_node_type != AstNodeType::None {
-            Err(ParserError::new(format!(
+            Err(ParseError::new(format!(
                 "Root node type is not {:#?} and id is not {}.",
                 AstNodeType::None,
                 Uuid::nil()
@@ -128,7 +128,7 @@ impl MathPotatoAstTree {
         &mut self,
         id: Uuid,
         node_type: AstNodeType,
-    ) -> Result<(Uuid, AstNodeType), ParserError> {
+    ) -> Result<(Uuid, AstNodeType), ParseError> {
         self.root_node_id = id;
         self.root_node_type = node_type.clone();
         Ok((id, node_type))

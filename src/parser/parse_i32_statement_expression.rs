@@ -11,7 +11,7 @@ use crate::{
     },
 };
 
-use super::parser_error::ParserError;
+use super::parser_error::ParseError;
 
 /// Parses integer, i32, statement expression based on the tokens provided by the lexer.
 ///
@@ -35,7 +35,7 @@ pub fn parse_i32_statement_expression(
     i: usize,
     tokens: Vec<PotatoToken>,
     mut ast: MathPotatoAstTree,
-) -> Result<MathPotatoAstTree, ParserError> {
+) -> Result<MathPotatoAstTree, ParseError> {
     match tokens.get(i).cloned().ok_or_else(|| error_message(i)) {
         Err(e) => panic!("{}", e),
 
@@ -101,7 +101,7 @@ pub fn parse_i32_statement_expression(
                             match cont_node_details.1 {
                                 AstNodeType::I32AstNode => {
                                     // this is a syntax error, since two number type cannot follow each other
-                                    Err(ParserError::new(String::from(
+                                    Err(ParseError::new(String::from(
                                         "Syntax error! Two number type cannot follow each other!",
                                     )))
                                 }
@@ -153,7 +153,10 @@ pub fn parse_i32_statement_expression(
                                         );
                                     let recorded_infix_node =
                                         ast.put_infix_node(infix_node).unwrap_or_else(|err| {
-                                            panic!("Error while adding InfixNode to AST.")
+                                            panic!(
+                                                "Error while adding InfixNode to AST. Error: {:#?}",
+                                                err
+                                            )
                                         });
                                     cont_node.parent_type = AstNodeType::InfixOperationAstNode;
                                     cont_node.parent_uuid = recorded_infix_node.0;
@@ -166,7 +169,6 @@ pub fn parse_i32_statement_expression(
                                     .update_root_node_id_and_type(recorded_infix_node.0, AstNodeType::InfixOperationAstNode)
                                         .unwrap_or_else(|e|panic!("Error happened while updated root node id and type. Error: {:#?}", e));
 
-                                    println!("=== Addition: {:#?}", ast);
                                     parse_i32_statement_expression(i + 1, tokens, ast)
                                 }
                                 AstNodeType::InfixOperationAstNode => {
@@ -183,10 +185,7 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::LiteralValueVariableIdentifier => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
-                        PotatoTokenTypes::SignSemicolon => {
-                            println!("AST: {:#?}", ast);
-                            Ok(ast)
-                        }
+                        PotatoTokenTypes::SignSemicolon => Ok(ast),
                         PotatoTokenTypes::None => todo!(),
                     }
                 }
@@ -247,7 +246,7 @@ fn value_and_infixoperation() {
     // root node checks
     let root_node_id = result
         .get_root_node_id()
-        .unwrap_or_else(|| panic!("There is no root node!"));
+        .unwrap_or_else(|| panic!("There is no root node id!"));
     assert_eq!(
         result.get_root_node_type(),
         AstNodeType::InfixOperationAstNode
@@ -279,7 +278,7 @@ fn value_and_infixoperation() {
 }
 
 #[test]
-fn single_value_then_return_single_node_in_ast() {
+fn value_only() {
     // arrange
     let input = String::from("3;");
     let lexed_input = lexing(&input);
