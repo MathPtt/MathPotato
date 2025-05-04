@@ -5,8 +5,8 @@ use uuid::Uuid;
 use crate::parser::parser_error::ParseError;
 
 use super::{
-    ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
     infix_operation_ast_node::InfixOperationAstNode,
+    internal::ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
 };
 
 #[derive(Clone, Debug)]

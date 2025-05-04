@@ -1,6 +1,5 @@
 pub mod ast_node_types_enum;
 pub mod ast_tree;
-pub mod ast_tree_traits;
 pub mod i32_node;
 pub mod infix_operation_ast_node;
 pub mod infix_operation_ast_tree;

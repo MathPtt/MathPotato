@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use crate::{
-    ast::ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    parser::parser_error::ParseError,
-};
+use crate::parser::parser_error::ParseError;
 
-use super::i32_ast_node_internal::I32AstNodeInternal;
+use super::{
+    ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
+    i32_ast_node_internal::I32AstNodeInternal,
+};
 
 #[derive(Clone, Debug)]
 pub struct I32AstTree {
