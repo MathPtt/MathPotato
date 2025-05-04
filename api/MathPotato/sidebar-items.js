@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["lexer","parser","types"]};
+window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["ast","lexer","parser"]};

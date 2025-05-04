@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["MathPotatoAstTree"],"trait":["ContinuationNode","I32","RootNode"]};

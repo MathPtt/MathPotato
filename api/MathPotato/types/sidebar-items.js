@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["ast_node_types_enum","ast_tree","ast_tree_traits","i32_ast_node","i32_ast_tree","infix_operation_ast_node","infix_operation_ast_tree","infix_operation_enum","integer_statement_ast_node","integer_value_expression_ast_node","patterns","potato_ast_node","potato_token","potato_token_types","variable_state_enum"]};
