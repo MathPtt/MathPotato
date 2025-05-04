@@ -1,4 +1,4 @@
-use crate::types::{
+use crate::ast::{
     patterns::{
         KEYWORD_I32, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
         SIGN_OPEN_PARENTHESES, SIGN_SEMICOLON, WHITESPACE,
@@ -91,7 +91,7 @@ fn is_integer_value(s: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use crate::types::{potato_token::PotatoToken, potato_token_types::PotatoTokenTypes};
+    use crate::ast::{potato_token::PotatoToken, potato_token_types::PotatoTokenTypes};
 
     use super::*;
 

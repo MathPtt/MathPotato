@@ -1,6 +1,6 @@
 use core::panic;
 
-use crate::types::{
+use crate::ast::{
     ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree, i32_ast_node::I32AstNode,
     infix_operation_ast_node::InfixOperationAstNode, infix_operation_enum::InfixOperationType,
     potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
@@ -241,12 +241,12 @@ mod test {
     use uuid::Uuid;
 
     use crate::{
-        lexer::lexer::lexing,
-        parser::parse_i32_statement_expression::parse_i32_statement_expression,
-        types::{
+        ast::{
             ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree,
             infix_operation_enum::InfixOperationType,
         },
+        lexer::lexer::lexing,
+        parser::parse_i32_statement_expression::parse_i32_statement_expression,
     };
 
     #[test]

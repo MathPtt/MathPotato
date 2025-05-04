@@ -1,6 +1,6 @@
 use parser_error::ParseError;
 
-use crate::types::{
+use crate::ast::{
     ast_tree::MathPotatoAstTree, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
 
