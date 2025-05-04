@@ -6,7 +6,7 @@ use crate::parser::parser_error::ParseError;
 
 use super::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    i32_ast_node_internal::I32AstNodeInternal,
+    internal::i32_ast_node_internal::I32AstNodeInternal,
 };
 
 #[derive(Clone, Debug)]
@@ -58,7 +58,7 @@ impl I32AstTree {
         self.tree.clone().len()
     }
 
-    pub(crate) fn overwrite(
+    pub(crate) fn update(
         &mut self,
         id: Uuid,
         node: I32AstNodeInternal,

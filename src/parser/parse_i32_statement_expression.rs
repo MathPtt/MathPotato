@@ -1,9 +1,12 @@
 use core::panic;
 
 use crate::ast::{
-    ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree,
-    i32_ast_node_internal::I32AstNodeInternal, infix_operation_ast_node::InfixOperationAstNode,
-    infix_operation_enum::InfixOperationType, potato_token::PotatoToken,
+    ast_node_types_enum::AstNodeType,
+    ast_tree::{ContinuationNode, MathPotatoAstTree, RootNode, I32},
+    i32_node::I32AstNode,
+    infix_operation_ast_node::InfixOperationAstNode,
+    infix_operation_enum::InfixOperationType,
+    potato_token::PotatoToken,
     potato_token_types::PotatoTokenTypes,
 };
 
@@ -45,15 +48,18 @@ pub fn parse_i32_statement_expression(
                             // this is the case when we right after the `=` sign and the expression
                             // tree is empty
                             let recorded_node = ast
-                                .put_i32_ast_node(I32AstNodeInternal::new_with_value(
-                                    parse_literal_to_i32(&token),
-                                ))
+                                .put_i32_ast_node(I32AstNode::new_with_value(parse_literal_to_i32(
+                                    &token,
+                                )))
                                 .unwrap_or_else(|e| {
                                     panic!("Adding I32AstNode has failed. Details: {:#?}", e)
                                 });
 
                             let _ = ast
-                                .add_root_node(recorded_node.0, AstNodeType::I32AstNode)
+                                .add_root_node_id_and_type(
+                                    recorded_node.id,
+                                    AstNodeType::I32AstNode,
+                                )
                                 .unwrap_or_else(|r| {
                                     panic!(
                                         "Adding root node details to AST failed. Details: {:#?}",
@@ -114,26 +120,22 @@ pub fn parse_i32_statement_expression(
                                                 cont_node_details.0
                                             )
                                         });
-                                    println!("=== we have cont node: {:#?}", cont_node.clone());
                                     cont_node
                                         .1
                                         .check_if_left_empty_right_occupied()
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    let i32node = I32AstNodeInternal::new_value_parent_id_and_type(
+                                    let i32node = I32AstNode::new_value_parent_id_and_type(
                                         parse_literal_to_i32(&token),
                                         AstNodeType::InfixOperationAstNode,
                                         cont_node.0,
                                     );
-                                    // println!("=== new i32 node: {:#?}", i32node);
                                     let i32node_recorded = ast
                                         .put_i32_ast_node(i32node)
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    // println!("=== new i32 node recorded: {:#?}", i32node_recorded);
                                     cont_node
                                         .1
-                                        .add_i32node_to_the_right(i32node_recorded.0)
+                                        .add_i32node_to_the_right(i32node_recorded.id)
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    println!("=== updated cont node: {:#?}", cont_node);
                                     ast.update_infix_node_by_id(cont_node.0, cont_node.1).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
                                     parse_i32_statement_expression(i + 1, tokens, ast)
                                 }
@@ -163,11 +165,12 @@ pub fn parse_i32_statement_expression(
                                     // the continuation node will be a child to it
                                     // and the new node will be the parent of the continuation node
                                     let mut cont_node = ast
-                                        .get_i32_node(cont_node_details.0)
-                                        .unwrap_or_else(|| {
+                                        .get_i32_node_by_id(cont_node_details.0)
+                                        .unwrap_or_else(|e| {
                                             panic!(
-                                                "There is no i32 continuation node with {}",
-                                                cont_node_details.0
+                                                "There is no i32 continuation node with {}. Error: {:#?}",
+                                                cont_node_details.0,
+                                                e
                                             )
                                         });
 
@@ -186,7 +189,7 @@ pub fn parse_i32_statement_expression(
                                         });
                                     cont_node.parent_type = AstNodeType::InfixOperationAstNode;
                                     cont_node.parent_id = recorded_infix_node.0;
-                                    let _ = ast.overwrite_i32_node(
+                                    let _ = ast.update_i32_node(
                                                         cont_node_details.0,
                                                         cont_node,
                                                     ).unwrap_or_else(|r|
@@ -243,7 +246,8 @@ mod test {
 
     use crate::{
         ast::{
-            ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree,
+            ast_node_types_enum::AstNodeType,
+            ast_tree::{ContinuationNode, MathPotatoAstTree, RootNode, I32},
             infix_operation_enum::InfixOperationType,
         },
         lexer::lexer::lexing,
@@ -288,8 +292,8 @@ mod test {
             "The continuation node has to be an I32AstNode"
         );
         let _ = result
-            .get_i32_node(continuation_node_id_and_type.0)
-            .unwrap_or_else(|| panic!("There is no i32 continuation node by id"));
+            .get_i32_node_by_id(continuation_node_id_and_type.0)
+            .unwrap_or_else(|e| panic!("There is no i32 continuation node by id. Error: {:#?}", e));
 
         // root node checks
         let root_node_id = result
@@ -324,19 +328,9 @@ mod test {
             AstNodeType::I32AstNode
         );
         let left_children = result
-            .get_i32_node(left_children_id_and_type.0)
-            .unwrap_or_else(|| panic!("No left children."));
+            .get_i32_node_by_id(left_children_id_and_type.0)
+            .unwrap_or_else(|e| panic!("No left children. Error: {:#?}", e));
         assert_eq!(left_children.value, 1, "The left children value must be 1");
-        assert_eq!(
-            left_children.child_id,
-            Uuid::nil(),
-            "It must not have children id."
-        );
-        assert_eq!(
-            left_children.child_type,
-            AstNodeType::None,
-            "It must not have children type."
-        );
         assert_eq!(
             left_children.parent_id, root_node.0,
             "The parent id must be equal to root node id."
@@ -358,21 +352,11 @@ mod test {
             AstNodeType::I32AstNode
         );
         let right_children = result
-            .get_i32_node(right_children_id_and_type.0)
-            .unwrap_or_else(|| panic!("No right children."));
+            .get_i32_node_by_id(right_children_id_and_type.0)
+            .unwrap_or_else(|e| panic!("No right children. Error: {:#?}", e));
         assert_eq!(
             right_children.value, 2,
             "The right children value must be 2"
-        );
-        assert_eq!(
-            right_children.child_id,
-            Uuid::nil(),
-            "It must not have children id."
-        );
-        assert_eq!(
-            right_children.child_type,
-            AstNodeType::None,
-            "It must not have children type."
         );
         assert_eq!(
             right_children.parent_id, root_node.0,
@@ -440,15 +424,16 @@ mod test {
 
         // child node
         let child_node = result
-            .get_i32_node(root_node_right_child_id_and_type.0)
-            .unwrap_or_else(|| {
-                panic!("There is no node under the provided root node's child item node.")
+            .get_i32_node_by_id(root_node_right_child_id_and_type.0)
+            .unwrap_or_else(|e| {
+                panic!(
+                    "There is no node under the provided root node's child item node. Error: {:#?}",
+                    e
+                )
             });
         assert_eq!(child_node.value, 3);
         assert_eq!(child_node.parent_type, AstNodeType::InfixOperationAstNode);
         assert_eq!(child_node.parent_id, root_node_id);
-        assert_eq!(child_node.child_id, Uuid::nil());
-        assert_eq!(child_node.child_type, AstNodeType::None);
     }
 
     #[test]
@@ -467,17 +452,15 @@ mod test {
             .get_continuation_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));
         let cont_node = result
-            .get_i32_node(continuation_node_id.0)
-            .unwrap_or_else(|| panic!("There is no continuation node by id"));
+            .get_i32_node_by_id(continuation_node_id.0)
+            .unwrap_or_else(|e| panic!("There is no continuation node by id. Error: {:#?}", e));
         let root_node_id = result
             .get_root_node_id()
             .unwrap_or_else(|| panic!("There is no root node in AST."));
         assert_eq!(root_node_id, continuation_node_id.0);
         assert_eq!(result.get_root_node_type(), AstNodeType::I32AstNode);
         assert_eq!(cont_node.value, 3);
-        assert_eq!(cont_node.child_id, Uuid::nil());
         assert_eq!(cont_node.parent_id, Uuid::nil());
         assert_eq!(cont_node.parent_type, AstNodeType::None);
-        assert_eq!(cont_node.child_type, AstNodeType::None);
     }
 }
