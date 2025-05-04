@@ -1,6 +1,6 @@
 use crate::types::{
     patterns::{
-        KEYWORD_INTEGER, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
+        KEYWORD_I32, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
         SIGN_OPEN_PARENTHESES, SIGN_SEMICOLON, WHITESPACE,
     },
     potato_token::PotatoToken,
@@ -59,8 +59,8 @@ fn tokenize(s: &str) -> PotatoToken {
             token_type: PotatoTokenTypes::OperationDivision,
             literal_value: s.to_string(),
         },
-        KEYWORD_INTEGER => PotatoToken {
-            token_type: PotatoTokenTypes::KeywordInteger,
+        KEYWORD_I32 => PotatoToken {
+            token_type: PotatoTokenTypes::KeywordI32,
             literal_value: s.to_string(),
         },
         _ => {
@@ -96,17 +96,53 @@ mod tests {
     use super::*;
 
     #[test]
+    fn lexing_test_strings() {
+        struct CharToTokensData {
+            input: String,
+            expected: Vec<PotatoToken>,
+        }
+        let test_data = vec![CharToTokensData {
+            input: String::from("3 + 3;"),
+            expected: vec![
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::OperationAddition,
+                    literal_value: String::from("+"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::SignSemicolon,
+                    literal_value: String::from(";"),
+                },
+            ],
+        }];
+        for d in test_data {
+            let result = lexing(&d.input);
+            assert_ne!(result.len(), 0);
+            for (i, r) in d.expected.iter().enumerate() {
+                assert_eq!(r, &result[i]);
+            }
+        }
+    }
+
+    #[test]
     fn lexing_characters_test() {
         struct CharToTokensData {
             input: String,
             expected: Vec<PotatoToken>,
         }
         let test_data = vec![CharToTokensData {
-            input: String::from("Integer asd = 6;"),
+            input: String::from("i32 asd = 6;"),
             expected: vec![
                 PotatoToken {
-                    token_type: PotatoTokenTypes::KeywordInteger,
-                    literal_value: String::from("Integer"),
+                    token_type: PotatoTokenTypes::KeywordI32,
+                    literal_value: String::from("i32"),
                 },
                 PotatoToken {
                     token_type: PotatoTokenTypes::LiteralValueVariableIdentifier,
@@ -130,8 +166,6 @@ mod tests {
             let result = lexing(&d.input);
             assert_ne!(result.len(), 0);
             for (i, r) in d.expected.iter().enumerate() {
-                println!("{}", r.token_type);
-                println!("{}", &result[i].token_type);
                 assert_eq!(r, &result[i]);
             }
         }
@@ -187,10 +221,10 @@ mod tests {
                 },
             },
             CharToTokenData {
-                input: String::from("Integer"),
+                input: String::from("i32"),
                 expected: PotatoToken {
-                    token_type: PotatoTokenTypes::KeywordInteger,
-                    literal_value: String::from("Integer"),
+                    token_type: PotatoTokenTypes::KeywordI32,
+                    literal_value: String::from("i32"),
                 },
             },
             CharToTokenData {

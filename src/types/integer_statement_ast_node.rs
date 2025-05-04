@@ -14,7 +14,7 @@ use super::{potato_token_types::PotatoTokenTypes, variable_state_enum::VariableS
 /// ```
 /// Integer asd = a + b;
 /// ```
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Eq, Debug, Default, Clone)]
 pub struct IntegerStatementAstNode {
     pub guid: Uuid,
     pub variable_name: String,
