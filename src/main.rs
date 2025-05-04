@@ -3,13 +3,13 @@
 //! This programming language is about mathematics, you know the calculus, numerical
 //! analysis and stuff. Because why not!?
 
+use ast::potato_token::PotatoToken;
 use lexer::lexer::lexing;
 use parser::parse;
-use types::potato_token::PotatoToken;
 
+pub mod ast;
 pub mod lexer;
 pub mod parser;
-pub mod types;
 
 fn main() {
     let tokens: Vec<PotatoToken> = lexing("dummy code");

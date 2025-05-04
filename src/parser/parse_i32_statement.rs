@@ -1,4 +1,4 @@
-use crate::types::{
+use crate::ast::{
     ast_tree::MathPotatoAstTree, integer_statement_ast_node::IntegerStatementAstNode,
     potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
 };
