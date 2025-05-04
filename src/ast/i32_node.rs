@@ -6,6 +6,10 @@ use super::{
     ast_node_types_enum::AstNodeType, internal::i32_ast_node_internal::I32AstNodeInternal,
 };
 
+/// I32 datatype AST node
+///
+/// This node represents the i32 datatype in the language. This datatype is equivalent to what Rust
+/// has with the same name. There is no difference.
 #[derive(Debug)]
 pub struct I32AstNode {
     pub id: Uuid,

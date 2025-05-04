@@ -13,13 +13,39 @@ use super::{
     },
 };
 
+/// Represents the Abstract Syntax Tree of the Programming Language.
+///
+/// # Decisions
+///
+/// ## Tree vs HashMap
+///
+/// The tree is not a tree. It is a wrapper over many HashMaps. The reason is simple: managing a
+/// tree in Rust a particular pain. Managing a HashMap in Rust is less pain than that. The
+/// difference between representing a tree in HashMap and a tree is not that significant to eat the
+/// pain of dealing with the borrow checker.
+///
+/// The nodes are connected via their UUID values.
+///
+/// ## Generics or concrete types
+///
+/// I chose concrete types. Dealing with generics in Rust is not as easy as it is in, for example,
+/// C#. What is an interface hierarchy in C#, it is a major pain here. So, I have concrete types
+/// and there are methods, with the same functionality, but for different types. This way seemed
+/// way easier than dealing with generics. Maybe later I'll do the generics.
+///
 #[derive(Clone, Debug)]
 pub struct MathPotatoAstTree {
+    /// A reference to the Root AST node.
     root_node_id: Uuid,
+    /// The type of the root AST node.
     root_node_type: AstNodeType,
+    /// A reference to the last changed AST node.
     last_changed_node_id: Uuid,
+    /// The type of the last changed node.
     last_changed_node_type: AstNodeType,
+    /// The node tree to represent the i32 data type.
     i32_tree: I32AstTree,
+    /// The node tree to represent the infix operation nodes.
     infix_operation_tree: InfixOperationAstTree,
 }
 
@@ -43,12 +69,25 @@ pub trait I32 {
     /// error message.
     ///
     /// # Parameters
-    /// - `node` - an I32AstNode
+    /// - `node` - an `I32AstNode`
     ///
     /// # Returns
     /// - `Result<(Uuid, I32AstNode), ParseError>`
     fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<I32AstNode, ParseError>;
+
+    /// Returns the length of the i32 datatype tree size.
     fn i32_tree_len(&self) -> usize;
+
+    /// Updates the designated i32 datatype node with the provided data.
+    ///
+    /// # Details
+    ///
+    /// If there is no i32 node with the provided id the operation will panic.
+    ///
+    /// # Parameters
+    ///
+    /// - `id` - `Uuid`: The unique id of the node to be updated.
+    /// - `node` - `I32AstNode`: The I32AstNode with the new data.
     fn update_i32_node(&mut self, id: Uuid, node: I32AstNode) -> Result<I32AstNode, ParseError>;
 }
 
