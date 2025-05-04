@@ -63,6 +63,18 @@ impl MathPotatoAstTree {
         self.i32_tree.get_node_by_id(id)
     }
 
+    /// Adds a new node to the AST.
+    ///
+    /// # Important
+    ///
+    /// When there is a I32AstNode in the AST with the same key there will be no overwrite, rather
+    /// error message.
+    ///
+    /// # Parameters
+    /// - `node` - an I32AstNode
+    ///
+    /// # Returns
+    /// - `Result<(Uuid, I32AstNode), ParseError>`
     pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParseError> {
         let uuid = Uuid::new_v4();
         match self.i32_tree.put(uuid, node) {
@@ -124,6 +136,20 @@ impl MathPotatoAstTree {
         }
     }
 
+    /// Returns the root node by id.
+    pub(crate) fn get_root_node_infix(
+        &self,
+        id: Uuid,
+    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        match self.infix_operation_tree.get(id) {
+            Some(r) => Ok((id, r)),
+            None => Err(ParseError::new(format!(
+                "There is no InfixOperationAstNode type root node with id {}",
+                id
+            ))),
+        }
+    }
+
     pub(crate) fn update_root_node_id_and_type(
         &mut self,
         id: Uuid,
@@ -146,8 +172,31 @@ impl MathPotatoAstTree {
         self.root_node_type.clone()
     }
 
-    pub(crate) fn get_infix_node(&self, id: Uuid) -> Option<(Uuid, InfixOperationAstNode)> {
+    pub(crate) fn get_infix_node_by_id(&self, id: Uuid) -> Option<(Uuid, InfixOperationAstNode)> {
         self.infix_operation_tree.get(id).map(|r| (id, r))
+    }
+
+    pub(crate) fn update_infix_node_by_id(
+        &mut self,
+        id: Uuid,
+        node: InfixOperationAstNode,
+    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        Ok(self
+            .infix_operation_tree
+            .update(id, node)
+            .unwrap_or_else(|e| {
+                panic!(
+                    "Error while updating infix operations of AST tree. {:#?}",
+                    e
+                )
+            }))
+    }
+
+    pub(crate) fn get_infix_nodes(&self) -> Result<Vec<(Uuid, InfixOperationAstNode)>, ParseError> {
+        match self.infix_operation_tree.get_all() {
+            Ok(res) => Ok(res),
+            Err(err) => Err(err),
+        }
     }
 }
 

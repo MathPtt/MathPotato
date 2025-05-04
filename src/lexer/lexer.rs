@@ -96,6 +96,42 @@ mod tests {
     use super::*;
 
     #[test]
+    fn lexing_test_strings() {
+        struct CharToTokensData {
+            input: String,
+            expected: Vec<PotatoToken>,
+        }
+        let test_data = vec![CharToTokensData {
+            input: String::from("3 + 3;"),
+            expected: vec![
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::OperationAddition,
+                    literal_value: String::from("+"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::SignSemicolon,
+                    literal_value: String::from(";"),
+                },
+            ],
+        }];
+        for d in test_data {
+            let result = lexing(&d.input);
+            assert_ne!(result.len(), 0);
+            for (i, r) in d.expected.iter().enumerate() {
+                assert_eq!(r, &result[i]);
+            }
+        }
+    }
+
+    #[test]
     fn lexing_characters_test() {
         struct CharToTokensData {
             input: String,

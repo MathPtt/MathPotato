@@ -38,6 +38,24 @@ impl InfixOperationAstTree {
     pub(crate) fn get(&self, id: Uuid) -> Option<InfixOperationAstNode> {
         self.tree.get(&id).cloned()
     }
+
+    pub(crate) fn update(
+        &mut self,
+        id: Uuid,
+        node: InfixOperationAstNode,
+    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        self.tree.get(&id).unwrap_or_else(|| {
+            println!("infix tree: {:#?}", self.tree);
+            panic!("There is no item to be updated with id: {}", id)
+        });
+        self.tree.insert(id, node.clone());
+        Ok((id, node))
+    }
+
+    pub(crate) fn get_all(&self) -> Result<Vec<(Uuid, InfixOperationAstNode)>, ParseError> {
+        let res: Vec<(Uuid, InfixOperationAstNode)> = self.tree.clone().into_iter().collect();
+        Ok(res)
+    }
 }
 impl TypedAstTreeLen for InfixOperationAstTree {
     fn len(&self) -> usize {
