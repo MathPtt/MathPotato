@@ -1,12 +1,10 @@
+use crate::ast::ast_node_types_enum::AstNodeType;
+use crate::ast::infix_operation_enum::InfixOperationType;
+use crate::parser::parser_error::ParseError;
 use uuid::Uuid;
 
-use crate::parser::parser_error::ParseError;
-
-use super::ast_node_types_enum::AstNodeType;
-use super::infix_operation_enum::InfixOperationType;
-
 #[derive(Debug, Clone)]
-pub struct InfixOperationAstNode {
+pub struct InfixAstNodeInternal {
     operation_type: InfixOperationType,
     left_id: Uuid,
     left_type: AstNodeType,
@@ -14,13 +12,13 @@ pub struct InfixOperationAstNode {
     right_type: AstNodeType,
 }
 
-impl InfixOperationAstNode {
+impl InfixAstNodeInternal {
     pub fn new_with_type_and_left_child_node(
         operation_type: InfixOperationType,
         left_type: AstNodeType,
         left: Uuid,
-    ) -> InfixOperationAstNode {
-        InfixOperationAstNode {
+    ) -> InfixAstNodeInternal {
+        InfixAstNodeInternal {
             operation_type,
             left_type,
             left_id: left,
@@ -86,7 +84,7 @@ impl InfixOperationAstNode {
     pub(crate) fn add_i32node_to_the_right(
         &mut self,
         id: Uuid,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+    ) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         if self.right_id != Uuid::nil() && self.right_type != AstNodeType::None {
             Err(ParseError::new(format!(
                 "The right side is not empty. It is occupied by id: {:#?} and type: {:#?}",

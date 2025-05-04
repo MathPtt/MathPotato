@@ -4,22 +4,22 @@ use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
-use super::{
-    infix_operation_ast_node::InfixOperationAstNode,
-    internal::ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
+use super::internal::{
+    ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
+    infix_operation_ast_node::InfixAstNodeInternal,
 };
 
 #[derive(Clone, Debug)]
 pub struct InfixOperationAstTree {
-    tree: HashMap<Uuid, InfixOperationAstNode>,
+    tree: HashMap<Uuid, InfixAstNodeInternal>,
 }
 
 impl InfixOperationAstTree {
     pub fn put(
         &mut self,
         key: Uuid,
-        value: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        value: InfixAstNodeInternal,
+    ) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         match self.tree.insert(key, value) {
             None => Ok((key, self.tree.get(&key).unwrap().clone())),
             Some(_) => panic!(
@@ -35,15 +35,15 @@ impl InfixOperationAstTree {
         }
     }
 
-    pub(crate) fn get(&self, id: Uuid) -> Option<InfixOperationAstNode> {
+    pub(crate) fn get(&self, id: Uuid) -> Option<InfixAstNodeInternal> {
         self.tree.get(&id).cloned()
     }
 
     pub(crate) fn update(
         &mut self,
         id: Uuid,
-        node: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        node: InfixAstNodeInternal,
+    ) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         self.tree.get(&id).unwrap_or_else(|| {
             println!("infix tree: {:#?}", self.tree);
             panic!("There is no item to be updated with id: {}", id)
@@ -52,8 +52,8 @@ impl InfixOperationAstTree {
         Ok((id, node))
     }
 
-    pub(crate) fn get_all(&self) -> Result<Vec<(Uuid, InfixOperationAstNode)>, ParseError> {
-        let res: Vec<(Uuid, InfixOperationAstNode)> = self.tree.clone().into_iter().collect();
+    pub(crate) fn get_all(&self) -> Result<Vec<(Uuid, InfixAstNodeInternal)>, ParseError> {
+        let res: Vec<(Uuid, InfixAstNodeInternal)> = self.tree.clone().into_iter().collect();
         Ok(res)
     }
 }

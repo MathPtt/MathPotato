@@ -5,11 +5,11 @@ use crate::parser::parser_error::ParseError;
 use super::{
     ast_node_types_enum::AstNodeType,
     i32_node::I32AstNode,
-    infix_operation_ast_node::InfixOperationAstNode,
     infix_operation_ast_tree::InfixOperationAstTree,
     internal::{
         ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
         i32_ast_tree::I32AstTree,
+        infix_operation_ast_node::InfixAstNodeInternal,
     },
 };
 
@@ -102,7 +102,7 @@ pub trait RootNode {
     ) -> Result<(Uuid, AstNodeType), ParseError>;
 
     /// Returns the root node by id.
-    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixOperationAstNode), ParseError>;
+    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixAstNodeInternal), ParseError>;
 
     fn update_root_node_id_and_type(
         &mut self,
@@ -135,7 +135,7 @@ impl RootNode for MathPotatoAstTree {
     }
 
     /// Returns the root node by id.
-    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         match self.infix_operation_tree.get(id) {
             Some(r) => Ok((id, r)),
             None => Err(ParseError::new(format!(
@@ -216,8 +216,8 @@ impl MathPotatoAstTree {
 
     pub fn put_infix_node(
         &mut self,
-        inode: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        inode: InfixAstNodeInternal,
+    ) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         let key = Uuid::new_v4();
         match self.infix_operation_tree.put(key, inode) {
             Err(err) => Err(err),
@@ -232,15 +232,15 @@ impl MathPotatoAstTree {
         self.infix_operation_tree.len()
     }
 
-    pub(crate) fn get_infix_node_by_id(&self, id: Uuid) -> Option<(Uuid, InfixOperationAstNode)> {
+    pub(crate) fn get_infix_node_by_id(&self, id: Uuid) -> Option<(Uuid, InfixAstNodeInternal)> {
         self.infix_operation_tree.get(id).map(|r| (id, r))
     }
 
     pub(crate) fn update_infix_node_by_id(
         &mut self,
         id: Uuid,
-        node: InfixOperationAstNode,
-    ) -> Result<(Uuid, InfixOperationAstNode), ParseError> {
+        node: InfixAstNodeInternal,
+    ) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
         Ok(self
             .infix_operation_tree
             .update(id, node)
@@ -252,7 +252,7 @@ impl MathPotatoAstTree {
             }))
     }
 
-    pub(crate) fn get_infix_nodes(&self) -> Result<Vec<(Uuid, InfixOperationAstNode)>, ParseError> {
+    pub(crate) fn get_infix_nodes(&self) -> Result<Vec<(Uuid, InfixAstNodeInternal)>, ParseError> {
         match self.infix_operation_tree.get_all() {
             Ok(res) => Ok(res),
             Err(err) => Err(err),

@@ -4,8 +4,8 @@ use crate::ast::{
     ast_node_types_enum::AstNodeType,
     ast_tree::{ContinuationNode, MathPotatoAstTree, RootNode, I32},
     i32_node::I32AstNode,
-    infix_operation_ast_node::InfixOperationAstNode,
     infix_operation_enum::InfixOperationType,
+    internal::infix_operation_ast_node::InfixAstNodeInternal,
     potato_token::PotatoToken,
     potato_token_types::PotatoTokenTypes,
 };
@@ -175,7 +175,7 @@ pub fn parse_i32_statement_expression(
                                         });
 
                                     let infix_node =
-                                        InfixOperationAstNode::new_with_type_and_left_child_node(
+                                        InfixAstNodeInternal::new_with_type_and_left_child_node(
                                             InfixOperationType::Addition,
                                             cont_node_details.1,
                                             cont_node_details.0,
