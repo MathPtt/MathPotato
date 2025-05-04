@@ -1,9 +1,10 @@
 use core::panic;
 
 use crate::ast::{
-    ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree, i32_ast_node::I32AstNode,
-    infix_operation_ast_node::InfixOperationAstNode, infix_operation_enum::InfixOperationType,
-    potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
+    ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree,
+    i32_ast_node_internal::I32AstNodeInternal, infix_operation_ast_node::InfixOperationAstNode,
+    infix_operation_enum::InfixOperationType, potato_token::PotatoToken,
+    potato_token_types::PotatoTokenTypes,
 };
 
 use super::parser_error::ParseError;
@@ -44,9 +45,9 @@ pub fn parse_i32_statement_expression(
                             // this is the case when we right after the `=` sign and the expression
                             // tree is empty
                             let recorded_node = ast
-                                .put_i32_ast_node(I32AstNode::new_with_value(parse_literal_to_i32(
-                                    &token,
-                                )))
+                                .put_i32_ast_node(I32AstNodeInternal::new_with_value(
+                                    parse_literal_to_i32(&token),
+                                ))
                                 .unwrap_or_else(|e| {
                                     panic!("Adding I32AstNode has failed. Details: {:#?}", e)
                                 });
@@ -118,7 +119,7 @@ pub fn parse_i32_statement_expression(
                                         .1
                                         .check_if_left_empty_right_occupied()
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    let i32node = I32AstNode::new_value_parent_id_and_type(
+                                    let i32node = I32AstNodeInternal::new_value_parent_id_and_type(
                                         parse_literal_to_i32(&token),
                                         AstNodeType::InfixOperationAstNode,
                                         cont_node.0,

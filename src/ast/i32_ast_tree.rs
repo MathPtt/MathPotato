@@ -6,12 +6,12 @@ use crate::parser::parser_error::ParseError;
 
 use super::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    i32_ast_node::I32AstNode,
+    i32_ast_node_internal::I32AstNodeInternal,
 };
 
 #[derive(Clone, Debug)]
 pub struct I32AstTree {
-    tree: HashMap<Uuid, I32AstNode>,
+    tree: HashMap<Uuid, I32AstNodeInternal>,
 }
 
 impl I32AstTree {
@@ -20,8 +20,8 @@ impl I32AstTree {
             tree: HashMap::new(),
         }
     }
-    pub fn get_nodes(&self, l: Vec<Uuid>) -> Option<HashMap<Uuid, I32AstNode>> {
-        let res: HashMap<Uuid, I32AstNode> = l
+    pub fn get_nodes(&self, l: Vec<Uuid>) -> Option<HashMap<Uuid, I32AstNodeInternal>> {
+        let res: HashMap<Uuid, I32AstNodeInternal> = l
             .into_iter()
             .filter_map(|uuid| self.tree.get(&uuid).cloned().map(|res| (uuid, res.clone())))
             .collect();
@@ -33,11 +33,15 @@ impl I32AstTree {
         }
     }
 
-    pub fn put_all(&mut self, l: HashMap<Uuid, I32AstNode>) {
+    pub fn put_all(&mut self, l: HashMap<Uuid, I32AstNodeInternal>) {
         let _ = l.into_iter().map(|i| self.tree.insert(i.0, i.1));
     }
 
-    pub fn put(&mut self, uuid: Uuid, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParseError> {
+    pub fn put(
+        &mut self,
+        uuid: Uuid,
+        node: I32AstNodeInternal,
+    ) -> Result<(Uuid, I32AstNodeInternal), ParseError> {
         match self.tree.insert(uuid, node.clone()) {
             None => Ok((uuid, node)),
             Some(_) => Err(ParseError::new(String::from(
@@ -46,7 +50,7 @@ impl I32AstTree {
         }
     }
 
-    pub fn get_node_by_id(&self, id: Uuid) -> Option<I32AstNode> {
+    pub fn get_node_by_id(&self, id: Uuid) -> Option<I32AstNodeInternal> {
         self.tree.get(&id).cloned()
     }
 
@@ -57,8 +61,8 @@ impl I32AstTree {
     pub(crate) fn overwrite(
         &mut self,
         id: Uuid,
-        node: I32AstNode,
-    ) -> Result<(Uuid, I32AstNode), ParseError> {
+        node: I32AstNodeInternal,
+    ) -> Result<(Uuid, I32AstNodeInternal), ParseError> {
         match self.tree.get(&id) {
             None => Err(ParseError::new(format!(
                 "There is no I32AstNode with id {}.",

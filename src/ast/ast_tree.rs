@@ -5,7 +5,7 @@ use crate::parser::parser_error::ParseError;
 use super::{
     ast_node_types_enum::AstNodeType,
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    i32_ast_node::I32AstNode,
+    i32_ast_node_internal::I32AstNodeInternal,
     i32_ast_tree::I32AstTree,
     infix_operation_ast_node::InfixOperationAstNode,
     infix_operation_ast_tree::InfixOperationAstTree,
@@ -59,7 +59,7 @@ impl MathPotatoAstTree {
             ))
         }
     }
-    pub fn get_i32_node(&self, id: Uuid) -> Option<I32AstNode> {
+    pub fn get_i32_node(&self, id: Uuid) -> Option<I32AstNodeInternal> {
         self.i32_tree.get_node_by_id(id)
     }
 
@@ -75,7 +75,10 @@ impl MathPotatoAstTree {
     ///
     /// # Returns
     /// - `Result<(Uuid, I32AstNode), ParseError>`
-    pub fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<(Uuid, I32AstNode), ParseError> {
+    pub fn put_i32_ast_node(
+        &mut self,
+        node: I32AstNodeInternal,
+    ) -> Result<(Uuid, I32AstNodeInternal), ParseError> {
         let uuid = Uuid::new_v4();
         match self.i32_tree.put(uuid, node) {
             Ok(r) => {
@@ -92,8 +95,8 @@ impl MathPotatoAstTree {
     pub(crate) fn overwrite_i32_node(
         &mut self,
         id: Uuid,
-        node: I32AstNode,
-    ) -> Result<(Uuid, I32AstNode), ParseError> {
+        node: I32AstNodeInternal,
+    ) -> Result<(Uuid, I32AstNodeInternal), ParseError> {
         match self.i32_tree.overwrite(id, node) {
             Err(err) => Err(err),
             Ok(res) => Ok(res),
