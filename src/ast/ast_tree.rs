@@ -5,10 +5,10 @@ use crate::parser::parser_error::ParseError;
 use super::{
     ast_node_types_enum::AstNodeType,
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    i32_ast_tree::I32AstTree,
     i32_node::I32AstNode,
     infix_operation_ast_node::InfixOperationAstNode,
     infix_operation_ast_tree::InfixOperationAstTree,
+    internal::i32_ast_tree::I32AstTree,
 };
 
 #[derive(Clone, Debug)]
