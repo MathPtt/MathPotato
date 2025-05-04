@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PotatoParserError"]};
+window.SIDEBAR_ITEMS = {"struct":["ParseError"]};

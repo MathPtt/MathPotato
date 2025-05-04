@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["parse"],"mod":["parse_integer_statement","parse_integer_statement_expression","parser_error"]};
+window.SIDEBAR_ITEMS = {"fn":["parse"],"mod":["parse_i32_statement","parse_i32_statement_expression","parser_error"]};

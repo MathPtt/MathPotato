@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PotatoAstTree","PotatoAstTreeError"]};
+window.SIDEBAR_ITEMS = {"struct":["MathPotatoAstTree"]};

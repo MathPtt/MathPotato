@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["PotatoAstNode"],"trait":["PotatoAstNodeGUID"]};
+window.SIDEBAR_ITEMS = {"enum":["PotatoAstNode","PotatoAstNodeKind"],"trait":["PotatoAstNodeGUID"]};
