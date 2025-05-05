@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["MathPotatoAstTree"],"trait":["ContinuationNode","I32","RootNode"]};
+window.SIDEBAR_ITEMS = {"mod":["continuation_node_api","i32_api_get_node_by_id","i32_api_node_count","i32_api_put_node","i32_api_update_node","root_node_api"],"struct":["MathPotatoAstTree"]};
