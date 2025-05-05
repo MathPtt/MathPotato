@@ -9,7 +9,10 @@ use crate::{
 
 use super::MathPotatoAstTree;
 
-/// AST Root node related methods
+/// Root Node Api of the Abstract Syntax Tree
+///
+/// The root node of the AST must be tracked for the interpreter which starts here and walks the
+/// tree and does its magic. At this point I think there will be a single root node.
 pub trait RootNodeApi {
     fn add_root_node_id_and_type(
         &mut self,

@@ -5,15 +5,14 @@ use crate::{
     parser::parser_error::ParseError,
 };
 
-use super::MathPotatoAstTree;
+use super::{i32_api::I32Api, MathPotatoAstTree};
 
-/// The I32 type related functionalities offered by the Abstract Syntax Tree.
-pub trait I32ApiPutNode {
-    /// Adds a new node to the AST.
+pub trait I32ApiPutNode: I32Api {
+    /// Adds a new `I32AstNode` to the AST.
+    ///
+    /// # Remarks
     /// By adding a new node to the AST the reference to the continuation node will be updated
     /// accordingly.
-    ///
-    /// # Important
     ///
     /// When there is a I32AstNode in the AST with the same key there will be no overwrite, rather
     /// error message.
@@ -22,7 +21,9 @@ pub trait I32ApiPutNode {
     /// - `node` - an `I32AstNode`
     ///
     /// # Returns
-    /// - `Result<(Uuid, I32AstNode), ParseError>`
+    /// - `OK(I32AstNode)` - the newly created `I32AstNode` node which also has the unique
+    /// identifier.
+    /// - `Err(ParseError)` - when recording the node is not successful due to some reasons.
     fn put_i32_ast_node(&mut self, node: I32AstNode) -> Result<I32AstNode, ParseError>;
 }
 

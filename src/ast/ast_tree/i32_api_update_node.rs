@@ -1,27 +1,25 @@
 use uuid::Uuid;
 
-use crate::{
-    ast::{
-        ast_node_types_enum::AstNodeType, i32_node::I32AstNode,
-        internal::ast_tree_traits::TypedAstTreeLen,
-    },
-    parser::parser_error::ParseError,
-};
+use crate::{ast::i32_node::I32AstNode, parser::parser_error::ParseError};
 
-use super::MathPotatoAstTree;
+use super::{i32_api::I32Api, MathPotatoAstTree};
 
-/// The I32 type related functionalities offered by the Abstract Syntax Tree.
-pub trait I32ApiUpdateNode {
-    /// Updates the designated i32 datatype node with the provided data.
+pub trait I32ApiUpdateNode: I32Api {
+    /// Updates the designated `I32AstNode` node with the provided data.
     ///
-    /// # Details
+    /// # Remarks
     ///
-    /// If there is no i32 node with the provided id the operation will panic.
+    /// The node must exist in the AST to be updated. There is no "if doesn't exist, update it". At
+    /// this point I think this would lead to results I don't want.
     ///
     /// # Parameters
     ///
     /// - `id` - `Uuid`: The unique id of the node to be updated.
     /// - `node` - `I32AstNode`: The I32AstNode with the new data.
+    ///
+    /// # Returns
+    /// - `Ok(I32AstNode)` - the updated node
+    /// - `Err(ParseError)` - if any error happens during updating the node
     fn update_i32_node(&mut self, id: Uuid, node: I32AstNode) -> Result<I32AstNode, ParseError>;
 }
 

@@ -3,7 +3,7 @@ use core::panic;
 use crate::ast::{
     ast_node_types_enum::AstNodeType,
     ast_tree::{
-        cont_node_api_get_id_and_type::ContinuationNodeApi,
+        cont_node_api_get_id_and_type::ContNodeApiGetIdAndType,
         i32_api_get_node_by_id::I32ApiGetNodeById, i32_api_put_node::I32ApiPutNode,
         i32_api_update_node::I32ApiUpdateNode, root_node_api::RootNodeApi, MathPotatoAstTree,
     },
@@ -248,7 +248,7 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
-    use crate::ast::ast_tree::cont_node_api_get_id_and_type::ContinuationNodeApi;
+    use crate::ast::ast_tree::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
     use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
     use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::{root_node_api::RootNodeApi, MathPotatoAstTree};
