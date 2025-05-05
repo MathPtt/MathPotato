@@ -3,7 +3,8 @@ use core::panic;
 use crate::ast::{
     ast_node_types_enum::AstNodeType,
     ast_tree::{
-        ast_i32_api::I32Api, continuation_node_api::ContinuationNodeApi,
+        continuation_node_api::ContinuationNodeApi, i32_api_get_node_by_id::I32ApiGetNodeById,
+        i32_api_put_node::I32ApiPutNode, i32_api_update_node::I32ApiUpdateNode,
         root_node_api::RootNodeApi, MathPotatoAstTree,
     },
     i32_node::I32AstNode,
@@ -247,8 +248,10 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
+    use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
+    use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::{
-        ast_i32_api::I32Api, continuation_node_api::ContinuationNodeApi,
+        continuation_node_api::ContinuationNodeApi, i32_api_update_node::I32ApiUpdateNode,
         root_node_api::RootNodeApi, MathPotatoAstTree,
     };
     use crate::{
@@ -271,10 +274,10 @@ mod test {
 
         // assert
         assert_eq!(
-            result.i32_tree_len(),
+            result.i32_node_count(),
             2,
             "sout: {}, expected: {}",
-            result.i32_tree_len(),
+            result.i32_node_count(),
             2
         );
         assert_eq!(
@@ -384,7 +387,7 @@ mod test {
             .unwrap_or_else(|e| panic!("There is no result: {:#?}", e));
 
         // assert
-        assert_eq!(result.i32_tree_len(), 1);
+        assert_eq!(result.i32_node_count(), 1);
         assert_eq!(result.infix_tree_len(), 1);
 
         // continuation node checks
@@ -450,7 +453,7 @@ mod test {
         let result = parse_i32_statement_expression(0, lexed_input, input_ast)
             .unwrap_or_else(|r| panic!("There is no result! {:#?}", r));
         // assert
-        assert_eq!(result.i32_tree_len(), 1);
+        assert_eq!(result.i32_node_count(), 1);
         let continuation_node_id = result
             .get_continuation_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));

@@ -11,8 +11,11 @@ use super::{
         infix_operation_ast_node::InfixAstNodeInternal,
     },
 };
-pub mod ast_i32_api;
 pub mod continuation_node_api;
+pub mod i32_api_get_node_by_id;
+pub mod i32_api_node_count;
+pub mod i32_api_put_node;
+pub mod i32_api_update_node;
 pub mod root_node_api;
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
