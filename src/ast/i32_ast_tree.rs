@@ -4,14 +4,14 @@ use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
-use super::{
+use super::internal::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
     i32_ast_node_internal::I32AstNodeInternal,
 };
 
 #[derive(Clone, Debug)]
 pub struct I32AstTree {
-    tree: HashMap<Uuid, I32AstNodeInternal>,
+    pub tree: HashMap<Uuid, I32AstNodeInternal>,
 }
 
 impl I32AstTree {

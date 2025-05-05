@@ -2,7 +2,10 @@ use core::panic;
 
 use crate::ast::{
     ast_node_types_enum::AstNodeType,
-    ast_tree::{ContinuationNode, MathPotatoAstTree, RootNode, I32},
+    ast_tree::{
+        ast_i32_api::I32Api, continuation_node_api::ContinuationNodeApi,
+        root_node_api::RootNodeApi, MathPotatoAstTree,
+    },
     i32_node::I32AstNode,
     infix_operation_enum::InfixOperationType,
     internal::infix_operation_ast_node::InfixAstNodeInternal,
@@ -244,12 +247,12 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
+    use crate::ast::ast_tree::{
+        ast_i32_api::I32Api, continuation_node_api::ContinuationNodeApi,
+        root_node_api::RootNodeApi, MathPotatoAstTree,
+    };
     use crate::{
-        ast::{
-            ast_node_types_enum::AstNodeType,
-            ast_tree::{ContinuationNode, MathPotatoAstTree, RootNode, I32},
-            infix_operation_enum::InfixOperationType,
-        },
+        ast::{ast_node_types_enum::AstNodeType, infix_operation_enum::InfixOperationType},
         lexer::lexer::lexing,
         parser::parse_i32_statement_expression::parse_i32_statement_expression,
     };
