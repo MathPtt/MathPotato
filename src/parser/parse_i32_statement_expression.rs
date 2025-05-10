@@ -8,7 +8,7 @@ use crate::ast::{
         i32_api_update_node::I32ApiUpdateNode, root_node_api::RootNodeApi, MathPotatoAstTree,
     },
     i32_node::I32AstNode,
-    infix_operation_enum::InfixOperationType,
+    infix_operation_type_enum::InfixOperationTypeEnum,
     internal::infix_operation_ast_node::InfixAstNodeInternal,
     potato_token::PotatoToken,
     potato_token_types::PotatoTokenTypes,
@@ -76,6 +76,9 @@ pub fn parse_i32_statement_expression(
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationDivision => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationMultiplication => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationAddition => {
@@ -160,6 +163,12 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::OperationDivision => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
+                        PotatoTokenTypes::OperationMultiplication => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
+                        PotatoTokenTypes::OperationMultiplication => {
+                            parse_i32_statement_expression(i + 1, tokens, ast)
+                        }
                         PotatoTokenTypes::OperationAddition => {
                             match cont_node_details.1 {
                                 AstNodeType::I32AstNode => {
@@ -180,7 +189,7 @@ pub fn parse_i32_statement_expression(
 
                                     let infix_node =
                                         InfixAstNodeInternal::new_with_type_and_left_child_node(
-                                            InfixOperationType::Addition,
+                                            InfixOperationTypeEnum::Addition,
                                             cont_node_details.1,
                                             cont_node_details.0,
                                         );
@@ -251,12 +260,24 @@ mod test {
     use crate::ast::ast_tree::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
     use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
     use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
-    use crate::ast::ast_tree::{root_node_api::RootNodeApi, MathPotatoAstTree};
+    use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::{
-        ast::{ast_node_types_enum::AstNodeType, infix_operation_enum::InfixOperationType},
+        ast::{
+            ast_node_types_enum::AstNodeType,
+            ast_tree::{root_node_api::RootNodeApi, MathPotatoAstTree},
+        },
         lexer::lexer::lexing,
         parser::parse_i32_statement_expression::parse_i32_statement_expression,
     };
+
+    #[test]
+    fn addition_and_multiplication_precedence_case() {
+        // case: `2 + 3 * 4;`
+        // arrange
+        let input = String::from("1 + 2;");
+        let lexed_input = lexing(&input);
+        let input_ast = MathPotatoAstTree::new();
+    }
 
     #[test]
     fn value_infix_and_value() {
@@ -402,7 +423,7 @@ mod test {
         assert_eq!(cont_node.0, continuation_node_id_and_type.0);
         assert_eq!(
             cont_node.1.get_operation_type(),
-            InfixOperationType::Addition
+            InfixOperationTypeEnum::Addition
         );
 
         // root node checks
@@ -418,7 +439,7 @@ mod test {
             .unwrap_or_else(|| panic!("There is no root node!"));
         assert_eq!(
             root_node.1.get_operation_type(),
-            InfixOperationType::Addition
+            InfixOperationTypeEnum::Addition
         );
         let root_node_right_child_id_and_type = root_node
             .1

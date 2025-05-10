@@ -1,10 +1,8 @@
-use crate::ast::{
-    patterns::{
-        KEYWORD_I32, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
-        SIGN_OPEN_PARENTHESES, SIGN_SEMICOLON, WHITESPACE,
-    },
-    potato_token::PotatoToken,
-    potato_token_types::PotatoTokenTypes,
+use crate::ast::{potato_token::PotatoToken, potato_token_types::PotatoTokenTypes};
+
+use super::patterns::{
+    KEYWORD_I32, SIGN_ADDITION, SIGN_ASSIGNMENT, SIGN_CLOSE_PARENTHESES, SIGN_DIVISION,
+    SIGN_MULTIPLICATION, SIGN_OPEN_PARENTHESES, SIGN_SEMICOLON, WHITESPACE,
 };
 
 pub fn lexing(s: &str) -> Vec<PotatoToken> {
@@ -59,6 +57,10 @@ fn tokenize(s: &str) -> PotatoToken {
             token_type: PotatoTokenTypes::OperationDivision,
             literal_value: s.to_string(),
         },
+        SIGN_MULTIPLICATION => PotatoToken {
+            token_type: PotatoTokenTypes::OperationMultiplication,
+            literal_value: s.to_string(),
+        },
         KEYWORD_I32 => PotatoToken {
             token_type: PotatoTokenTypes::KeywordI32,
             literal_value: s.to_string(),
@@ -95,6 +97,41 @@ mod tests {
 
     use super::*;
 
+    #[test]
+    fn multiplication() {
+        struct CharToTokensData {
+            input: String,
+            expected: Vec<PotatoToken>,
+        }
+        let test_data = vec![CharToTokensData {
+            input: String::from("3 * 3;"),
+            expected: vec![
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::OperationMultiplication,
+                    literal_value: String::from("*"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::LiteralIntegerValue,
+                    literal_value: String::from("3"),
+                },
+                PotatoToken {
+                    token_type: PotatoTokenTypes::SignSemicolon,
+                    literal_value: String::from(";"),
+                },
+            ],
+        }];
+        for d in test_data {
+            let result = lexing(&d.input);
+            assert_ne!(result.len(), 0);
+            for (i, r) in d.expected.iter().enumerate() {
+                assert_eq!(r, &result[i]);
+            }
+        }
+    }
     #[test]
     fn lexing_test_strings() {
         struct CharToTokensData {

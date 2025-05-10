@@ -10,4 +10,10 @@ pub const SIGN_CLOSE_PARENTHESES: &str = ")";
 pub const SIGN_SEMICOLON: &str = ";";
 pub const SIGN_ADDITION: &str = "+";
 pub const SIGN_DIVISION: &str = "/";
+
+/// Represents the multiplication operation character, `*`, in the source code.
+///
+/// # Example
+/// `i32 some_variable_name = 3 * 4;`
+pub const SIGN_MULTIPLICATION: &str = "*";
 pub const WHITESPACE: &str = " ";

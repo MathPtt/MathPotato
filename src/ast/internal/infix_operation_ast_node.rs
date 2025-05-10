@@ -1,11 +1,11 @@
 use crate::ast::ast_node_types_enum::AstNodeType;
-use crate::ast::infix_operation_enum::InfixOperationType;
+use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
 use crate::parser::parser_error::ParseError;
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub struct InfixAstNodeInternal {
-    operation_type: InfixOperationType,
+    operation_type: InfixOperationTypeEnum,
     left_id: Uuid,
     left_type: AstNodeType,
     right_id: Uuid,
@@ -14,7 +14,7 @@ pub struct InfixAstNodeInternal {
 
 impl InfixAstNodeInternal {
     pub fn new_with_type_and_left_child_node(
-        operation_type: InfixOperationType,
+        operation_type: InfixOperationTypeEnum,
         left_type: AstNodeType,
         left: Uuid,
     ) -> InfixAstNodeInternal {
@@ -26,7 +26,7 @@ impl InfixAstNodeInternal {
             right_type: AstNodeType::None,
         }
     }
-    pub fn get_operation_type(&self) -> InfixOperationType {
+    pub fn get_operation_type(&self) -> InfixOperationTypeEnum {
         self.operation_type.clone()
     }
 
