@@ -26,39 +26,4 @@ impl InfixAstNodeInternal {
             right_type: AstNodeType::None,
         }
     }
-    pub fn get_operation_type(&self) -> InfixOperationTypeEnum {
-        self.operation_type.clone()
-    }
-
-    pub fn get_left_node_id_and_type(&self) -> Option<(Uuid, AstNodeType)> {
-        if self.left_id == Uuid::nil() {
-            None
-        } else {
-            Some((self.left_id, self.left_type.clone()))
-        }
-    }
-
-    pub fn get_right_node_id_and_type(&self) -> Option<(Uuid, AstNodeType)> {
-        if self.right_id == Uuid::nil() {
-            None
-        } else {
-            Some((self.right_id, self.right_type.clone()))
-        }
-    }
-
-    pub fn get_right_node(&self) -> Option<(Uuid, AstNodeType)> {
-        if self.right_id == Uuid::nil() {
-            None
-        } else {
-            Some((self.right_id, self.right_type.clone()))
-        }
-    }
-
-    pub(crate) fn is_left_occupied(&self) -> bool {
-        self.left_type != AstNodeType::None && self.left_id != Uuid::nil()
-    }
-
-    pub(crate) fn is_right_occupied(&self) -> bool {
-        self.right_type != AstNodeType::None && self.right_id != Uuid::nil()
-    }
 }
