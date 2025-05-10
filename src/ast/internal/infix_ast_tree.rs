@@ -4,17 +4,17 @@ use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
-use super::internal::{
+use super::{
     ast_tree_traits::{TypedAstTreeGetKeys, TypedAstTreeLen},
-    infix_operation_ast_node::InfixAstNodeInternal,
+    infix_ast_node_internal::InfixAstNodeInternal,
 };
 
 #[derive(Clone, Debug)]
-pub struct InfixOperationAstTree {
+pub struct InfixAstTree {
     tree: HashMap<Uuid, InfixAstNodeInternal>,
 }
 
-impl InfixOperationAstTree {
+impl InfixAstTree {
     pub fn put(
         &mut self,
         key: Uuid,
@@ -33,6 +33,10 @@ impl InfixOperationAstTree {
         Self {
             tree: HashMap::new(),
         }
+    }
+
+    pub(crate) fn len(&self) -> usize {
+        self.tree.len()
     }
 
     pub(crate) fn get(&self, id: Uuid) -> Option<InfixAstNodeInternal> {
@@ -57,13 +61,13 @@ impl InfixOperationAstTree {
         Ok(res)
     }
 }
-impl TypedAstTreeLen for InfixOperationAstTree {
+impl TypedAstTreeLen for InfixAstTree {
     fn len(&self) -> usize {
         self.tree.len()
     }
 }
 
-impl TypedAstTreeGetKeys for InfixOperationAstTree {
+impl TypedAstTreeGetKeys for InfixAstTree {
     fn keys(self) -> Vec<Uuid> {
         self.tree.keys().copied().collect()
     }

@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     ast::{
-        ast_node_types_enum::AstNodeType, internal::infix_operation_ast_node::InfixAstNodeInternal,
+        ast_node_types_enum::AstNodeType, internal::infix_ast_node_internal::InfixAstNodeInternal,
     },
     parser::parser_error::ParseError,
 };
