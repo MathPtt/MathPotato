@@ -1,4 +1,4 @@
-use super::MathPotatoAstTree;
+use crate::ast::ast_tree::MathPotatoAstTree;
 
 /// The Continuation Node Api
 ///

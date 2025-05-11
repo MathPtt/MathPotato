@@ -12,8 +12,6 @@ use super::{
     },
 };
 pub mod ast_apis;
-pub mod cont_node_api;
-pub mod cont_node_api_get_id_and_type;
 pub mod i32_api;
 pub mod i32_api_get_node_by_id;
 pub mod i32_api_node_count;

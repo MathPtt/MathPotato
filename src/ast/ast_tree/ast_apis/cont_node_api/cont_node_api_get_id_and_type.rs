@@ -1,8 +1,8 @@
 use uuid::Uuid;
 
-use crate::ast::ast_node_types_enum::AstNodeType;
+use crate::ast::{ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree};
 
-use super::{cont_node_api::ContNodeApi, MathPotatoAstTree};
+use super::cont_node_api::ContNodeApi;
 
 pub trait ContNodeApiGetIdAndType: ContNodeApi {
     /// Returns the Id and Type of the Continuation Node.
