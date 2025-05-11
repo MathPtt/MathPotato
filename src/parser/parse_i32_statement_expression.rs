@@ -14,7 +14,10 @@ use crate::ast::{
                 infix_api_update_by_id::InfixApiUpdateNodeById,
                 infix_get_by_id::InfixApiGetNodeById,
             },
-            root_node::root_node_api::RootNodeApi,
+            root_node::{
+                add_root_node_id_and_type::RootNodeApiAddRootNodeIdAndType,
+                update_root_node_id_and_type::RootNodeApiUpdateRootNodeIdAndType,
+            },
         },
         MathPotatoAstTree,
     },
@@ -339,7 +342,8 @@ mod test {
     use crate::ast::ast_tree::ast_apis::i32_api::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::ast_apis::infix_api::infix_api_get_node_count::InfixApiGetNodeCount;
     use crate::ast::ast_tree::ast_apis::infix_api::infix_get_by_id::InfixApiGetNodeById;
-    use crate::ast::ast_tree::ast_apis::root_node::root_node_api::RootNodeApi;
+    use crate::ast::ast_tree::ast_apis::root_node::get_root_node_id::RootNodeApiGetRootNodeId;
+    use crate::ast::ast_tree::ast_apis::root_node::get_root_node_type::RootNodeApiGetRootNodeType;
     use crate::ast::ast_tree::ast_apis::root_node::root_node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;

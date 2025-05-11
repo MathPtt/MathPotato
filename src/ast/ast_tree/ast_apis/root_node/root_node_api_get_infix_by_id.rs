@@ -8,7 +8,7 @@ use crate::{
     parser::parser_error::ParseError,
 };
 
-use super::root_node_api::RootNodeApi;
+use super::RootNodeApi;
 
 pub trait RootNodeApiGetInfixNodeById: RootNodeApi {
     /// Returns the root node when the root node type is Infix node.
