@@ -181,8 +181,8 @@ pub fn parse_i32_statement_expression(
                             // here we assume that we are not the first character after the `=`, so
                             // we have to determine where are we, meaning investigating the AST and
                             // based on the result act.
-                            // let target_node = find_target_node(token, ast, cont_node_details);
-                            // parse_i32_statement_expression(i + 1, tokens, ast)
+                            let parent_infix_node =
+                                find_the_parent_infix_node(&ast, cont_node_details);
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationMultiplication => {
@@ -255,53 +255,54 @@ pub fn parse_i32_statement_expression(
     }
 }
 
-/// Finds the place in the AST for the node to be created.
+/// Finds the parent InfixNode based on the provided continuation node details.
 ///
 /// # Remarks
-/// This method walks up in the execution order represented by the AST and looks for a node which
-/// either:
-/// - has the same precedence as the node to be created based on the token
-/// - has higher precedence than the node to be created based on the token
-/// The steps of this walk are `InfixOperationAstNode`s.
-// fn find_target_node(
-//     token: PotatoToken,
-//     ast: MathPotatoAstTree,
-//     cont_node_details: (uuid::Uuid, AstNodeType),
-// ) ->  {
-//     match cont_node_details.1 {
-//         AstNodeType::I32AstNode => {
-//             let cont_node = ast.get_i32_node_by_id(cont_node_details.0).unwrap_or_else(|e|panic!("There is no target node with {} id.", cont_node_details.0));
-//             match cont_node.parent_type {
-//                 AstNodeType::I32AstNode => {
-//                     panic!("Structural error. A {} node type cannot be parent of {} node type.", AstNodeType::I32AstNode, AstNodeType::I32AstNode)
-//                 },
-//                 AstNodeType::InfixOperationAstNode => {
-//                     let target_node = ast.get_infix_node_by_id(cont_node.parent_id).unwrap_or_else(|e|panic!("panic"));
-//                 },
-//                 AstNodeType::None => {
-//                     // this means that there is no parent for continuation node
-//                     // meaning, this is the case when we process the first infix node after the `=`
-//                     // sign
-//                 },
-//             }
-//
-//         },
-//         AstNodeType::InfixOperationAstNode => {
-//             panic!(
-//                 "Syntax error! Cannot be an {:#?} node before an {:#?} node type.",
-//                 AstNodeType::InfixOperationAstNode,
-//                 token.token_type
-//             )
-//         }
-//         AstNodeType::None => {
-//             panic!(
-//                 "Syntax error! Cannot be an {:#?} node before an {:#?} node type.",
-//                 AstNodeType::None,
-//                 token.token_type,
-//             )
-//         }
-//     }
-// }
+/// In the process of building the AST and considering the operation precedence we need to walk
+/// through the tree of InfixNodes and find the place where the actual node need to be placed. The
+/// first step in this process is finding the parent Infix node.
+fn find_the_parent_infix_node(
+    ast: &MathPotatoAstTree,
+    cont_node_details: (uuid::Uuid, AstNodeType),
+) -> Option<InfixAstNode> {
+    match cont_node_details.1 {
+        AstNodeType::I32AstNode => {
+            let cont_node = ast
+                .get_i32_node_by_id(cont_node_details.0)
+                .unwrap_or_else(|e| {
+                    panic!("There is no target node with {} id.", cont_node_details.0)
+                });
+            match cont_node.parent_type {
+                AstNodeType::I32AstNode => {
+                    panic!(
+                        "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
+                        AstNodeType::I32AstNode,
+                        AstNodeType::I32AstNode
+                    )
+                }
+                AstNodeType::InfixOperationAstNode => ast.get_infix_node_by_id(cont_node.parent_id),
+                AstNodeType::None => {
+                    // this means that there is no parent for continuation node
+                    // meaning, this is the case when we process the first infix node after the `=`
+                    // sign
+                    panic!("Deal with this later.")
+                }
+            }
+        }
+        AstNodeType::InfixOperationAstNode => {
+            panic!(
+                "Syntax error! Cannot be an {:#?} node before an Infix node type.",
+                AstNodeType::InfixOperationAstNode,
+            )
+        }
+        AstNodeType::None => {
+            panic!(
+                "Syntax error! Cannot be an {:#?} node before an Infix node type.",
+                AstNodeType::None,
+            )
+        }
+    }
+}
 
 fn error_message(i: usize) -> String {
     format!("There is no character at {}", i)
