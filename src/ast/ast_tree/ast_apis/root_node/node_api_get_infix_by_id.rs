@@ -1,12 +1,10 @@
 use uuid::Uuid;
 
-use crate::{
-    ast::{
-        ast_tree::{ast_apis::infix_api::infix_get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
-        infix_ast_node::InfixAstNode,
-    },
-    parser::parser_error::ParseError,
+use crate::ast::{
+    ast_tree::{ast_apis::infix_api::get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
+    infix_ast_node::InfixAstNode,
 };
+use crate::parser::parser_error::ParseError;
 
 use super::RootNodeApi;
 
