@@ -3,11 +3,9 @@ use crate::ast::ast_tree::MathPotatoAstTree;
 pub mod cont_node_api_get_id_and_type;
 /// The Continuation Node Api
 ///
-/// # Note
-///
 /// This zero method trait is only to store all the documentation related to Continuation Node
-/// problem space. All the related traits implement this trait, so there is traceability in the
-/// documentation.
+/// problem space. All other Continuation Node related traits implement this trait,
+/// so there is traceability in the documentation.
 ///
 /// # Continuation Node
 ///

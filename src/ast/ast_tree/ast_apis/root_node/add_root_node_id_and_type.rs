@@ -8,6 +8,18 @@ use crate::{
 use super::RootNodeApi;
 
 pub trait RootNodeApiAddRootNodeIdAndType: RootNodeApi {
+    /// Add Root Node Id and Type
+    ///
+    /// Adds the provided id and node_type as Root Node to the AST and returns the new Root Node Id
+    /// and Type values.
+    ///
+    /// # Parameters
+    /// - `id` - `Uuid` - the new Root Node id.
+    /// - `node_type` - `AstNodeType` - the new type of the Root Node.
+    ///
+    /// # Returns
+    /// - `Ok((Uuid, AstNodeType))` - when the operation successful.
+    /// - `Err(ParseError)` - The details of the error happened during the operation.
     fn add_root_node_id_and_type(
         &mut self,
         id: Uuid,

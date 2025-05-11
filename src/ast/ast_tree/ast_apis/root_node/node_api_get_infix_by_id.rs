@@ -11,8 +11,16 @@ use crate::{
 use super::RootNodeApi;
 
 pub trait RootNodeApiGetInfixNodeById: RootNodeApi {
-    /// Returns the root node when the root node type is Infix node.
+    /// Get Root Node Infix By Id
+    ///
+    /// Returns the root node when the root node type is Infix type node.
+    ///
+    /// # Note
     /// This method is an alias over the InfixApiGetNodeById.
+    ///
+    /// # Returns
+    /// - `Ok(InfixAstNode)` - The Root Node.
+    /// - `Err(ParseError)` - The details of the error happened related to this operation.
     fn get_root_node_infix_by_id(&self, id: Uuid) -> Result<InfixAstNode, ParseError>;
 }
 

@@ -8,6 +8,12 @@ use crate::{
 use super::RootNodeApi;
 
 pub trait RootNodeApiUpdateRootNodeIdAndType: RootNodeApi {
+    /// Updates the Root Node id and type
+    ///
+    /// # Parameters
+    /// - `&mut self` - `MathPotatoAstTree`: the AST tree.
+    /// - `id` - `Uuid`, the Id of the new Root Node.
+    /// - `node_type` - `AstNodeType` - the new type of the Root Node.
     fn update_root_node_id_and_type(
         &mut self,
         id: Uuid,
