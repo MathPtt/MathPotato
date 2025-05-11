@@ -1,8 +1,8 @@
 use uuid::Uuid;
 
-use crate::ast::infix_ast_node::InfixAstNode;
+use crate::ast::{ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode};
 
-use super::{infix_api::InfixApi, MathPotatoAstTree};
+use super::InfixApi;
 
 pub trait InfixApiGetNodeById: InfixApi {
     fn get_infix_node_by_id(&self, id: Uuid) -> Option<InfixAstNode>;

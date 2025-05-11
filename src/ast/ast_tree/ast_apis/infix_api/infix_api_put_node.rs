@@ -1,11 +1,13 @@
 use uuid::Uuid;
 
 use crate::{
-    ast::{ast_node_types_enum::AstNodeType, infix_ast_node::InfixAstNode},
+    ast::{
+        ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode,
+    },
     parser::parser_error::ParseError,
 };
 
-use super::{infix_api::InfixApi, MathPotatoAstTree};
+use super::InfixApi;
 
 pub trait InfixApiPutNode: InfixApi {
     /// .

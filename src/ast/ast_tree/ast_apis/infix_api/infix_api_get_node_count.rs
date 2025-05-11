@@ -1,4 +1,6 @@
-use super::{infix_api::InfixApi, MathPotatoAstTree};
+use crate::ast::ast_tree::MathPotatoAstTree;
+
+use super::InfixApi;
 
 pub trait InfixApiGetNodeCount: InfixApi {
     fn get_infix_node_count(&self) -> usize;

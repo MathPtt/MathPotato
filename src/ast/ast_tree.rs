@@ -17,12 +17,6 @@ pub mod i32_api_get_node_by_id;
 pub mod i32_api_node_count;
 pub mod i32_api_put_node;
 pub mod i32_api_update_node;
-pub mod infix_api;
-pub mod infix_api_get_node_count;
-pub mod infix_api_get_nodes;
-pub mod infix_api_put_node;
-pub mod infix_api_update_by_id;
-pub mod infix_get_by_id;
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
 /// # Decisions

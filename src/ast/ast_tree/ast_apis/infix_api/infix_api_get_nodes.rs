@@ -1,6 +1,9 @@
-use crate::{ast::infix_ast_node::InfixAstNode, parser::parser_error::ParseError};
+use crate::{
+    ast::{ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode},
+    parser::parser_error::ParseError,
+};
 
-use super::{infix_api::InfixApi, MathPotatoAstTree};
+use super::InfixApi;
 
 pub trait InfixApiGetNodes: InfixApi {
     fn get_infix_nodes(&self) -> Result<Vec<InfixAstNode>, ParseError>;

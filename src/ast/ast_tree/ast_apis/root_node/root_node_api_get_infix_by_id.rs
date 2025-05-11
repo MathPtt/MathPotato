@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     ast::{
-        ast_tree::{infix_get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
+        ast_tree::{ast_apis::infix_api::infix_get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
         infix_ast_node::InfixAstNode,
     },
     parser::parser_error::ParseError,
