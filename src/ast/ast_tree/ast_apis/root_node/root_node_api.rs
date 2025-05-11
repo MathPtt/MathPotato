@@ -1,13 +1,9 @@
 use uuid::Uuid;
 
 use crate::{
-    ast::{
-        ast_node_types_enum::AstNodeType, internal::infix_ast_node_internal::InfixAstNodeInternal,
-    },
+    ast::{ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree},
     parser::parser_error::ParseError,
 };
-
-use super::MathPotatoAstTree;
 
 /// Root Node Api of the Abstract Syntax Tree
 ///

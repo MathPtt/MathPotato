@@ -1,11 +1,14 @@
 use uuid::Uuid;
 
-use crate::{ast::infix_ast_node::InfixAstNode, parser::parser_error::ParseError};
-
-use super::{
-    i32_api_get_node_by_id::I32ApiGetNodeById, infix_get_by_id::InfixApiGetNodeById,
-    root_node_api::RootNodeApi, MathPotatoAstTree,
+use crate::{
+    ast::{
+        ast_tree::{infix_get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
+        infix_ast_node::InfixAstNode,
+    },
+    parser::parser_error::ParseError,
 };
+
+use super::root_node_api::RootNodeApi;
 
 pub trait RootNodeApiGetInfixNodeById: RootNodeApi {
     /// Returns the root node when the root node type is Infix node.

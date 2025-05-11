@@ -3,11 +3,12 @@ use core::panic;
 use crate::ast::{
     ast_node_types_enum::AstNodeType,
     ast_tree::{
+        ast_apis::root_node::root_node_api::RootNodeApi,
         cont_node_api_get_id_and_type::ContNodeApiGetIdAndType,
         i32_api_get_node_by_id::I32ApiGetNodeById, i32_api_put_node::I32ApiPutNode,
         i32_api_update_node::I32ApiUpdateNode, infix_api_put_node::InfixApiPutNode,
         infix_api_update_by_id::InfixApiUpdateNodeById, infix_get_by_id::InfixApiGetNodeById,
-        root_node_api::RootNodeApi, MathPotatoAstTree,
+        MathPotatoAstTree,
     },
     i32_node::I32AstNode,
     infix_ast_node::InfixAstNode,
@@ -325,19 +326,17 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
+    use crate::ast::ast_tree::ast_apis::root_node::root_node_api::RootNodeApi;
+    use crate::ast::ast_tree::ast_apis::root_node::root_node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
     use crate::ast::ast_tree::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
     use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
     use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::infix_api_get_node_count::InfixApiGetNodeCount;
     use crate::ast::ast_tree::infix_get_by_id::InfixApiGetNodeById;
-    use crate::ast::ast_tree::root_node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
+    use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::{
-        ast::{
-            ast_node_types_enum::AstNodeType,
-            ast_tree::{root_node_api::RootNodeApi, MathPotatoAstTree},
-        },
-        lexer::lexer::lexing,
+        ast::ast_node_types_enum::AstNodeType, lexer::lexer::lexing,
         parser::parse_i32_statement_expression::parse_i32_statement_expression,
     };
 

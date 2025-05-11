@@ -11,6 +11,7 @@ use super::{
         infix_ast_tree::InfixAstTree,
     },
 };
+pub mod ast_apis;
 pub mod cont_node_api;
 pub mod cont_node_api_get_id_and_type;
 pub mod i32_api;
@@ -24,8 +25,6 @@ pub mod infix_api_get_nodes;
 pub mod infix_api_put_node;
 pub mod infix_api_update_by_id;
 pub mod infix_get_by_id;
-pub mod root_node_api;
-pub mod root_node_api_get_infix_by_id;
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
 /// # Decisions
