@@ -12,11 +12,6 @@ use super::{
     },
 };
 pub mod ast_apis;
-pub mod i32_api;
-pub mod i32_api_get_node_by_id;
-pub mod i32_api_node_count;
-pub mod i32_api_put_node;
-pub mod i32_api_update_node;
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
 /// # Decisions

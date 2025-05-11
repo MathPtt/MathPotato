@@ -5,6 +5,10 @@ use crate::ast::{
     ast_tree::{
         ast_apis::{
             cont_node_api::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType,
+            i32_api::{
+                i32_api_get_node_by_id::I32ApiGetNodeById, i32_api_put_node::I32ApiPutNode,
+                i32_api_update_node::I32ApiUpdateNode,
+            },
             infix_api::{
                 infix_api_put_node::InfixApiPutNode,
                 infix_api_update_by_id::InfixApiUpdateNodeById,
@@ -12,9 +16,6 @@ use crate::ast::{
             },
             root_node::root_node_api::RootNodeApi,
         },
-        i32_api_get_node_by_id::I32ApiGetNodeById,
-        i32_api_put_node::I32ApiPutNode,
-        i32_api_update_node::I32ApiUpdateNode,
         MathPotatoAstTree,
     },
     i32_node::I32AstNode,
@@ -334,12 +335,12 @@ mod test {
     use uuid::Uuid;
 
     use crate::ast::ast_tree::ast_apis::cont_node_api::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
+    use crate::ast::ast_tree::ast_apis::i32_api::i32_api_get_node_by_id::I32ApiGetNodeById;
+    use crate::ast::ast_tree::ast_apis::i32_api::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::ast_apis::infix_api::infix_api_get_node_count::InfixApiGetNodeCount;
     use crate::ast::ast_tree::ast_apis::infix_api::infix_get_by_id::InfixApiGetNodeById;
     use crate::ast::ast_tree::ast_apis::root_node::root_node_api::RootNodeApi;
     use crate::ast::ast_tree::ast_apis::root_node::root_node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
-    use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
-    use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::{

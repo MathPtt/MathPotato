@@ -1,11 +1,11 @@
 use uuid::Uuid;
 
 use crate::{
-    ast::{ast_node_types_enum::AstNodeType, i32_node::I32AstNode},
+    ast::{ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree, i32_node::I32AstNode},
     parser::parser_error::ParseError,
 };
 
-use super::{i32_api::I32Api, MathPotatoAstTree};
+use super::I32Api;
 
 pub trait I32ApiPutNode: I32Api {
     /// Adds a new `I32AstNode` to the AST.

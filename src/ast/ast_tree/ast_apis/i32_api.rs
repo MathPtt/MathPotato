@@ -1,5 +1,8 @@
-use super::MathPotatoAstTree;
-
+use crate::ast::ast_tree::MathPotatoAstTree;
+pub mod i32_api_get_node_by_id;
+pub mod i32_api_node_count;
+pub mod i32_api_put_node;
+pub mod i32_api_update_node;
 /// The I32 Api
 ///
 /// The I32 Api is dedicated to communicate with world outside of the AST.

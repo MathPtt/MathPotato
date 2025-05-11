@@ -1,8 +1,11 @@
 use uuid::Uuid;
 
-use crate::{ast::i32_node::I32AstNode, parser::parser_error::ParseError};
+use crate::{
+    ast::{ast_tree::MathPotatoAstTree, i32_node::I32AstNode},
+    parser::parser_error::ParseError,
+};
 
-use super::{i32_api::I32Api, MathPotatoAstTree};
+use super::I32Api;
 
 pub trait I32ApiGetNodeById: I32Api {
     /// Returns the I32AstNode with the designated id.

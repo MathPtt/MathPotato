@@ -1,6 +1,6 @@
-use crate::ast::internal::ast_tree_traits::TypedAstTreeLen;
+use crate::ast::{ast_tree::MathPotatoAstTree, internal::ast_tree_traits::TypedAstTreeLen};
 
-use super::{i32_api::I32Api, MathPotatoAstTree};
+use super::I32Api;
 
 pub trait I32ApiNodeCount: I32Api {
     /// Returns the length of the i32 datatype tree size.
