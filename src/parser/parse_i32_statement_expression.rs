@@ -327,7 +327,9 @@ mod test {
     use crate::ast::ast_tree::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
     use crate::ast::ast_tree::i32_api_get_node_by_id::I32ApiGetNodeById;
     use crate::ast::ast_tree::i32_api_node_count::I32ApiNodeCount;
+    use crate::ast::ast_tree::infix_api_get_node_count::InfixApiGetNodeCount;
     use crate::ast::ast_tree::infix_get_by_id::InfixApiGetNodeById;
+    use crate::ast::ast_tree::root_node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
     use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::{
         ast::{
@@ -368,10 +370,10 @@ mod test {
             2
         );
         assert_eq!(
-            result.infix_tree_len(),
+            result.get_infix_node_count(),
             1,
             "sout: {}, expected: {}",
-            result.infix_tree_len(),
+            result.get_infix_node_count(),
             1
         );
 
@@ -400,18 +402,17 @@ mod test {
             result.get_root_node_type()
         );
         let root_node = result
-            .get_root_node_infix(root_node_id)
+            .get_root_node_infix_by_id(root_node_id)
             .unwrap_or_else(|e| panic!("{:#?}", e));
         assert!(
-            root_node.1.is_left_occupied(),
+            root_node.is_left_occupied(),
             "The left node of the root InfixOperationAstNode must be occupied at this point.",
         );
         assert!(
-            root_node.1.is_right_occupied(),
+            root_node.is_right_occupied(),
             "The left node of the root InfixOperationAstNode must be occupied at this point.",
         );
         let left_children_id_and_type = root_node
-            .1
             .get_left_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no left children."));
         assert_eq!(
@@ -425,7 +426,7 @@ mod test {
             .unwrap_or_else(|e| panic!("No left children. Error: {:#?}", e));
         assert_eq!(left_children.value, 1, "The left children value must be 1");
         assert_eq!(
-            left_children.parent_id, root_node.0,
+            left_children.parent_id, root_node.id,
             "The parent id must be equal to root node id."
         );
         assert_eq!(
@@ -435,7 +436,6 @@ mod test {
         );
 
         let right_children_id_and_type = root_node
-            .1
             .get_right_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no left children."));
         assert_eq!(
@@ -452,7 +452,7 @@ mod test {
             "The right children value must be 2"
         );
         assert_eq!(
-            right_children.parent_id, root_node.0,
+            right_children.parent_id, root_node.id,
             "The parent id must be equal to root node id."
         );
         assert_eq!(
@@ -475,7 +475,7 @@ mod test {
 
         // assert
         assert_eq!(result.i32_node_count(), 1);
-        assert_eq!(result.infix_tree_len(), 1);
+        assert_eq!(result.get_infix_node_count(), 1);
 
         // continuation node checks
         let continuation_node_id_and_type = result

@@ -20,9 +20,6 @@ pub trait RootNodeApi {
         node_type: AstNodeType,
     ) -> Result<(Uuid, AstNodeType), ParseError>;
 
-    /// Returns the root node by id.
-    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixAstNodeInternal), ParseError>;
-
     fn update_root_node_id_and_type(
         &mut self,
         id: Uuid,
@@ -50,17 +47,6 @@ impl RootNodeApi for MathPotatoAstTree {
             self.root_node_id = id;
             self.root_node_type = node_type.clone();
             Ok((id, node_type))
-        }
-    }
-
-    /// Returns the root node by id.
-    fn get_root_node_infix(&self, id: Uuid) -> Result<(Uuid, InfixAstNodeInternal), ParseError> {
-        match self.infix_operation_tree.get(id) {
-            Some(r) => Ok((id, r)),
-            None => Err(ParseError::new(format!(
-                "There is no InfixOperationAstNode type root node with id {}",
-                id
-            ))),
         }
     }
 
