@@ -1,6 +1,7 @@
 use crate::ast::ast_tree::MathPotatoAstTree;
 
-pub mod cont_node_api_get_id_and_type;
+pub mod get_node_id_and_type;
+pub mod update_node_id_and_type;
 /// The Continuation Node Api
 ///
 /// This zero method trait is only to store all the documentation related to Continuation Node

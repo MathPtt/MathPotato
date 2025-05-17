@@ -113,11 +113,11 @@ impl InfixAstNode {
         }
     }
 
-    pub(crate) fn is_left_occupied(&self) -> bool {
+    pub fn is_left_occupied(&self) -> bool {
         self.left_type != AstNodeType::None && self.left_id != Uuid::nil()
     }
 
-    pub(crate) fn is_right_occupied(&self) -> bool {
+    pub fn is_right_occupied(&self) -> bool {
         self.right_type != AstNodeType::None && self.right_id != Uuid::nil()
     }
 }

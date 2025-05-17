@@ -58,7 +58,7 @@ impl I32AstTree {
         self.tree.clone().len()
     }
 
-    pub(crate) fn update(
+    pub fn update(
         &mut self,
         id: Uuid,
         node: I32AstNodeInternal,

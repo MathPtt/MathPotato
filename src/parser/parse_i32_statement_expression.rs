@@ -4,7 +4,10 @@ use crate::ast::{
     ast_node_types_enum::AstNodeType,
     ast_tree::{
         ast_apis::{
-            cont_node_api::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType,
+            cont_node_api::{
+                get_node_id_and_type::ContNodeApiGetIdAndType,
+                update_node_id_and_type::ContNodeApiUpdateNodeIdAndType,
+            },
             i32_api::{
                 i32_api_get_node_by_id::I32ApiGetNodeById, i32_api_put_node::I32ApiPutNode,
                 i32_api_update_node::I32ApiUpdateNode,
@@ -168,7 +171,15 @@ pub fn parse_i32_statement_expression(
                                     cont_node
                                         .add_i32node_to_the_right(i32node_recorded.id)
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    ast.update_infix_node_by_id(cont_node).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
+                                    ast.update_infix_node_by_id(cont_node.clone()).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
+                                    ast.update_continuation_node_id_and_type(
+                                        cont_node.id,
+                                        AstNodeType::InfixOperationAstNode,
+                                    )
+                                    .unwrap_or_else(|e| {
+                                        panic!("Updating continuation node. {:#?}", e)
+                                    });
+
                                     parse_i32_statement_expression(i + 1, tokens, ast)
                                 }
                                 AstNodeType::None => {
@@ -192,11 +203,8 @@ pub fn parse_i32_statement_expression(
                             // here we assume that we are not the first character after the `=`, so
                             // we have to determine where are we, meaning investigating the AST and
                             // based on the result act.
-                            let parent_infix_node =
+                            let _parent_infix_node =
                                 find_the_parent_infix_node(&ast, cont_node_details);
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::OperationMultiplication => {
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationAddition => {
@@ -281,7 +289,10 @@ fn find_the_parent_infix_node(
             let cont_node = ast
                 .get_i32_node_by_id(cont_node_details.0)
                 .unwrap_or_else(|e| {
-                    panic!("There is no target node with {} id.", cont_node_details.0)
+                    panic!(
+                        "There is no target node with {:#?} id. Error details: {:#?}",
+                        cont_node_details.0, e
+                    )
                 });
             match cont_node.parent_type {
                 AstNodeType::I32AstNode => {
@@ -336,7 +347,7 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
-    use crate::ast::ast_tree::ast_apis::cont_node_api::cont_node_api_get_id_and_type::ContNodeApiGetIdAndType;
+    use crate::ast::ast_tree::ast_apis::cont_node_api::get_node_id_and_type::ContNodeApiGetIdAndType;
     use crate::ast::ast_tree::ast_apis::i32_api::i32_api_get_node_by_id::I32ApiGetNodeById;
     use crate::ast::ast_tree::ast_apis::i32_api::i32_api_node_count::I32ApiNodeCount;
     use crate::ast::ast_tree::ast_apis::infix_api::get_by_id::InfixApiGetNodeById;
@@ -357,6 +368,7 @@ mod test {
         // arrange
         let input = String::from("1 + 2 * 3;");
         let lexed_input = lexing(&input);
+        // lexed_input.iter().for_each(|i| println!("{:#?}", i));
         let input_ast = MathPotatoAstTree::new();
 
         // action
@@ -364,10 +376,10 @@ mod test {
             .unwrap_or_else(|e| panic!("Parsing has failed! {:#?}", e));
 
         assert_eq!(
-            result.i32_node_count(),
+            result.get_i32_node_count(),
             2,
             "expected i32 node count was: {}, actual result: {}",
-            result.i32_node_count(),
+            result.get_i32_node_count(),
             2
         );
         assert_eq!(
@@ -393,10 +405,10 @@ mod test {
 
         // assert
         assert_eq!(
-            result.i32_node_count(),
+            result.get_i32_node_count(),
             2,
             "sout: {}, expected: {}",
-            result.i32_node_count(),
+            result.get_i32_node_count(),
             2
         );
         assert_eq!(
@@ -504,7 +516,7 @@ mod test {
             .unwrap_or_else(|e| panic!("There is no result: {:#?}", e));
 
         // assert
-        assert_eq!(result.i32_node_count(), 1);
+        assert_eq!(result.get_i32_node_count(), 1);
         assert_eq!(result.get_infix_node_count(), 1);
 
         // continuation node checks
@@ -569,7 +581,7 @@ mod test {
         let result = parse_i32_statement_expression(0, lexed_input, input_ast)
             .unwrap_or_else(|r| panic!("There is no result! {:#?}", r));
         // assert
-        assert_eq!(result.i32_node_count(), 1);
+        assert_eq!(result.get_i32_node_count(), 1);
         let continuation_node_id = result
             .get_continuation_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));

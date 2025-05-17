@@ -1,5 +1,3 @@
-use uuid::Uuid;
-
 use crate::{
     ast::{
         ast_node_types_enum::AstNodeType, ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode,
@@ -30,7 +28,7 @@ impl InfixApiPutNode for MathPotatoAstTree {
                 self.last_changed_node_type = AstNodeType::InfixOperationAstNode;
                 self.last_changed_node_id = r.0;
                 Ok(InfixAstNode::from_internal_and_id(r.0, r.1)
-                    .unwrap_or_else(|e| panic!("From internal has failed.")))
+                    .unwrap_or_else(|e| panic!("From internal has failed. {:#?}", e)))
             }
         }
     }

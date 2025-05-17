@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::ast::{ast_node_types_enum::AstNodeType, i32_node::I32AstNode};
+use crate::ast::ast_node_types_enum::AstNodeType;
 
 /// Represents an i32 value of the language.
 #[derive(Clone, Debug)]

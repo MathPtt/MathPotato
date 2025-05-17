@@ -1,6 +1,5 @@
 use crate::ast::ast_node_types_enum::AstNodeType;
 use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
-use crate::parser::parser_error::ParseError;
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
