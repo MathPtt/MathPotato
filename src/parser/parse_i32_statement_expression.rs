@@ -355,9 +355,28 @@ mod test {
     fn addition_and_multiplication_precedence_case() {
         // case: `2 + 3 * 4;`
         // arrange
-        let input = String::from("1 + 2;");
+        let input = String::from("1 + 2 * 3;");
         let lexed_input = lexing(&input);
         let input_ast = MathPotatoAstTree::new();
+
+        // action
+        let result = parse_i32_statement_expression(0, lexed_input, input_ast)
+            .unwrap_or_else(|e| panic!("Parsing has failed! {:#?}", e));
+
+        assert_eq!(
+            result.i32_node_count(),
+            2,
+            "expected i32 node count was: {}, actual result: {}",
+            result.i32_node_count(),
+            2
+        );
+        assert_eq!(
+            result.get_infix_node_count(),
+            3,
+            "expected infix node count was: {}, actual result: {}",
+            result.get_infix_node_count(),
+            2
+        );
     }
 
     #[test]
