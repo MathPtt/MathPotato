@@ -11,6 +11,9 @@ pub trait ContNodeApiUpdateNodeIdAndType: ContNodeApi {
     /// Update Continuation Node and Id
     ///
     /// It updates the continuation node (an Id and node type) in the AST.
+    /// If there is no continuation node, meaning the first time continuation node has been
+    /// referenced, it will create the reference. It also means that this method blindly overwrites
+    /// the values.
     ///
     /// # Parameters
     /// - `id`:`Uuid` - the id of the new continuation node
@@ -28,21 +31,8 @@ impl ContNodeApiUpdateNodeIdAndType for MathPotatoAstTree {
         id: Uuid,
         ast_node_type: AstNodeType,
     ) -> Result<(Uuid, AstNodeType), ParseError> {
-        match ast_node_type {
-            AstNodeType::None => Err(ParseError::new(
-                "The continuation node type cannot be: None".to_string(),
-            )),
-            _ => {
-                if id == Uuid::nil() {
-                    Err(ParseError::new(
-                        "The continuation node type cannot be: None".to_string(),
-                    ))
-                } else {
-                    self.last_changed_node_type = ast_node_type.clone();
-                    self.last_changed_node_id = id;
-                    Ok((self.root_node_id, self.root_node_type.clone()))
-                }
-            }
-        }
+        self.last_changed_node_type = ast_node_type.clone();
+        self.last_changed_node_id = id;
+        Ok((self.root_node_id, self.root_node_type.clone()))
     }
 }

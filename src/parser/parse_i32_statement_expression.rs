@@ -86,6 +86,11 @@ pub fn parse_i32_statement_expression(
                                         r
                                     )
                                 });
+                            let _ = ast.update_continuation_node_id_and_type(
+                                recorded_node.id,
+                                AstNodeType::I32AstNode,
+                            );
+                            // println!("=== first char LiteralIntegerValue: {:#?}", ast);
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::SignAssignment => {
@@ -136,13 +141,20 @@ pub fn parse_i32_statement_expression(
                     // once we matched the actual token type
                     // we are going to match on continuation node too.
 
+                    // println!("=====================");
+                    // println!("=== AST: {:#?}", ast);
+                    // println!("=== Token: {:#?}", token);
+                    // println!("=== Cont node: {:#?}", cont_node_details);
+                    // println!("=====================");
+
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
                             match cont_node_details.1 {
                                 AstNodeType::I32AstNode => {
                                     // this is a syntax error, since two number type cannot follow each other
-                                    Err(ParseError::new(String::from(
-                                        "Syntax error! Two number type cannot follow each other!",
+
+                                    Err(ParseError::new(format!(
+                                        "Syntax error! Two number type cannot follow each other! Token: {:#?}, cont node: {:#?}", token, cont_node_details
                                     )))
                                 }
                                 AstNodeType::InfixOperationAstNode => {
@@ -173,8 +185,8 @@ pub fn parse_i32_statement_expression(
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
                                     ast.update_infix_node_by_id(cont_node.clone()).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
                                     ast.update_continuation_node_id_and_type(
-                                        cont_node.id,
-                                        AstNodeType::InfixOperationAstNode,
+                                        i32node_recorded.id,
+                                        AstNodeType::I32AstNode,
                                     )
                                     .unwrap_or_else(|e| {
                                         panic!("Updating continuation node. {:#?}", e)
@@ -398,6 +410,7 @@ mod test {
         let input = String::from("1 + 2;");
         let lexed_input = lexing(&input);
         let input_ast = MathPotatoAstTree::new();
+        // println!("{:#?}", lexed_input);
 
         // action
         let result = parse_i32_statement_expression(0, lexed_input, input_ast)
