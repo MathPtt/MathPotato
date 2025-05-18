@@ -141,11 +141,11 @@ pub fn parse_i32_statement_expression(
                     // once we matched the actual token type
                     // we are going to match on continuation node too.
 
-                    // println!("=====================");
-                    // println!("=== AST: {:#?}", ast);
-                    // println!("=== Token: {:#?}", token);
-                    // println!("=== Cont node: {:#?}", cont_node_details);
-                    // println!("=====================");
+                    println!("=====================");
+                    println!("=== AST: {:#?}", ast);
+                    println!("=== Token: {:#?}", token);
+                    println!("=== Cont node: {:#?}", cont_node_details);
+                    println!("=====================");
 
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
