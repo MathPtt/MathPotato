@@ -1,8 +1,8 @@
 use uuid::Uuid;
 
-use crate::ast::{
-    ast_tree::{ast_apis::infix_api::get_by_id::InfixApiGetNodeById, MathPotatoAstTree},
-    infix_ast_node::InfixAstNode,
+use crate::ast::ast_tree::ast_nodes::infix_ast_node::InfixAstNode;
+use crate::ast::ast_tree::{
+    ast_apis::infix_api::get_by_id::InfixApiGetNodeById, MathPotatoAstTree,
 };
 use crate::parser::parser_error::ParseError;
 

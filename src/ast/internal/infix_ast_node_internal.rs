@@ -2,27 +2,22 @@ use crate::ast::ast_node_types_enum::AstNodeType;
 use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
 use uuid::Uuid;
 
+pub mod get_left_id;
+pub mod get_left_type;
+pub mod get_operation_type;
+pub mod get_right_id;
+pub mod get_right_type;
+pub mod new_with_type_and_left_child_node;
+pub mod set_left_id;
+
 #[derive(Debug, Clone)]
 pub struct InfixAstNodeInternal {
-    pub operation_type: InfixOperationTypeEnum,
-    pub left_id: Uuid,
-    pub left_type: AstNodeType,
-    pub right_id: Uuid,
-    pub right_type: AstNodeType,
+    operation_type: InfixOperationTypeEnum,
+    left_id: Uuid,
+    left_type: AstNodeType,
+    right_id: Uuid,
+    right_type: AstNodeType,
 }
 
-impl InfixAstNodeInternal {
-    pub fn new_with_type_and_left_child_node(
-        operation_type: InfixOperationTypeEnum,
-        left_type: AstNodeType,
-        left: Uuid,
-    ) -> InfixAstNodeInternal {
-        InfixAstNodeInternal {
-            operation_type,
-            left_type,
-            left_id: left,
-            right_id: Uuid::nil(),
-            right_type: AstNodeType::None,
-        }
-    }
-}
+pub trait InfixAstNodeInternalApi {}
+impl InfixAstNodeInternalApi for InfixAstNodeInternal {}

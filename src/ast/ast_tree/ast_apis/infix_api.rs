@@ -1,5 +1,6 @@
 use crate::ast::ast_tree::MathPotatoAstTree;
 
+pub mod add_infix_left_child_to_infix;
 pub mod get_by_id;
 pub mod get_node_count;
 pub mod get_nodes;

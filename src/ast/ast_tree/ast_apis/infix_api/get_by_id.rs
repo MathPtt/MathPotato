@@ -1,6 +1,11 @@
 use uuid::Uuid;
 
-use crate::ast::{ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode};
+use crate::ast::ast_tree::{
+    ast_nodes::infix_ast_node::{
+        from_internal_and_id::InfixAstNodeFromInternalAndId, InfixAstNode,
+    },
+    MathPotatoAstTree,
+};
 
 use super::InfixApi;
 

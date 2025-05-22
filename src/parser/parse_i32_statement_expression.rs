@@ -21,10 +21,12 @@ use crate::ast::{
                 update_root_node_id_and_type::RootNodeApiUpdateRootNodeIdAndType,
             },
         },
+        ast_nodes::infix_ast_node::{
+            add_i32node_to_the_right::InfixAstNodeAddI32NodeToTheRight, check_if_left_empty_right_occupied::InfixAstNodeCheckIfLeftEmptyRightOccupied, get_left_node_id::InfixAstNodeGetLeftNodeId, get_left_node_id_and_type::InfixAstNodeGetLeftNodeIdAndType, new_with_type_and_left_child_node::InfixAstNodeNewWithTypeAndLeftChildNode, new_with_type_and_parent_node::InfixAstNodeNewWithTypeAndParentNode, remove_left_node_and_return_id::InfixAstNodeRemoveLeftNodeAndReturnId, InfixAstNode
+        },
         MathPotatoAstTree,
     },
     i32_node::I32AstNode,
-    infix_ast_node::InfixAstNode,
     infix_operation_type_enum::InfixOperationTypeEnum,
     potato_token::PotatoToken,
     potato_token_types::PotatoTokenTypes,
@@ -215,8 +217,34 @@ pub fn parse_i32_statement_expression(
                             // here we assume that we are not the first character after the `=`, so
                             // we have to determine where are we, meaning investigating the AST and
                             // based on the result act.
-                            let _parent_infix_node =
-                                find_the_parent_infix_node(&ast, cont_node_details);
+
+                            // We check if the conditions are met to execute this part
+                            match cont_node_details.1 {
+                                AstNodeType::InfixOperationAstNode => {
+                                    panic!("Cannot be an InfixAstNode right after another one. Actual node type by token: {:#?}; AST tree {:#?}", token, ast);
+                                }
+                                AstNodeType::None => {
+                                    panic!(
+                                        "Continuation node type is None: {:#?}, token: {:#?}",
+                                        cont_node_details.1, token
+                                    );
+                                }
+                                _ => {}
+                            }
+                            let parent_infix_node =
+                                find_the_parent_infix_node(&ast, cont_node_details.clone())
+                                .unwrap_or_else(|e|panic!("Error while looking for parent infix node. Node details: {:#?}, error details: {:#?}", cont_node_details.clone(), e));
+                            let removed_left_node_id = parent_infix_node.clone()
+                                .remove_left_node_and_return_id()
+                                .unwrap_or_else(|e| panic!("Error happened while removing left if of infix node: {:#?}. Details: {:#?}", parent_infix_node, e));
+                            let multiplication_infix_node = InfixAstNode::new_with_type_and_parent_node(
+                                InfixOperationTypeEnum::Multiplication, 
+                                &token.literal_value, 
+                                parent_infix_node.clone().id)
+                            .unwrap_or_else(|e|
+                                    panic!("Error happened while creating infix node with type: {:#?}, parent id: {} and literal value: {}. Details: {:#?}", 
+                                        InfixOperationTypeEnum::Multiplication, parent_infix_node.clone().id, token.literal_value, e));
+
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationAddition => {
@@ -295,7 +323,7 @@ pub fn parse_i32_statement_expression(
 fn find_the_parent_infix_node(
     ast: &MathPotatoAstTree,
     cont_node_details: (uuid::Uuid, AstNodeType),
-) -> Option<InfixAstNode> {
+) -> Result<InfixAstNode, ParseError> {
     match cont_node_details.1 {
         AstNodeType::I32AstNode => {
             let cont_node = ast
@@ -307,19 +335,29 @@ fn find_the_parent_infix_node(
                     )
                 });
             match cont_node.parent_type {
-                AstNodeType::I32AstNode => {
-                    panic!(
-                        "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
-                        AstNodeType::I32AstNode,
-                        AstNodeType::I32AstNode
-                    )
-                }
-                AstNodeType::InfixOperationAstNode => ast.get_infix_node_by_id(cont_node.parent_id),
+                AstNodeType::I32AstNode => Err(ParseError::new(format!(
+                    "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
+                    AstNodeType::I32AstNode,
+                    AstNodeType::I32AstNode
+                ))),
                 AstNodeType::None => {
                     // this means that there is no parent for continuation node
                     // meaning, this is the case when we process the first infix node after the `=`
                     // sign
-                    panic!("Deal with this later.")
+                    Err(ParseError::new(format!(
+                        "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
+                        AstNodeType::I32AstNode,
+                        AstNodeType::I32AstNode
+                    )))
+                }
+                AstNodeType::InfixOperationAstNode => {
+                    match ast.get_infix_node_by_id(cont_node.parent_id) {
+                        None => Err(ParseError::new(format!(
+                            "There is no node in the AST with id: {}",
+                            cont_node.parent_id
+                        ))),
+                        Some(res) => Ok(res),
+                    }
                 }
             }
         }
@@ -367,6 +405,11 @@ mod test {
     use crate::ast::ast_tree::ast_apis::root_node::get_root_node_id::RootNodeApiGetRootNodeId;
     use crate::ast::ast_tree::ast_apis::root_node::get_root_node_type::RootNodeApiGetRootNodeType;
     use crate::ast::ast_tree::ast_apis::root_node::node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
+    use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_left_node_id_and_type::InfixAstNodeGetLeftNodeIdAndType;
+    use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_operation_type::InfixAstNodeGetOperationType;
+    use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_right_node_id_and_type::InfixAstNodeGetRightNodeIdAndType;
+    use crate::ast::ast_tree::ast_nodes::infix_ast_node::is_left_occupied::InfixAstNodeIsLeftOccupied;
+    use crate::ast::ast_tree::ast_nodes::infix_ast_node::is_right_occupied::InfixAstNodeIsRightOccupied;
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::{

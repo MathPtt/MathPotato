@@ -1,5 +1,11 @@
 use crate::{
-    ast::{ast_tree::MathPotatoAstTree, infix_ast_node::InfixAstNode},
+    ast::ast_tree::{
+        ast_nodes::infix_ast_node::{
+            from_internal_and_id::InfixAstNodeFromInternalAndId,
+            to_internal::InfixAstNodeToInternal, InfixAstNode,
+        },
+        MathPotatoAstTree,
+    },
     parser::parser_error::ParseError,
 };
 
