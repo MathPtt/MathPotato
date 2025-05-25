@@ -1,36 +1,7 @@
 use core::panic;
+use std::any::type_name;
 
-use crate::ast::{
-    ast_node_types_enum::AstNodeType,
-    ast_tree::{
-        ast_apis::{
-            cont_node_api::{
-                get_node_id_and_type::ContNodeApiGetIdAndType,
-                update_node_id_and_type::ContNodeApiUpdateNodeIdAndType,
-            },
-            i32_api::{
-                i32_api_get_node_by_id::I32ApiGetNodeById, i32_api_put_node::I32ApiPutNode,
-                i32_api_update_node::I32ApiUpdateNode,
-            },
-            infix_api::{
-                get_by_id::InfixApiGetNodeById, put_node::InfixApiPutNode,
-                update_by_id::InfixApiUpdateNodeById,
-            },
-            root_node::{
-                add_root_node_id_and_type::RootNodeApiAddRootNodeIdAndType,
-                update_root_node_id_and_type::RootNodeApiUpdateRootNodeIdAndType,
-            },
-        },
-        ast_nodes::infix_ast_node::{
-            add_i32node_to_the_right::InfixAstNodeAddI32NodeToTheRight, check_if_left_empty_right_occupied::InfixAstNodeCheckIfLeftEmptyRightOccupied, get_left_node_id::InfixAstNodeGetLeftNodeId, get_left_node_id_and_type::InfixAstNodeGetLeftNodeIdAndType, new_with_type_and_left_child_node::InfixAstNodeNewWithTypeAndLeftChildNode, new_with_type_and_parent_node::InfixAstNodeNewWithTypeAndParentNode, remove_left_node_and_return_id::InfixAstNodeRemoveLeftNodeAndReturnId, InfixAstNode
-        },
-        MathPotatoAstTree,
-    },
-    i32_node::I32AstNode,
-    infix_operation_type_enum::InfixOperationTypeEnum,
-    potato_token::PotatoToken,
-    potato_token_types::PotatoTokenTypes,
-};
+use crate::ast::{ast_tree::MathPotatoAstTree, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes, public::apis::node_catalog_api::get_type::NodeCatalogApiGetType};
 
 use super::parser_error::ParseError;
 
@@ -62,80 +33,32 @@ pub fn parse_i32_statement_expression(
         Err(e) => panic!("{}", e),
 
         Ok(token) => {
-            match ast.get_continuation_node_id_and_type() {
+            match ast.cont_node_api_get_cont_node_id_and_type() {
                 // this means that we are processing the first character!
                 None => {
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
                             // this is the case when we right after the `=` sign and the expression
                             // tree is empty
-                            let recorded_node = ast
-                                .put_i32_ast_node(I32AstNode::new_with_value(parse_literal_to_i32(
-                                    &token,
-                                )))
-                                .unwrap_or_else(|e| {
-                                    panic!("Adding I32AstNode has failed. Details: {:#?}", e)
-                                });
-
-                            let _ = ast
-                                .add_root_node_id_and_type(
-                                    recorded_node.id,
+                            let recorded_node_id = ast.i32_api_create_node_with_value(parse_literal_to_i32(&token))
+                                .unwrap_or_else(|e|panic!("Creating new {:#?} node failed. Details: {:#?}", AstNodeType::I32AstNode, e));
+                            let _ = ast.root_node_api_update_root_node_id_and_type(
+                                recorded_node_id, 
+                                ast.node_catalog_api_get_node_type_by_id(recorded_node_id)?
+                            ).unwrap_or_else(|e|panic!("Updating root node id and type failed for node type: {:#?} with id: {}. Details: {:#?}", 
                                     AstNodeType::I32AstNode,
-                                )
-                                .unwrap_or_else(|r| {
-                                    panic!(
-                                        "Adding root node details to AST failed. Details: {:#?}",
-                                        r
-                                    )
-                                });
-                            let _ = ast.update_continuation_node_id_and_type(
-                                recorded_node.id,
+                                    recorded_node_id,
+                                    e
+                                ));
+                            let _ = ast.continuation_node_api_update_node_id_and_type(
+                                recorded_node_id,
                                 AstNodeType::I32AstNode,
                             );
                             // println!("=== first char LiteralIntegerValue: {:#?}", ast);
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
-                        PotatoTokenTypes::SignAssignment => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be =!"
-                            )
-                        }
-                        PotatoTokenTypes::OperationDivision => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be /!"
-                            )
-                        }
-                        PotatoTokenTypes::OperationMultiplication => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be *!"
-                            )
-                        }
-                        PotatoTokenTypes::OperationAddition => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be +!"
-                            )
-                        }
-                        PotatoTokenTypes::KeywordI32 => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be i32 type identifier!"
-                            )
-                        }
-                        PotatoTokenTypes::SignCloseParentheses => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot be the character ')'!"
-                            )
-                        }
-                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::SignOpenParentheses => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::SignSemicolon => Ok(ast),
-                        PotatoTokenTypes::None => {
-                            panic!(
-                                "Syntax error! The first character of an expression cannot have the type None!"
-                            )
+                        _ => {
+                            panic!("The first character right after the `=` was {:#?} than the expected: {:#?}.", token, PotatoTokenTypes::LiteralIntegerValue);
                         }
                     }
                 }
@@ -143,50 +66,38 @@ pub fn parse_i32_statement_expression(
                     // once we matched the actual token type
                     // we are going to match on continuation node too.
 
-                    println!("=====================");
-                    println!("=== AST: {:#?}", ast);
-                    println!("=== Token: {:#?}", token);
-                    println!("=== Cont node: {:#?}", cont_node_details);
-                    println!("=====================");
-
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
-                            match cont_node_details.1 {
+                            match cont_node_details.get_type() {
                                 AstNodeType::I32AstNode => {
-                                    // this is a syntax error, since two number type cannot follow each other
-
-                                    Err(ParseError::new(format!(
-                                        "Syntax error! Two number type cannot follow each other! Token: {:#?}, cont node: {:#?}", token, cont_node_details
-                                    )))
+                                    panic!("Syntax error! Two {} cannot follow each other! Token: {}, cont node: {}",
+                                        PotatoTokenTypes::LiteralIntegerValue, token, cont_node_details);
                                 }
                                 AstNodeType::InfixOperationAstNode => {
                                     // this happens when we are right after the `+` sign in the
                                     // following example:
                                     // `i32 variable_name = 1 + 3;`
-                                    let mut cont_node = ast
-                                        .get_infix_node_by_id(cont_node_details.0)
-                                        .unwrap_or_else(|| {
-                                            panic!(
-                                                "No InfixOperationAstNode with id {:#?}",
-                                                cont_node_details.0
-                                            )
-                                        });
-                                    cont_node
-                                        .check_if_left_empty_right_occupied()
-                                        .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    let i32node = I32AstNode::new_value_parent_id_and_type(
-                                        parse_literal_to_i32(&token),
-                                        AstNodeType::InfixOperationAstNode,
-                                        cont_node.id,
-                                    );
-                                    let i32node_recorded = ast
-                                        .put_i32_ast_node(i32node)
-                                        .unwrap_or_else(|e| panic!("{:#?}", e));
+                                    ast.cont_node_api_check_if_left_empty_right_occupied(cont_node_details.get_id()?)
+                                        .unwrap_or_else(|e|panic!("Continuation node, type: {}, consistency check failed. It has its left side empty, but right side occupied.",
+                                        cont_node_details.get_type()));
+
+                                    let created_i32_node_id = ast.i32_api_create_node_with_value(parse_literal_to_i32(&token))
+                                        .unwrap_or_else(|e|panic!("Error happened while creating an {} node with value: {}. Details: {}",
+                                        type_name::<I32AstNode>(), token, e));
+
+                                    ast.infix_api_add_i32_node_to_the_right(created_i32_node_id)
+                                        .unwrap_or_else(|e|panic!("Error happened while adding an {} type node with id: {} to an {} type node with id: {}. Details: {}", 
+                                            AstNodeType::I32AstNode,
+                                            created_i32_node_id,
+                                            AstNodeType::InfixOperationAstNode,
+                                            cont_node_details.get_id(),
+                                            e
+                                        ));
                                     cont_node
                                         .add_i32node_to_the_right(i32node_recorded.id)
                                         .unwrap_or_else(|e| panic!("{:#?}", e));
                                     ast.update_infix_node_by_id(cont_node.clone()).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
-                                    ast.update_continuation_node_id_and_type(
+                                    ast.continuation_node_api_update_node_id_and_type(
                                         i32node_recorded.id,
                                         AstNodeType::I32AstNode,
                                     )
@@ -397,14 +308,14 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 mod test {
     use uuid::Uuid;
 
-    use crate::ast::ast_tree::ast_apis::cont_node_api::get_node_id_and_type::ContNodeApiGetIdAndType;
-    use crate::ast::ast_tree::ast_apis::i32_api::i32_api_get_node_by_id::I32ApiGetNodeById;
-    use crate::ast::ast_tree::ast_apis::i32_api::i32_api_node_count::I32ApiNodeCount;
-    use crate::ast::ast_tree::ast_apis::infix_api::get_by_id::InfixApiGetNodeById;
-    use crate::ast::ast_tree::ast_apis::infix_api::get_node_count::InfixApiGetNodeCount;
-    use crate::ast::ast_tree::ast_apis::root_node::get_root_node_id::RootNodeApiGetRootNodeId;
-    use crate::ast::ast_tree::ast_apis::root_node::get_root_node_type::RootNodeApiGetRootNodeType;
-    use crate::ast::ast_tree::ast_apis::root_node::node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
+    use crate::ast::ast_tree::ast_public_apis::cont_node_api::get_node_id_and_type::ContNodeApiGetIdAndType;
+    use crate::ast::ast_tree::ast_public_apis::i32_api::i32_api_get_node_by_id::I32ApiGetNodeById;
+    use crate::ast::ast_tree::ast_public_apis::i32_api::i32_api_node_count::I32ApiNodeCount;
+    use crate::ast::ast_tree::ast_public_apis::infix_api::get_by_id::InfixApiGetNodeById;
+    use crate::ast::ast_tree::ast_public_apis::infix_api::get_node_count::InfixApiGetNodeCount;
+    use crate::ast::ast_tree::ast_public_apis::root_node::get_root_node_id::RootNodeApiGetRootNodeId;
+    use crate::ast::ast_tree::ast_public_apis::root_node::get_root_node_type::RootNodeApiGetRootNodeType;
+    use crate::ast::ast_tree::ast_public_apis::root_node::node_api_get_infix_by_id::RootNodeApiGetInfixNodeById;
     use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_left_node_id_and_type::InfixAstNodeGetLeftNodeIdAndType;
     use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_operation_type::InfixAstNodeGetOperationType;
     use crate::ast::ast_tree::ast_nodes::infix_ast_node::get_right_node_id_and_type::InfixAstNodeGetRightNodeIdAndType;
@@ -477,7 +388,7 @@ mod test {
 
         // continuation node checks
         let continuation_node_id_and_type = result
-            .get_continuation_node_id_and_type()
+            .cont_node_api_get_cont_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));
         assert_eq!(
             continuation_node_id_and_type.1,
@@ -577,7 +488,7 @@ mod test {
 
         // continuation node checks
         let continuation_node_id_and_type = result
-            .get_continuation_node_id_and_type()
+            .cont_node_api_get_cont_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));
         assert_eq!(
             continuation_node_id_and_type.1,
@@ -639,7 +550,7 @@ mod test {
         // assert
         assert_eq!(result.get_i32_node_count(), 1);
         let continuation_node_id = result
-            .get_continuation_node_id_and_type()
+            .cont_node_api_get_cont_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));
         let cont_node = result
             .get_i32_node_by_id(continuation_node_id.0)

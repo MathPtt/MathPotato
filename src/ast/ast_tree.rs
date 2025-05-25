@@ -1,14 +1,18 @@
+use public::i32_nodes_api::I32NodesApi;
 use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
 use super::{
-    ast_node_types_enum::AstNodeType,
-    i32_ast_tree::I32AstTree,
-    internal::{ast_tree_traits::TypedAstTreeGetKeys, infix_ast_tree::InfixAstTree},
+    global::enums::ast_node_types_enum::AstNodeType,
+    private::apis::{
+        ast_continuation_node_api::{new::AstContinuationInternalNodeNew, AstContinuationNodeApi},
+        i32_nodes_api::{new::I32AstTreeApiNew, I32NodesApi},
+        infix_nodes_api::{new::InfixAstTreeApiNew, InfixNodesApi},
+        node_catalog_api::{new::NodeCatalogApiNew, NodeCatalogApi},
+    },
 };
-pub mod ast_apis;
-pub mod ast_nodes;
+
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
 /// # Decisions
@@ -28,21 +32,25 @@ pub mod ast_nodes;
 /// C#. What is an interface hierarchy in C#, it is a major pain here. So, I have concrete types
 /// and there are methods, with the same functionality, but for different types. This way seemed
 /// way easier than dealing with generics. Maybe later I'll do the generics.
-///
+pub mod global;
+pub mod private;
+pub mod public;
+
 #[derive(Clone, Debug)]
 pub struct MathPotatoAstTree {
     /// A reference to the Root AST node.
     root_node_id: Uuid,
     /// The type of the root AST node.
     root_node_type: AstNodeType,
-    /// A reference to the last changed AST node.
-    last_changed_node_id: Uuid,
-    /// The type of the last changed node.
-    last_changed_node_type: AstNodeType,
+    /// Represents the point where the AST processing is right now.
+    /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
+    continuation_node: AstContinuationNodeApi,
     /// The node tree to represent the i32 data type.
-    i32_tree: I32AstTree,
+    i32_tree: I32NodesApi,
     /// The node tree to represent the infix operation nodes.
-    infix_operation_tree: InfixAstTree,
+    infix_operation_tree: InfixNodesApi,
+    /// The catalog of the nodes in the AST
+    node_catalog: NodeCatalogApi,
 }
 
 impl MathPotatoAstTree {
@@ -50,10 +58,10 @@ impl MathPotatoAstTree {
         MathPotatoAstTree {
             root_node_id: Uuid::nil(),
             root_node_type: AstNodeType::None,
-            last_changed_node_id: Uuid::nil(),
-            last_changed_node_type: AstNodeType::None,
-            i32_tree: I32AstTree::new(),
-            infix_operation_tree: InfixAstTree::new(),
+            i32_tree: I32NodesApi::new(),
+            infix_operation_tree: InfixNodesApi::new(),
+            node_catalog: NodeCatalogApi::new(),
+            continuation_node: AstContinuationNodeApi::new(),
         }
     }
     pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {

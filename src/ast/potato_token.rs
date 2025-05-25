@@ -1,8 +1,15 @@
+use derive_more::Display;
+
 use super::potato_token_types::PotatoTokenTypes;
 
 /// Represents a single character in the parsed source code.
 /// Every single character, keyword and literal value gets its own Token.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Display)]
+#[display(
+    "PotatoToken(token_type: {}, literal_value: {}",
+    token_type,
+    literal_value
+)]
 pub struct PotatoToken {
     /// The token type
     pub token_type: PotatoTokenTypes,

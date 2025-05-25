@@ -1,4 +1,7 @@
-#[derive(Debug)]
+use derive_more::Display;
+
+#[derive(Debug, Display)]
+#[display("ParseError(details: {})", details)]
 pub struct ParseError {
     pub details: String,
 }

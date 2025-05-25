@@ -1,12 +1,1 @@
-pub mod ast_node_types_enum;
 pub mod ast_tree;
-pub mod i32_ast_tree;
-pub mod i32_node;
-pub mod infix_operation_type_enum;
-pub mod integer_statement_ast_node;
-pub mod integer_value_expression_ast_node;
-pub mod internal;
-pub mod potato_ast_node;
-pub mod potato_token;
-pub mod potato_token_types;
-pub mod variable_state_enum;
