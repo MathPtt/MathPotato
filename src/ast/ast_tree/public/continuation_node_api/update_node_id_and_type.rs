@@ -4,11 +4,11 @@ use crate::{
     ast::global::enums::ast_node_types_enum::AstNodeType, parser::parser_error::ParseError,
 };
 
-use super::ContinuationNodeApi;
+use super::ContinuationNodeStorageApi;
 
 pub mod implementation;
 pub mod result;
-pub trait ContNodeApiUpdateNodeIdAndType: ContinuationNodeApi {
+pub trait ContNodeApiUpdateNodeIdAndType: ContinuationNodeStorageApi {
     /// Update Continuation Node and Id
     ///
     /// It updates the continuation node (an Id and node type) in the AST.

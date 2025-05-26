@@ -1,10 +1,7 @@
-use super::{InfixAstTreeApi, InfixNodesApi};
+use super::InfixAstTreeApi;
+
+pub mod implementation;
 
 pub trait InfixAstTreeApiLen: InfixAstTreeApi {
     fn len(&self) -> usize;
-}
-impl InfixAstTreeApiLen for InfixNodesApi {
-    fn len(&self) -> usize {
-        self.tree.len()
-    }
 }

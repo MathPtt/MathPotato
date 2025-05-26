@@ -33,7 +33,8 @@ pub fn parse_i32_statement_expression(
         Err(e) => panic!("{}", e),
 
         Ok(token) => {
-            match ast.cont_node_api_get_cont_node_id_and_type() {
+            match ast.get_continuation_node_id_and_type()
+            // match ast.cont_node_api_get_cont_node_id_and_type() {
                 // this means that we are processing the first character!
                 None => {
                     match token.token_type {

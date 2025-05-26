@@ -44,7 +44,7 @@ pub struct MathPotatoAstTree {
     root_node_type: AstNodeType,
     /// Represents the point where the AST processing is right now.
     /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
-    continuation_node: AstContinuationNodeApi,
+    continuation_node: AstContinuationNodeSt
     /// The node tree to represent the i32 data type.
     i32_tree: I32NodesApi,
     /// The node tree to represent the infix operation nodes.
