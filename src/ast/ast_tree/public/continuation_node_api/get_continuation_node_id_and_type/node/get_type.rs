@@ -5,10 +5,10 @@ use crate::ast::{
 
 use super::{GetContinuationNodeIdAndTypeResult, GetContinuationNodeIdAndTypeResultApi};
 
-pub trait ContinuationNodeApiGetType: GetContinuationNodeIdAndTypeResultApi {
+pub trait GetContinuationNodeIdAndTypeResultGetType: GetContinuationNodeIdAndTypeResultApi {
     fn get_type(&self) -> AstNodeType;
 }
-impl ContinuationNodeApiGetType for GetContinuationNodeIdAndTypeResult {
+impl GetContinuationNodeIdAndTypeResultGetType for GetContinuationNodeIdAndTypeResult {
     fn get_type(&self) -> AstNodeType {
         self.node_type.clone()
     }

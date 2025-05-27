@@ -1,9 +1,19 @@
-impl AstContinuationInternalNodeSetIdAndType for AstContinuationNodeApi {
+use uuid::Uuid;
+
+use crate::{
+    ast::ast_tree::{
+        global::enums::ast_node_types_enum::AstNodeType,
+        private::continuation_node::{node::ContinuationNode, storage::ContinuationNodeStorage},
+    },
+    parser::parser_error::ParseError,
+};
+
+impl ContinuationNodeStorageSetIdAndType for ContinuationNodeStorage {
     fn set_id_and_type(
         &mut self,
         id: Uuid,
         node_type: AstNodeType,
-    ) -> Result<AstContinuationNodeApi, ParseError> {
+    ) -> Result<ContinuationNode, ParseError> {
         if id == Uuid::nil() || node_type == AstNodeType::None {
             Err(ParseError::new(format!(
                 "Invalid input at updating of {} type. Id: {}, type {}.",

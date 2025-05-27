@@ -10,7 +10,8 @@ use super::{GetContinuationNodeIdAndTypeResult, GetContinuationNodeIdAndTypeResu
 pub trait ContinuationNodeFromIdAndType: GetContinuationNodeIdAndTypeResultApi {
     fn from_id_and_type(id: Uuid, node_type: AstNodeType) -> GetContinuationNodeIdAndTypeResult;
 }
-impl ContinuationNodeFromIdAndType for GetContinuationNodeIdAndTypeResultApi {
+
+impl ContinuationNodeFromIdAndType for GetContinuationNodeIdAndTypeResult {
     fn from_id_and_type(id: Uuid, node_type: AstNodeType) -> GetContinuationNodeIdAndTypeResult {
         GetContinuationNodeIdAndTypeResult { id, node_type }
     }
