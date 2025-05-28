@@ -1,6 +1,7 @@
-pub mod continuation_node_api;
+use super::MathPotatoAstTree;
+
+pub mod create_i32_node_with_value;
 pub mod get_continuation_node_id_and_type;
-pub mod i32_nodes_api;
-pub mod infix_nodes_api;
-pub mod nodes_catalog_api;
-pub mod root_node_api;
+
+pub trait AstApi {}
+impl AstApi for MathPotatoAstTree {}

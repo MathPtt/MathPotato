@@ -1,13 +1,13 @@
 use uuid::Uuid;
 
 use crate::{
-    ast::ast_tree::private::i32_nodes_api::{entity::I32AstEntity, storage::I32NodesApi},
+    ast::ast_tree::private::i32_nodes_api::{entity::I32AstEntity, storage::I32NodeStorage},
     parser::parser_error::ParseError,
 };
 
 use super::I32AstTreeApiUpdate;
 
-impl I32AstTreeApiUpdate for I32NodesApi {
+impl I32AstTreeApiUpdate for I32NodeStorage {
     fn update(&mut self, id: Uuid, node: I32AstEntity) -> Result<(Uuid, I32AstEntity), ParseError> {
         match self.tree.get(&id) {
             None => Err(ParseError::new(format!(

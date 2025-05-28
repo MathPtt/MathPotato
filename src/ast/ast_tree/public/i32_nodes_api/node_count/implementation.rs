@@ -4,6 +4,6 @@ use super::I32ApiNodeCount;
 
 impl I32ApiNodeCount for MathPotatoAstTree {
     fn get_i32_node_count(&self) -> usize {
-        self.i32_tree.len()
+        self.i32_nodes_storage.len()
     }
 }

@@ -1,5 +1,5 @@
-use private::continuation_node::storage::ContinuationNodeStorage;
-use public::i32_nodes_api::I32NodesApi;
+use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi};
+use public::i32_nodes_api::I32NodeStorageApi;
 use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
@@ -47,7 +47,7 @@ pub struct MathPotatoAstTree {
     /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
     continuation_node: ContinuationNodeStorage
     /// The node tree to represent the i32 data type.
-    i32_tree: I32NodesApi,
+    i32_nodes: I32NodeStorageApi,
     /// The node tree to represent the infix operation nodes.
     infix_operation_tree: InfixNodesApi,
     /// The catalog of the nodes in the AST
@@ -59,7 +59,7 @@ impl MathPotatoAstTree {
         MathPotatoAstTree {
             root_node_id: Uuid::nil(),
             root_node_type: AstNodeType::None,
-            i32_tree: I32NodesApi::new(),
+            i32_nodes_storage: I32NodeStorageApi::new(),
             infix_operation_tree: InfixNodesApi::new(),
             node_catalog: NodeCatalogApi::new(),
             continuation_node: AstContinuationNodeApi::new(),
@@ -71,14 +71,14 @@ impl MathPotatoAstTree {
 
         // i32 node merge
         let diff: Vec<Uuid> = tree
-            .i32_tree
+            .i32_nodes_storage
             .clone()
             .keys()
             .into_iter()
-            .filter(|k| !self.i32_tree.clone().keys().contains(k))
+            .filter(|k| !self.i32_nodes_storage.clone().keys().contains(k))
             .collect();
-        let diff_result = tree.i32_tree.get_nodes(diff).unwrap();
-        self.i32_tree.put_all(diff_result);
+        let diff_result = tree.i32_nodes_storage.get_nodes(diff).unwrap();
+        self.i32_nodes_storage.put_all(diff_result);
 
         Ok(())
     }

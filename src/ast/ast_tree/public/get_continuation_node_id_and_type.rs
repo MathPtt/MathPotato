@@ -1,11 +1,11 @@
 use node::GetContinuationNodeIdAndTypeResult;
 
-use super::continuation_node_api::ContinuationNodeStorageApi;
+use super::AstApi;
 
 pub mod implementation;
 pub mod node;
 
-pub trait ContinuationNodeStorageApiGetIdAndType: ContinuationNodeStorageApi {
+pub trait ContinuationNodeStorageApiGetIdAndType: AstApi {
     /// Returns the `GetContinuationNodeIdAndTypeResult` struct containing the `id` and `node_type`
     /// values of the AST continuation node.
     ///
