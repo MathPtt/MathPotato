@@ -7,7 +7,7 @@ use crate::{ast::ast_tree::MathPotatoAstTree, parser::parser_error::ParseError};
 use super::CreateI32NodeWithValue;
 
 impl CreateI32NodeWithValue for MathPotatoAstTree {
-    fn i32_api_create_node_with_value(&mut self, i32_value: i32) -> Result<Uuid, ParseError> {
+    fn create_i32_node_with_value(&mut self, i32_value: i32) -> Result<Uuid, ParseError> {
         match self.i32_nodes.create(i32_value) {
             Ok(id) => {
                 self.node_catalog.add(id, AstNodeType::I32AstNode)

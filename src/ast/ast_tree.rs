@@ -1,4 +1,4 @@
-use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi};
+use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi, root_node::storage::RootNodeStorage};
 use public::i32_nodes_api::I32NodeStorageApi;
 use uuid::Uuid;
 
@@ -39,10 +39,7 @@ pub mod public;
 
 #[derive(Clone, Debug)]
 pub struct MathPotatoAstTree {
-    /// A reference to the Root AST node.
-    root_node_id: Uuid,
-    /// The type of the root AST node.
-    root_node_type: AstNodeType,
+    root_node: RootNodeStorage,
     /// Represents the point where the AST processing is right now.
     /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
     continuation_node: ContinuationNodeStorage

@@ -1,7 +1,7 @@
 use core::panic;
 use std::any::type_name;
 
-use crate::ast::ast_tree::{global::enums::{potato_token::PotatoToken, potato_token_types::PotatoTokenTypes}, public::{create_i32_node_with_value::{CreateI32NodeWithValue, I32ApiCreateNodeWithValue}, get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType}, MathPotatoAstTree};
+use crate::ast::ast_tree::{global::enums::{ast_node_types_enum::AstNodeType, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes}, public::{create_i32_node_with_value::{CreateI32NodeWithValue, I32ApiCreateNodeWithValue}, create_or_update_root_node_id_and_type::CreateOrUpdateRootNodeIdAndType, get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType}, MathPotatoAstTree};
 
 use super::parser_error::ParseError;
 
@@ -41,17 +41,16 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::LiteralIntegerValue => {
                             // this is the case when we right after the `=` sign and the expression
                             // tree is empty
-                            let recorded_node_id = ast.i32_api_create_node_with_value(parse_literal_to_i32(&token))
+                            let recorded_node_id = ast.create_i32_node_with_value(parse_literal_to_i32(&token))
                                 .unwrap_or_else(|e|panic!("Creating new {:#?} node failed. Details: {:#?}", AstNodeType::I32AstNode, e));
-                            let _ = ast.root_node_api_update_root_node_id_and_type(
-                                recorded_node_id, 
-                                ast.node_catalog_api_get_node_type_by_id(recorded_node_id)?
-                            ).unwrap_or_else(|e|panic!("Updating root node id and type failed for node type: {:#?} with id: {}. Details: {:#?}", 
+                            let _ = ast.create_or_update_root_node_id_and_type(recorded_node_id, AstNodeType::I32AstNode)
+                                .unwrap_or_else(|e|panic!("Updating root node id and type failed for node type: {:#?} with id: {}. Details: {:#?}", 
                                     AstNodeType::I32AstNode,
                                     recorded_node_id,
                                     e
                                 ));
-                            let _ = ast.continuation_node_api_update_node_id_and_type(
+                            let _ = ast.update_continuation_node_id_and_type()
+                            continuation_node_api_update_node_id_and_type(
                                 recorded_node_id,
                                 AstNodeType::I32AstNode,
                             );
@@ -82,7 +81,7 @@ pub fn parse_i32_statement_expression(
                                         .unwrap_or_else(|e|panic!("Continuation node, type: {}, consistency check failed. It has its left side empty, but right side occupied.",
                                         cont_node_details.get_type()));
 
-                                    let created_i32_node_id = ast.i32_api_create_node_with_value(parse_literal_to_i32(&token))
+                                    let created_i32_node_id = ast.create_i32_node_with_value(parse_literal_to_i32(&token))
                                         .unwrap_or_else(|e|panic!("Error happened while creating an {} node with value: {}. Details: {}",
                                         type_name::<I32AstNode>(), token, e));
 
