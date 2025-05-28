@@ -1,3 +1,4 @@
+use private::continuation_node::storage::ContinuationNodeStorage;
 use public::i32_nodes_api::I32NodesApi;
 use uuid::Uuid;
 
