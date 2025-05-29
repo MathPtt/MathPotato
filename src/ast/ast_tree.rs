@@ -1,4 +1,4 @@
-use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi, root_node::storage::RootNodeStorage};
+use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi, infix_node::storage::InfixNodeStorage, infix_nodes_api::storage::InfixNodeStorage, node_catalog::storage::{new::NodeCatalogApiNew, NodeCatalogStorage}, root_node::storage::RootNodeStorage};
 use public::i32_nodes_api::I32NodeStorageApi;
 use uuid::Uuid;
 
@@ -10,7 +10,6 @@ use super::{
         ast_continuation_node_api::{new::AstContinuationInternalNodeNew, AstContinuationNodeApi},
         i32_nodes_api::{new::I32AstTreeApiNew, I32NodesApi},
         infix_nodes_api::{new::InfixAstTreeApiNew, InfixNodesApi},
-        node_catalog_api::{new::NodeCatalogApiNew, NodeCatalogApi},
     },
 };
 
@@ -46,9 +45,9 @@ pub struct MathPotatoAstTree {
     /// The node tree to represent the i32 data type.
     i32_nodes: I32NodeStorageApi,
     /// The node tree to represent the infix operation nodes.
-    infix_operation_tree: InfixNodesApi,
+    infix_operation_tree: InfixNodeStorage,
     /// The catalog of the nodes in the AST
-    node_catalog: NodeCatalogApi,
+    node_catalog: NodeCatalogStorage,
 }
 
 impl MathPotatoAstTree {
@@ -58,7 +57,7 @@ impl MathPotatoAstTree {
             root_node_type: AstNodeType::None,
             i32_nodes_storage: I32NodeStorageApi::new(),
             infix_operation_tree: InfixNodesApi::new(),
-            node_catalog: NodeCatalogApi::new(),
+            node_catalog: NodeCatalogStorage::new(),
             continuation_node: AstContinuationNodeApi::new(),
         }
     }

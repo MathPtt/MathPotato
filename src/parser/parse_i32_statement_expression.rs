@@ -1,7 +1,7 @@
 use core::panic;
 use std::any::type_name;
 
-use crate::ast::ast_tree::{global::enums::{ast_node_types_enum::AstNodeType, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes}, public::{create_i32_node_with_value::{CreateI32NodeWithValue, I32ApiCreateNodeWithValue}, create_or_update_root_node_id_and_type::CreateOrUpdateRootNodeIdAndType, get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType, update_continuation_node_id_and_type::UpdateContinuationNodeIdAndType}, MathPotatoAstTree};
+use crate::ast::ast_tree::{global::enums::{ast_node_types_enum::AstNodeType, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes}, private::i32_nodes::node::I32Node, public::{add_node_to_continuation_node_right::AddNodeToContinuationNodeRight, check_continuation_node_consistency::CheckContinuationNodeConsistency, create_i32_node_with_value::{CreateI32NodeWithValue, I32ApiCreateNodeWithValue}, create_or_update_root_node_id_and_type::CreateOrUpdateRootNodeIdAndType, get_continuation_node_id_and_type::{node::{get_id::GetContinuationNodeIdAndTypeResultGetId, get_type::GetContinuationNodeIdAndTypeResultGetType}, ContinuationNodeStorageApiGetIdAndType}, update_continuation_node_id_and_type::UpdateContinuationNodeIdAndType}, MathPotatoAstTree};
 
 use super::parser_error::ParseError;
 
@@ -49,12 +49,14 @@ pub fn parse_i32_statement_expression(
                                     recorded_node_id,
                                     e
                                 ));
-                            let _ = ast.update_continuation_node_id_and_type()
-                            continuation_node_api_update_node_id_and_type(
+                            let _ = ast.update_continuation_node_id_and_type(
                                 recorded_node_id,
                                 AstNodeType::I32AstNode,
-                            );
-                            // println!("=== first char LiteralIntegerValue: {:#?}", ast);
+                            ).unwrap_or_else(|e|panic!("Error happened while updating continuation node with id: {}, type: {}. Details: {}",
+                                recorded_node_id,
+                                AstNodeType::I32AstNode,
+                                e
+                            ));
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         _ => {
@@ -70,22 +72,30 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::LiteralIntegerValue => {
                             match cont_node_details.get_type() {
                                 AstNodeType::I32AstNode => {
-                                    panic!("Syntax error! Two {} cannot follow each other! Token: {}, cont node: {}",
+                                    panic!(r"Syntax error! Two {} cannot follow each other! \
+                                    Token: {}, \
+                                    previously processed node: {}",
                                         PotatoTokenTypes::LiteralIntegerValue, token, cont_node_details);
                                 }
                                 AstNodeType::InfixOperationAstNode => {
                                     // this happens when we are right after the `+` sign in the
                                     // following example:
                                     // `i32 variable_name = 1 + 3;`
-                                    ast.cont_node_api_check_if_left_empty_right_occupied(cont_node_details.get_id()?)
-                                        .unwrap_or_else(|e|panic!("Continuation node, type: {}, consistency check failed. It has its left side empty, but right side occupied.",
-                                        cont_node_details.get_type()));
+
+                                    ast.check_continuation_node_consistency()
+                                        .unwrap_or_else(|e|
+                                            panic!(r"Continuation node consistency check failed. \
+                                            It has its left side empty, but right side occupied. \ 
+                                            Node details: {}. \
+                                            Error details: {}",
+                                        cont_node_details, 
+                                        e));
 
                                     let created_i32_node_id = ast.create_i32_node_with_value(parse_literal_to_i32(&token))
                                         .unwrap_or_else(|e|panic!("Error happened while creating an {} node with value: {}. Details: {}",
-                                        type_name::<I32AstNode>(), token, e));
+                                        type_name::<I32Node>(), token, e));
 
-                                    ast.infix_api_add_i32_node_to_the_right(created_i32_node_id)
+                                    ast.add_node_to_continuation_node_right(created_i32_node_id)
                                         .unwrap_or_else(|e|panic!("Error happened while adding an {} type node with id: {} to an {} type node with id: {}. Details: {}", 
                                             AstNodeType::I32AstNode,
                                             created_i32_node_id,
@@ -93,17 +103,6 @@ pub fn parse_i32_statement_expression(
                                             cont_node_details.get_id(),
                                             e
                                         ));
-                                    cont_node
-                                        .add_i32node_to_the_right(i32node_recorded.id)
-                                        .unwrap_or_else(|e| panic!("{:#?}", e));
-                                    ast.update_infix_node_by_id(cont_node.clone()).unwrap_or_else(|e|panic!("Error happened while persisting updated InfixOperationAstNode node. {:#?}", e));
-                                    ast.continuation_node_api_update_node_id_and_type(
-                                        i32node_recorded.id,
-                                        AstNodeType::I32AstNode,
-                                    )
-                                    .unwrap_or_else(|e| {
-                                        panic!("Updating continuation node. {:#?}", e)
-                                    });
 
                                     parse_i32_statement_expression(i + 1, tokens, ast)
                                 }
@@ -111,18 +110,6 @@ pub fn parse_i32_statement_expression(
                                     panic!("we have a cont node, but the type is none")
                                 }
                             }
-                        }
-                        PotatoTokenTypes::SignAssignment => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::SignCloseParentheses => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::SignOpenParentheses => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::OperationDivision => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         PotatoTokenTypes::OperationMultiplication => {
                             // here we assume that we are not the first character after the `=`, so
@@ -210,14 +197,8 @@ pub fn parse_i32_statement_expression(
                                 }
                             }
                         }
-                        PotatoTokenTypes::KeywordI32 => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
-                        PotatoTokenTypes::LiteralValueVariableIdentifier => {
-                            parse_i32_statement_expression(i + 1, tokens, ast)
-                        }
                         PotatoTokenTypes::SignSemicolon => Ok(ast),
-                        PotatoTokenTypes::None => todo!(),
+                        _ => parse_i32_statement_expression(i + 1, tokens, ast)
                     }
                 }
             }
