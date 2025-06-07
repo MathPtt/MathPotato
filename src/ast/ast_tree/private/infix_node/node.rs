@@ -7,6 +7,8 @@ use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 pub mod get_left_id;
 pub mod get_left_type;
 pub mod get_operation_type;
+pub mod get_parent_id;
+pub mod get_parent_type;
 pub mod get_right_id;
 pub mod get_right_type;
 pub mod infix_operation_type_enum;
@@ -16,17 +18,21 @@ pub mod new_with_values;
 pub mod set_infix_node_operation_type;
 pub mod set_left_id;
 pub mod set_left_type;
+pub mod set_parent_id;
+pub mod set_parent_type;
 pub mod set_right_id;
 pub mod set_right_type;
 
 #[derive(Debug, Clone, Display)]
 #[display(
-    "InfixNode(operation_type: {}, left_id: {}, left_type: {}, right_id: {}, right_type:{})",
+    "InfixNode(operation_type: {}, left_id: {}, left_type: {}, right_id: {}, right_type:{}, parent_id: {}, parent_type: {})",
     operation_type,
     left_id,
     left_type,
     right_id,
-    right_type
+    right_type,
+    parent_id,
+    parent_type
 )]
 pub struct InfixNode {
     operation_type: InfixOperationTypeEnum,
@@ -34,6 +40,8 @@ pub struct InfixNode {
     left_type: AstNodeType,
     right_id: Uuid,
     right_type: AstNodeType,
+    parent_id: Uuid,
+    parent_type: AstNodeType,
 }
 
 pub trait InfixNodeApi {}

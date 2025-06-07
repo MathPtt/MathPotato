@@ -1,10 +1,23 @@
 use core::panic;
 use std::any::type_name;
 
+use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
+use crate::ast::ast_tree::global::enums::potato_token::PotatoToken;
+use crate::ast::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
+use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
 use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::InfixOperationTypeEnum;
+use crate::ast::ast_tree::public::add_node_to_continuation_node_right::AddNodeToContinuationNodeRight;
+use crate::ast::ast_tree::public::check_continuation_node_consistency::CheckContinuationNodeConsistency;
+use crate::ast::ast_tree::public::create_i32_node_with_value::CreateI32NodeWithValue;
 use crate::ast::ast_tree::public::create_new_infix_node_with_parent_node::CreateNewInfixNodeWithParentNode;
+use crate::ast::ast_tree::public::create_or_update_root_node_id_and_type::CreateOrUpdateRootNodeIdAndType;
+use crate::ast::ast_tree::public::find_next_feasible_continuation_node_and_set_as_actual_continuation_node::FindNextFeasibleContinuationNode;
+use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_id::GetContinuationNodeIdAndTypeResultGetId;
+use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_type::GetContinuationNodeIdAndTypeResultGetType;
+use crate::ast::ast_tree::public::get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType;
 use crate::ast::ast_tree::public::remove_continuation_node_left_node_and_return_id::RemoveContinuationNodeLeftNodeAndReturnId;
-use crate::ast::ast_tree::{global::enums::{ast_node_types_enum::AstNodeType, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes}, private::i32_nodes::node::I32Node, public::{add_node_to_continuation_node_right::AddNodeToContinuationNodeRight, check_continuation_node_consistency::CheckContinuationNodeConsistency, create_i32_node_with_value::{CreateI32NodeWithValue, I32ApiCreateNodeWithValue}, create_or_update_root_node_id_and_type::CreateOrUpdateRootNodeIdAndType, find_next_feasible_continuation_node::FindNextFeasibleContinuationNode, find_next_feasible_continuation_node_and_set_as_actual_continuation_node::FindNextFeasibleContinuationNode, get_continuation_node_id_and_type::{node::{get_id::GetContinuationNodeIdAndTypeResultGetId, get_type::GetContinuationNodeIdAndTypeResultGetType}, ContinuationNodeStorageApiGetIdAndType}, update_continuation_node_id_and_type::UpdateContinuationNodeIdAndType}, MathPotatoAstTree};
+use crate::ast::ast_tree::public::update_continuation_node_id_and_type::UpdateContinuationNodeIdAndType;
+use crate::ast::ast_tree::MathPotatoAstTree;
 
 use super::parser_error::ParseError;
 
@@ -103,7 +116,7 @@ pub fn parse_i32_statement_expression(
                                             AstNodeType::I32AstNode,
                                             created_i32_node_id,
                                             AstNodeType::InfixOperationAstNode,
-                                            cont_node_details.get_id(),
+                                            cont_node_details.get_id().unwrap(),
                                             e
                                         ));
 
@@ -121,7 +134,7 @@ pub fn parse_i32_statement_expression(
 
                             match cont_node_details.get_type() {
                                 AstNodeType::InfixOperationAstNode => {
-                                    panic!("Cannot be an {} right after another one. Actual node type by token: {}; AST tree {}", 
+                                    panic!("Cannot be an {} right after another one. Actual node type by token: {}; AST tree {:#?}", 
                                         cont_node_details.get_type(),
                                         token, 
                                         ast);
@@ -133,24 +146,24 @@ pub fn parse_i32_statement_expression(
                                         token
                                     );
                                 }
-                                
                                 _ => {                                }
                             };
                             let parent_infix_node_id = ast.find_next_feasible_continuation_node_and_set_as_actual_continuation_node()
-                                .unwrap_or_else(|e|panic!("Error while looking for the next feasible continutaion node. Actual continuation node details: {}, Ast: {}, error details: {}", 
+                                .unwrap_or_else(|e|panic!("Error while looking for the next feasible continutaion node. Actual continuation node details: {}, Ast: {:#?}, error details: {}", 
                                     cont_node_details.clone(), 
                                     ast,
                                     e));
                             ast.check_continuation_node_consistency()
-                                .unwrap_or_else(|e|panic!("Continuation node is inconsistent at this point. Continuation node: {}, AST: {}", 
-                                    ast.get_continuation_node_id_and_type(),
-                                    ast
+                                .unwrap_or_else(|e|panic!("Continuation node is inconsistent at this point. Continuation node: {}, AST: {:#?}. Details: {}", 
+                                    ast.get_continuation_node_id_and_type().unwrap(),
+                                    ast,
+                                    e
                                 ));
                             let removed_left_node_id = ast 
                                 .remove_continuation_node_left_node_and_return_id()
                                 .unwrap_or_else(|e| panic!("Error happened while removing left if of infix node: {}. Details: {}", parent_infix_node_id, e));
                             let multiplication_infix_node_id = ast.create_new_infix_node_with_parent_node(parent_infix_node_id, InfixOperationTypeEnum::Multiplication)
-                                .unwrap_or_else(|e|ParseError::new(format!("Error happened while creating new infix node. Details: {}", e)));
+                                .unwrap_or_else(|e|ParseError::new(format!("Error happened while creating infix node. Details: {}", e)));
 
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
@@ -162,15 +175,6 @@ pub fn parse_i32_statement_expression(
                                     // we are going to create a infix operation node and
                                     // the continuation node will be a child to it
                                     // and the new node will be the parent of the continuation node
-                                    let mut cont_node = ast
-                                        .get_i32_node_by_id(cont_node_details.0)
-                                        .unwrap_or_else(|e| {
-                                            panic!(
-                                                "There is no i32 continuation node with {}. Error: {:#?}",
-                                                cont_node_details.0,
-                                                e
-                                            )
-                                        });
 
                                     let infix_node =
                                         InfixAstNode::new_with_type_and_left_child_node(
@@ -211,68 +215,6 @@ pub fn parse_i32_statement_expression(
                     }
                 }
             }
-        }
-    }
-}
-
-/// Finds the parent InfixNode based on the provided continuation node details.
-///
-/// # Remarks
-/// In the process of building the AST and considering the operation precedence we need to walk
-/// through the tree of InfixNodes and find the place where the actual node need to be placed. The
-/// first step in this process is finding the parent Infix node.
-fn find_the_parent_infix_node(
-    ast: &MathPotatoAstTree,
-    cont_node_details: (uuid::Uuid, AstNodeType),
-) -> Result<InfixAstNode, ParseError> {
-    match cont_node_details.1 {
-        AstNodeType::I32AstNode => {
-            let cont_node = ast
-                .get_i32_node_by_id(cont_node_details.0)
-                .unwrap_or_else(|e| {
-                    panic!(
-                        "There is no target node with {:#?} id. Error details: {:#?}",
-                        cont_node_details.0, e
-                    )
-                });
-            match cont_node.parent_type {
-                AstNodeType::I32AstNode => Err(ParseError::new(format!(
-                    "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
-                    AstNodeType::I32AstNode,
-                    AstNodeType::I32AstNode
-                ))),
-                AstNodeType::None => {
-                    // this means that there is no parent for continuation node
-                    // meaning, this is the case when we process the first infix node after the `=`
-                    // sign
-                    Err(ParseError::new(format!(
-                        "Structural error. A {:#?} node type cannot be parent of {:#?} node type.",
-                        AstNodeType::I32AstNode,
-                        AstNodeType::I32AstNode
-                    )))
-                }
-                AstNodeType::InfixOperationAstNode => {
-                    match ast.get_infix_node_by_id(cont_node.parent_id) {
-                        None => Err(ParseError::new(format!(
-                            "There is no node in the AST with id: {}",
-                            cont_node.parent_id
-                        ))),
-                        Some(res) => Ok(res),
-                    }
-                }
-            }
-        }
-        AstNodeType::InfixOperationAstNode => {
-            panic!(
-                "Syntax error! Cannot be an {:#?} node before an Infix node type.",
-                AstNodeType::InfixOperationAstNode,
-            )
-        }
-        AstNodeType::None => {
-            panic!(
-                "Syntax error! Cannot be an {:#?} node before an Infix node type.",
-                AstNodeType::None,
-            )
         }
     }
 }

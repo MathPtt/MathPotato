@@ -11,6 +11,8 @@ pub trait InfixNodeApiNewWithValues: InfixNodeApi {
         left_type: AstNodeType,
         right_id: Uuid,
         right_type: AstNodeType,
+        parent_id: Uuid,
+        paren_type: AstNodeType,
     ) -> Self;
 }
 
@@ -21,6 +23,8 @@ impl InfixNodeApiNewWithValues for InfixNode {
         left_type: AstNodeType,
         right_id: Uuid,
         right_type: AstNodeType,
+        parent_id: Uuid,
+        paren_type: AstNodeType,
     ) -> Self {
         InfixNode {
             operation_type,
@@ -28,6 +32,8 @@ impl InfixNodeApiNewWithValues for InfixNode {
             left_type,
             right_id,
             right_type,
+            parent_id,
+            parent_type,
         }
     }
 }

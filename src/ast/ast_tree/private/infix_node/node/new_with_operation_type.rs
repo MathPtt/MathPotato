@@ -1,5 +1,7 @@
 use uuid::Uuid;
 
+use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
+
 use super::infix_operation_type_enum::InfixOperationTypeEnum;
 use super::InfixNode;
 use super::InfixNodeApi;
@@ -13,9 +15,11 @@ impl InfixNodeApiNew for InfixNode {
         InfixNode {
             operation_type,
             left_id: Uuid::nil(),
-            left_type: crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType::None,
+            left_type: AstNodeType::None,
             right_id: Uuid::nil(),
-            right_type: crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType::None,
+            right_type: AstNodeType::None,
+            parent_id: Uuid::nil(),
+            parent_type: AstNodeType::None,
         }
     }
 }
