@@ -1,6 +1,11 @@
-#[derive(Clone, PartialEq, Eq, Debug)]
+use derive_more::Display;
+
+#[derive(Clone, PartialEq, Eq, Debug, Display)]
+#[display("InfixOperationTypeEnum(value: (_value))", _value)]
 pub enum InfixOperationTypeEnum {
+    #[display("Addition")]
     Addition,
+    #[display("Multiplication")]
     Multiplication,
 }
 

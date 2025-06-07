@@ -7,7 +7,8 @@ use super::AstApi;
 pub mod implementation;
 
 pub trait AddNodeToContinuationNodeRight: AstApi {
-    /// Adds the designated node to the right side of the continuation node.
+    /// Adds the designated node to the right side of the continuation node. This operation assumes
+    /// that the continuation node is an `InfixNode` in this case.
     ///
     /// This method assumes that the continuation node in this case is an `InfixNode`. If the
     /// reality is something different the method returns an error.

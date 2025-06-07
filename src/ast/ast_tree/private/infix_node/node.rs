@@ -10,10 +10,14 @@ pub mod get_operation_type;
 pub mod get_right_id;
 pub mod get_right_type;
 pub mod infix_operation_type_enum;
+pub mod new_with_operation_type;
 pub mod new_with_type_and_left_child_node;
 pub mod new_with_values;
+pub mod set_infix_node_operation_type;
 pub mod set_left_id;
 pub mod set_left_type;
+pub mod set_right_id;
+pub mod set_right_type;
 
 #[derive(Debug, Clone, Display)]
 #[display(

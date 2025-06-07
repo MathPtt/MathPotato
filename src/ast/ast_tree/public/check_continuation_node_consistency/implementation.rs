@@ -37,7 +37,7 @@ impl CheckContinuationNodeConsistency for MathPotatoAstTree {
             Ok(t) => match t {
                 AstNodeType::InfixOperationAstNode => {
                     let node = self
-                        .infix_operation_tree
+                        .infix_nodes
                         .get_node_by_id(continuation_node_id)
                         .unwrap_or_else(|e| {
                             panic!(

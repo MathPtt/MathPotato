@@ -45,7 +45,7 @@ pub struct MathPotatoAstTree {
     /// The node tree to represent the i32 data type.
     i32_nodes: I32NodeStorageApi,
     /// The node tree to represent the infix operation nodes.
-    infix_operation_tree: InfixNodeStorage,
+    infix_nodes: InfixNodeStorage,
     /// The catalog of the nodes in the AST
     node_catalog: NodeCatalogStorage,
 }
@@ -56,7 +56,7 @@ impl MathPotatoAstTree {
             root_node_id: Uuid::nil(),
             root_node_type: AstNodeType::None,
             i32_nodes_storage: I32NodeStorageApi::new(),
-            infix_operation_tree: InfixNodesApi::new(),
+            infix_nodes: InfixNodesApi::new(),
             node_catalog: NodeCatalogStorage::new(),
             continuation_node: AstContinuationNodeApi::new(),
         }

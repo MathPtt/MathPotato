@@ -32,7 +32,7 @@ impl AddNodeToContinuationNodeRight for MathPotatoAstTree {
         match node_type {
             AstNodeType::I32AstNode => match self.continuation_node.get_type() {
                 AstNodeType::InfixOperationAstNode => {
-                    self.infix_operation_tree
+                    self.infix_nodes
                                     .add_node_id_and_type_to_left(self.continuation_node.get_id(), id, node_type)
                                     .unwrap_or_else(|e| {
                                         let cont_node_debug =
