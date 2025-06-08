@@ -14,7 +14,7 @@ impl InfixNodeStorageApiRemoveLeftAndReturnItsId for InfixNodeStorage {
         &self,
         node_id: uuid::Uuid,
     ) -> Result<uuid::Uuid, crate::parser::parser_error::ParseError> {
-        self.tree.entry(node_id).and_modify(|infix_node| {
+        self.nodes.entry(node_id).and_modify(|infix_node| {
             let id = infix_node.get_left_id();
 
             infix_node.set_left_id(Uuid::nil()).unwrap_or_else(|e| {

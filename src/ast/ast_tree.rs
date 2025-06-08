@@ -1,13 +1,23 @@
 use derive_more::Display;
-use private::{continuation_node::storage::ContinuationNodeStorage, i32_nodes::storage::I32NodeStorageApi, infix_node::storage::InfixNodeStorage, infix_nodes_api::storage::InfixNodeStorage, node_catalog::storage::{new::NodeCatalogApiNew, NodeCatalogStorage}, root_node::storage::RootNodeStorage};
+use private::{
+    continuation_node::storage::ContinuationNodeStorage,
+    i32_nodes::storage::I32NodeStorageApi,
+    infix_node::storage::InfixNodeStorage,
+    infix_nodes_api::storage::InfixNodeStorage,
+    node_catalog::storage::{new::NodeCatalogApiNew, NodeCatalogStorage},
+    root_node::storage::RootNodeStorage,
+};
 use public::i32_nodes_api::I32NodeStorageApi;
 use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
 use self::global::enums::ast_node_types_enum::AstNodeType;
-use self::private::i32_nodes::storage::new::I32AstTreeApiNew;
+use self::private::continuation_node::storage::new::ContinuationNodeStorageApiNew;
+use self::private::i32_nodes::storage::new::I32NodeStorageApiNew;
 use self::private::i32_nodes::storage::I32NodeStorage;
+use self::private::infix_node::storage::new::InfixNodeStorageApiNew;
+use self::private::root_node::storage::new::RootNodeStorageApiNew;
 
 use super::{
     global::enums::ast_node_types_enum::AstNodeType,
@@ -46,7 +56,7 @@ pub struct MathPotatoAstTree {
     root_node: RootNodeStorage,
     /// Represents the point where the AST processing is right now.
     /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
-    continuation_node: ContinuationNodeStorage
+    continuation_node: ContinuationNodeStorage,
     /// The node tree to represent the i32 data type.
     i32_nodes: I32NodeStorage,
     /// The node tree to represent the infix operation nodes.
@@ -58,12 +68,11 @@ pub struct MathPotatoAstTree {
 impl MathPotatoAstTree {
     pub fn new() -> Self {
         MathPotatoAstTree {
-            root_node_id: Uuid::nil(),
-            root_node_type: AstNodeType::None,
+            root_node: RootNodeStorage::new(),
             i32_nodes: I32NodeStorage::new(),
             infix_nodes: InfixNodeStorage::new(),
             node_catalog: NodeCatalogStorage::new(),
-            continuation_node: AstContinuationNode::new(),
+            continuation_node: ContinuationNodeStorage::new(),
         }
     }
     pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {

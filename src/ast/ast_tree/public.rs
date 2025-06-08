@@ -2,15 +2,18 @@ use super::MathPotatoAstTree;
 
 pub mod add_node_to_continuation_node_right;
 pub mod check_continuation_node_consistency;
-pub mod create_i32_node_with_value;
 pub mod create_new_infix_node_with_left_child;
 pub mod create_new_infix_node_with_parent_node;
 pub mod create_or_update_root_node_id_and_type;
 pub mod find_next_feasible_continuation_node_and_set_as_actual_continuation_node;
 pub mod get_continuation_node_id_and_type;
+pub mod get_infix_node_by_id;
+pub mod get_infix_node_count;
 pub mod remove_continuation_node_left_node_and_return_id;
 pub mod update_continuation_node_id_and_type;
 
+pub mod i32_node;
+pub mod root_node;
 /// Public Abstract Syntax Tree Api
 ///
 /// This is the layer where the so-called business logic of the tree management lives. The methods

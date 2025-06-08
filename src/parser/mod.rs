@@ -1,8 +1,8 @@
 use parser_error::ParseError;
 
-use crate::ast::{
-    ast_tree::MathPotatoAstTree, potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
-};
+use crate::ast::ast_tree::global::enums::potato_token::PotatoToken;
+use crate::ast::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
+use crate::ast::ast_tree::MathPotatoAstTree;
 
 pub mod parse_i32_statement;
 pub mod parse_i32_statement_expression;

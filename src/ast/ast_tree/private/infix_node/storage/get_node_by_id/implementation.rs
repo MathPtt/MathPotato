@@ -20,7 +20,7 @@ impl InfixNodeStorageApiGetNodeById for InfixNodeStorage {
         crate::ast::ast_tree::private::infix_node::node::InfixNode,
         crate::parser::parser_error::ParseError,
     > {
-        match self.tree.get(&id) {
+        match self.nodes.get(&id) {
             Some(r) => Ok(InfixNode::new_with_values(
                 *r.get_infix_node_operation_type(),
                 *r.get_left_id(),

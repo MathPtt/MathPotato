@@ -28,7 +28,7 @@ impl InfixNodeStorageApiUpdate for InfixNodeStorage {
                 id
             ))),
             true => {
-                self.tree.entry(&id).and_modify(|orig| {
+                self.nodes.entry(&id).and_modify(|orig| {
                     if orig.get_infix_node_operation_type() != node.get_infix_node_operation_type()
                     {
                         orig.set_infix_node_operation_type(node.get_infix_node_operation_type())

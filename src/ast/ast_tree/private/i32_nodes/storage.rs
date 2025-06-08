@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 use super::node::I32Node;
 
+pub mod count;
 pub mod create;
 pub mod get_node_by_id;
 pub mod new;

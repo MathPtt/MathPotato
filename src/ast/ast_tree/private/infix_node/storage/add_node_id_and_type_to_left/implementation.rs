@@ -23,7 +23,7 @@ impl InfixNodeStorageApiAddNodeIdAndTypeToLeft for InfixNodeStorage {
         left_node_id: uuid::Uuid,
         left_node_type: crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType,
     ) -> Result<uuid::Uuid, crate::parser::parser_error::ParseError> {
-        match self.tree.get(&target_node_id) {
+        match self.nodes.get(&target_node_id) {
             None => Err(ParseError::new(format!(
                 "There is no {} node with id: {}.",
                 AstNodeType::InfixOperationAstNode,
@@ -45,7 +45,7 @@ impl InfixNodeStorageApiAddNodeIdAndTypeToLeft for InfixNodeStorage {
                         e
                     )));
                 });
-                self.tree.update(target_node_id, node).unwrap_or_else(|e| {
+                self.nodes.update(target_node_id, node).unwrap_or_else(|e| {
                     Err(ParseError::new(format!(
                         "Error happened while updating {} node with input: {}. Details: {}",
                         n, node, e

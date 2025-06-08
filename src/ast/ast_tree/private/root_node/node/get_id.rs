@@ -8,6 +8,6 @@ pub trait RootNodeApiGetId: RootNodeApi {
 
 impl RootNodeApiGetId for RootNode {
     fn get_id(&self) -> Uuid {
-        &self.id
+        self.id
     }
 }
