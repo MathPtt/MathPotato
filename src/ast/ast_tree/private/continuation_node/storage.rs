@@ -7,6 +7,8 @@ pub mod get_id;
 pub mod get_node;
 pub mod get_type;
 pub mod new;
+pub mod set_id;
+pub mod set_type;
 pub mod update_continuation_node_id_and_type;
 
 #[derive(Clone, Debug, Display)]

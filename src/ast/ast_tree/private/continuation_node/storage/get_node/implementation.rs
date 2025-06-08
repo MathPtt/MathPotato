@@ -3,10 +3,7 @@ use uuid::Uuid;
 use crate::ast::ast_tree::{
     global::enums::ast_node_types_enum::AstNodeType,
     private::continuation_node::{
-        node::{
-            new::ContinuationNodeApiCtor,
-            new_from_id_and_type::ContinuationNodeApiNewFromIdAndType, ContinuationNode,
-        },
+        node::{new_from_id_and_type::ContinuationNodeApiNewFromIdAndType, ContinuationNode},
         storage::ContinuationNodeStorage,
     },
 };
@@ -20,7 +17,7 @@ impl ContinuationNodeStorageApiGetNode for ContinuationNodeStorage {
         } else {
             Some(ContinuationNode::new_from_id_and_type(
                 self.id,
-                self.node_type,
+                self.node_type.clone(),
             ))
         }
     }

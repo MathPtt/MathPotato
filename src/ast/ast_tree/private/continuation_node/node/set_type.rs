@@ -7,8 +7,8 @@ pub trait ContinuationNodeApiSetType: ContinuationNodeApi {
 }
 
 impl ContinuationNodeApiSetType for ContinuationNode {
-    fn set_type(&self, node_type: AstNodeType) -> AstNodeType {
-        self.node_type = node_type;
-        node_type.clone()
+    fn set_type(&mut self, node_type: AstNodeType) -> AstNodeType {
+        self.node_type = node_type.clone();
+        node_type
     }
 }

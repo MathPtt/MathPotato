@@ -13,7 +13,7 @@ pub mod node;
 
 pub trait CreateOrUpdateRootNodeIdAndType: AstApi {
     fn create_or_update_root_node_id_and_type(
-        &self,
+        &mut self,
         id: Uuid,
         node_type: AstNodeType,
     ) -> Result<CreateOrUpdateRootNodeIdAndTypeResult, ParseError>;

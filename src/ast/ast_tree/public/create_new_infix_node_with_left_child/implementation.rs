@@ -25,31 +25,30 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
             .node_catalog
             .get_node_type(left_node_id)
             .unwrap_or_else(|e| {
-                ParseError::new(format!(
+                panic!(
                     "Error happened while retrieving node type of {}. Details: {}",
                     left_node_id, e
-                ))
+                )
             });
-        match left_node_type {
-            AstNodeType::I32AstNode => todo!(),
-            _ => Err(ParseError::new(format!(
-                "Left node type, {}, is incorrect at this point.",
+        if left_node_type.clone() != AstNodeType::I32AstNode {
+            return Err(ParseError::new(format!(
+                "The left node type, {}, is incorrect at this point.",
                 left_node_type
-            ))),
-        };
+            )));
+        }
         let new_infix_node_id = self
             .infix_nodes
             .put(InfixNode::new_with_type_and_left_child_node(
                 operation_type,
-                left_node_type,
+                left_node_type.clone(),
                 left_node_id,
             ))
             .unwrap_or_else(|e| {
-                ParseError::new(format!(
+                panic!(
                     "Error happened while creating new {} node. Details: {}",
                     AstNodeType::InfixOperationAstNode,
                     e
-                ))
+                )
             });
         match left_node_type {
             AstNodeType::I32AstNode => {
@@ -57,22 +56,23 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
                     .i32_nodes
                     .get_node_by_id(left_node_id)
                     .unwrap_or_else(|| {
-                        return Err(ParseError::new(format!(
+                        panic!(
                             "There is no {} node with id: {}.",
                             AstNodeType::I32AstNode,
                             left_node_id,
-                        )));
+                        );
                     });
                 actual_i32_node.set_parent_id(new_infix_node_id);
                 actual_i32_node.set_parent_type(AstNodeType::InfixOperationAstNode);
                 self.i32_nodes.update(left_node_id, actual_i32_node).unwrap_or_else(|e|{
-                    return Err(ParseError::new(format!("Error happened while updating parent id to {} and parent type to {} for {} node with id {}. Details: {}",
+                    panic!(
+                        "Error happened while updating parent id to {} and parent type to {} for {} node with id {}. Details: {}",
                         new_infix_node_id,
                         AstNodeType::InfixOperationAstNode,
                         AstNodeType::I32AstNode,
                         left_node_id,
                         e
-                    )));
+                    );
                 });
             }
             _ => {

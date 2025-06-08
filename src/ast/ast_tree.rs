@@ -1,32 +1,15 @@
-use derive_more::Display;
-use private::{
-    continuation_node::storage::ContinuationNodeStorage,
-    i32_nodes::storage::I32NodeStorageApi,
-    infix_node::storage::InfixNodeStorage,
-    infix_nodes_api::storage::InfixNodeStorage,
-    node_catalog::storage::{new::NodeCatalogApiNew, NodeCatalogStorage},
-    root_node::storage::RootNodeStorage,
-};
-use public::i32_nodes_api::I32NodeStorageApi;
-use uuid::Uuid;
-
 use crate::parser::parser_error::ParseError;
 
-use self::global::enums::ast_node_types_enum::AstNodeType;
 use self::private::continuation_node::storage::new::ContinuationNodeStorageApiNew;
+use self::private::continuation_node::storage::ContinuationNodeStorage;
 use self::private::i32_nodes::storage::new::I32NodeStorageApiNew;
 use self::private::i32_nodes::storage::I32NodeStorage;
 use self::private::infix_node::storage::new::InfixNodeStorageApiNew;
+use self::private::infix_node::storage::InfixNodeStorage;
+use self::private::node_catalog::storage::new::NodeCatalogApiNew;
+use self::private::node_catalog::storage::NodeCatalogStorage;
 use self::private::root_node::storage::new::RootNodeStorageApiNew;
-
-use super::{
-    global::enums::ast_node_types_enum::AstNodeType,
-    private::apis::{
-        ast_continuation_node_api::{new::AstContinuationInternalNodeNew, AstContinuationNodeApi},
-        i32_nodes_api::{new::I32AstTreeApiNew, I32NodesApi},
-        infix_nodes_api::{new::InfixAstTreeApiNew, InfixNodesApi},
-    },
-};
+use self::private::root_node::storage::RootNodeStorage;
 
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
@@ -76,19 +59,21 @@ impl MathPotatoAstTree {
         }
     }
     pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {
-        self.last_changed_node_type = tree.last_changed_node_type;
-        self.last_changed_node_id = tree.last_changed_node_id;
-
-        // i32 node merge
-        let diff: Vec<Uuid> = tree
-            .i32_nodes_storage
-            .clone()
-            .keys()
-            .into_iter()
-            .filter(|k| !self.i32_nodes_storage.clone().keys().contains(k))
-            .collect();
-        let diff_result = tree.i32_nodes_storage.get_nodes(diff).unwrap();
-        self.i32_nodes_storage.put_all(diff_result);
+        // self.continuation_node
+        //     .set_id(tree.continuation_node.get_id());
+        // self.continuation_node
+        //     .set_type(tree.continuation_node.get_type().clone());
+        // // i32 node merge
+        // let diff: Vec<Uuid> = tree
+        //     .i32_nodes
+        //     .get_nodes(l)
+        //     .clone()
+        //     .keys()
+        //     .into_iter()
+        //     .filter(|k| !self.i32_nodes_storage.clone().keys().contains(k))
+        //     .collect();
+        // let diff_result = tree.i32_nodes_storage.get_nodes(diff).unwrap();
+        // self.i32_nodes_storage.put_all(diff_result);
 
         Ok(())
     }

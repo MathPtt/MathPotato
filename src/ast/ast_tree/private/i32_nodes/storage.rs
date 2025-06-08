@@ -7,6 +7,7 @@ use super::node::I32Node;
 pub mod count;
 pub mod create;
 pub mod get_node_by_id;
+pub mod get_nodes;
 pub mod new;
 pub mod update;
 

@@ -25,7 +25,7 @@ impl UpdateContinuationNodeIdAndType for MathPotatoAstTree {
         node_type: AstNodeType,
     ) -> Result<UpdateContinuationNodeIdAndTypeResult, ParseError> {
         match self.continuation_node.update_continuation_node_id_and_type(
-            ContinuationNode::new_from_id_and_type(id, node_type),
+            ContinuationNode::new_from_id_and_type(id, node_type.clone()),
         ) {
             Ok(r) => Ok(UpdateContinuationNodeIdAndTypeResult::new_from_id_and_type(
                 id, node_type,

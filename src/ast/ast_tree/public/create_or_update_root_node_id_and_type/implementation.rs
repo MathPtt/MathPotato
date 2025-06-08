@@ -25,13 +25,13 @@ use super::{
 
 impl CreateOrUpdateRootNodeIdAndType for MathPotatoAstTree {
     fn create_or_update_root_node_id_and_type(
-        &self,
+        &mut self,
         id: Uuid,
         node_type: AstNodeType,
     ) -> Result<CreateOrUpdateRootNodeIdAndTypeResult, ParseError> {
         match self
             .root_node
-            .create_or_update(RootNode::new_from_id_and_type(id, node_type))
+            .create_or_update(RootNode::new_from_id_and_type(id, node_type.clone()))
         {
             Ok(r) => Ok(CreateOrUpdateRootNodeIdAndTypeResult::new_from_id_and_type(
                 r.get_id(),

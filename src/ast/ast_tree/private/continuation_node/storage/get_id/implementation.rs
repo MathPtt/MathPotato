@@ -5,11 +5,7 @@ use crate::ast::ast_tree::private::continuation_node::storage::ContinuationNodeS
 use super::ContinuationNodeStorageApiGetId;
 
 impl ContinuationNodeStorageApiGetId for ContinuationNodeStorage {
-    fn get_id(&self) -> Option<uuid::Uuid> {
-        if self.id == Uuid::nil() {
-            None
-        } else {
-            Some(self.id)
-        }
+    fn get_id(&self) -> Uuid {
+        self.id
     }
 }

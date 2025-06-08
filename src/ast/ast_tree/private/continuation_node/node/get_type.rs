@@ -8,6 +8,6 @@ pub trait ContinuationNodeApiGetType: ContinuationNodeApi {
 
 impl ContinuationNodeApiGetType for ContinuationNode {
     fn get_type(&self) -> AstNodeType {
-        self.node_type
+        self.node_type.clone()
     }
 }
