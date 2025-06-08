@@ -3,6 +3,7 @@ use super::MathPotatoAstTree;
 pub mod add_node_to_continuation_node_right;
 pub mod check_continuation_node_consistency;
 pub mod create_i32_node_with_value;
+pub mod create_new_infix_node_with_left_child;
 pub mod create_new_infix_node_with_parent_node;
 pub mod create_or_update_root_node_id_and_type;
 pub mod find_next_feasible_continuation_node_and_set_as_actual_continuation_node;

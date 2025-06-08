@@ -12,6 +12,6 @@ pub trait FindNextFeasibleContinuationNode: AstApi {
     /// - actual token
     /// - precedences
     fn find_next_feasible_continuation_node_and_set_as_actual_continuation_node(
-        self,
+        &self,
     ) -> Result<Uuid, ParseError>;
 }

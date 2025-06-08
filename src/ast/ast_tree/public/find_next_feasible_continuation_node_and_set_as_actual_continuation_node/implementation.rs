@@ -11,7 +11,7 @@ use crate::{
 
 impl FindNextFeasibleContinuationNode for MathPotatoAstTree {
     fn find_next_feasible_continuation_node_and_set_as_actual_continuation_node(
-        self,
+        &self,
     ) -> Result<Uuid, ParseError> {
         Ok(self.continuation_node.get_id())
     }

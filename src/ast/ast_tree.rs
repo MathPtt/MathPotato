@@ -5,6 +5,10 @@ use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
+use self::global::enums::ast_node_types_enum::AstNodeType;
+use self::private::i32_nodes::storage::new::I32AstTreeApiNew;
+use self::private::i32_nodes::storage::I32NodeStorage;
+
 use super::{
     global::enums::ast_node_types_enum::AstNodeType,
     private::apis::{
@@ -44,7 +48,7 @@ pub struct MathPotatoAstTree {
     /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
     continuation_node: ContinuationNodeStorage
     /// The node tree to represent the i32 data type.
-    i32_nodes: I32NodeStorageApi,
+    i32_nodes: I32NodeStorage,
     /// The node tree to represent the infix operation nodes.
     infix_nodes: InfixNodeStorage,
     /// The catalog of the nodes in the AST
@@ -56,10 +60,10 @@ impl MathPotatoAstTree {
         MathPotatoAstTree {
             root_node_id: Uuid::nil(),
             root_node_type: AstNodeType::None,
-            i32_nodes_storage: I32NodeStorageApi::new(),
-            infix_nodes: InfixNodesApi::new(),
+            i32_nodes: I32NodeStorage::new(),
+            infix_nodes: InfixNodeStorage::new(),
             node_catalog: NodeCatalogStorage::new(),
-            continuation_node: AstContinuationNodeApi::new(),
+            continuation_node: AstContinuationNode::new(),
         }
     }
     pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {

@@ -1,11 +1,12 @@
 use uuid::Uuid;
 
-use crate::ast::ast_tree::private::i32_nodes_api::{entity::I32AstEntity, storage::I32NodeStorage};
+use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
+use crate::ast::ast_tree::private::i32_nodes::storage::I32NodeStorage;
 
-use super::I32AstTreeApiGetNodeById;
+use super::I32NodeStorageApiGetNodeById;
 
-impl I32AstTreeApiGetNodeById for I32NodeStorage {
-    fn get_node_by_id(&self, id: Uuid) -> Option<I32AstEntity> {
-        self.tree.get(&id).cloned()
+impl I32NodeStorageApiGetNodeById for I32NodeStorage {
+    fn get_node_by_id(&self, id: Uuid) -> Option<I32Node> {
+        self.nodes.get(&id).cloned()
     }
 }

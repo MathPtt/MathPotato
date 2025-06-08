@@ -16,7 +16,7 @@ use super::CreateNewInfixNodeWithParentNode;
 
 impl CreateNewInfixNodeWithParentNode for MathPotatoAstTree {
     fn create_new_infix_node_with_parent_node(
-        self,
+        &self,
         parent_node_id: uuid::Uuid,
         infix_operation_type: InfixOperationTypeEnum,
     ) -> Result<uuid::Uuid, crate::parser::parser_error::ParseError> {
