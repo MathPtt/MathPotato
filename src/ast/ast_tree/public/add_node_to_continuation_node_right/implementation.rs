@@ -1,12 +1,12 @@
 use uuid::Uuid;
 
+use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 use crate::ast::ast_tree::private::continuation_node::storage::get_id::ContinuationNodeStorageApiGetId;
 use crate::ast::ast_tree::private::continuation_node::storage::get_node::ContinuationNodeStorageApiGetNode;
 use crate::ast::ast_tree::private::continuation_node::storage::get_type::ContinutationNodeStorageApiGetType;
 use crate::ast::ast_tree::private::infix_node::storage::add_node_id_and_type_to_left::InfixNodeStorageApiAddNodeIdAndTypeToLeft;
 use crate::ast::ast_tree::private::node_catalog::storage::get_node_type::NodeCatalogInternalApiGetType;
-use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::parser::parser_error::ParseError;
 
 use super::AddNodeToContinuationNodeRight;
@@ -33,8 +33,8 @@ impl AddNodeToContinuationNodeRight for MathPotatoAstTree {
                                 Continuation node details: {}", self.continuation_node)
                                             });
                                 panic!(
-                                            "Error happened while adding node id: {} and type: {} to {} node.",
-                                            id, node_type, cont_node_debug
+                                            "Error happened while adding node id: {} and type: {} to {} node. Details: {}",
+                                            id, node_type, cont_node_debug, e
                                         );
 
                                     });

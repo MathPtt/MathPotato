@@ -15,10 +15,12 @@ impl NodeCatalogApiAddNode for NodeCatalogStorage {
             )))
         } else {
             match self.catalog.insert(id, node_type.clone()) {
-                Some(meh) => Err(ParseError::new(
-                                format!("There was a node in the system despite the fact that we already checked this condition. So here are its details: {:#?}", meh))),
-                None => Ok((id, node_type))
-                }
+                Some(meh) => Err(ParseError::new(format!(
+                    "There was a node in the system despite the fact that we already checked this condition. So here are its details: {:#?}",
+                    meh
+                ))),
+                None => Ok((id, node_type)),
+            }
         }
     }
 }

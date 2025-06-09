@@ -1,15 +1,15 @@
 use crate::parser::parser_error::ParseError;
 
-use self::private::continuation_node::storage::new::ContinuationNodeStorageApiNew;
 use self::private::continuation_node::storage::ContinuationNodeStorage;
-use self::private::i32_nodes::storage::new::I32NodeStorageApiNew;
+use self::private::continuation_node::storage::new::ContinuationNodeStorageApiNew;
 use self::private::i32_nodes::storage::I32NodeStorage;
-use self::private::infix_node::storage::new::InfixNodeStorageApiNew;
+use self::private::i32_nodes::storage::new::I32NodeStorageApiNew;
 use self::private::infix_node::storage::InfixNodeStorage;
-use self::private::node_catalog::storage::new::NodeCatalogApiNew;
+use self::private::infix_node::storage::new::InfixNodeStorageApiNew;
 use self::private::node_catalog::storage::NodeCatalogStorage;
-use self::private::root_node::storage::new::RootNodeStorageApiNew;
+use self::private::node_catalog::storage::new::NodeCatalogApiNew;
 use self::private::root_node::storage::RootNodeStorage;
+use self::private::root_node::storage::new::RootNodeStorageApiNew;
 
 /// Represents the Abstract Syntax Tree of the Programming Language.
 ///
@@ -58,7 +58,7 @@ impl MathPotatoAstTree {
             continuation_node: ContinuationNodeStorage::new(),
         }
     }
-    pub fn merge(&mut self, tree: MathPotatoAstTree) -> Result<(), ParseError> {
+    pub fn merge(&mut self, _: MathPotatoAstTree) -> Result<(), ParseError> {
         // self.continuation_node
         //     .set_id(tree.continuation_node.get_id());
         // self.continuation_node

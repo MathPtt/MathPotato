@@ -1,7 +1,7 @@
+use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 use crate::ast::ast_tree::private::i32_nodes::storage::get_node_by_id::I32NodeStorageApiGetNodeById;
 use crate::ast::ast_tree::public::i32_node::dto::I32NodeDto;
-use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::parser::parser_error::ParseError;
 
 use super::GetI32NodeById;

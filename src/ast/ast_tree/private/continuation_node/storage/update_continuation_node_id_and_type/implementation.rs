@@ -1,8 +1,9 @@
 use crate::{
     ast::ast_tree::private::continuation_node::{
         node::{
-            get_id::ContinuationNodeApiGetId, get_type::ContinuationNodeApiGetType,
-            new_from_id_and_type::ContinuationNodeApiNewFromIdAndType, ContinuationNode,
+            ContinuationNode, get_id::ContinuationNodeApiGetId,
+            get_type::ContinuationNodeApiGetType,
+            new_from_id_and_type::ContinuationNodeApiNewFromIdAndType,
         },
         storage::ContinuationNodeStorage,
     },

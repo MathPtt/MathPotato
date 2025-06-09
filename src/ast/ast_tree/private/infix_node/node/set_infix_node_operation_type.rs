@@ -1,6 +1,6 @@
-use super::infix_operation_type_enum::InfixOperationTypeEnum;
 use super::InfixNode;
 use super::InfixNodeApi;
+use super::infix_operation_type_enum::InfixOperationTypeEnum;
 
 pub trait InfixNodeApiSetInfixNodeOperationType: InfixNodeApi {
     fn set_infix_node_operation_type(&mut self, infix_node_operation_type: InfixOperationTypeEnum);

@@ -1,6 +1,6 @@
+use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::ast_tree::global::enums::potato_token::PotatoToken;
 use crate::ast::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
-use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::integer_statement_ast_node::IntegerStatementAstNode;
 
 use super::parser_error::ParseError;

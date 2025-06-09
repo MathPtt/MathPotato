@@ -19,10 +19,6 @@ impl I32NodeStorageApiGetNodes for I32NodeStorage {
             })
             .collect();
 
-        if !res.is_empty() {
-            Some(res)
-        } else {
-            None
-        }
+        if !res.is_empty() { Some(res) } else { None }
     }
 }

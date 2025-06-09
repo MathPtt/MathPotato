@@ -1,16 +1,16 @@
 use uuid::Uuid;
 
+use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 use crate::ast::ast_tree::private::i32_nodes::node::set_parent_id::I32NodeApiSetParentId;
 use crate::ast::ast_tree::private::i32_nodes::node::set_parent_type::I32NodeApiSetParentType;
 use crate::ast::ast_tree::private::i32_nodes::storage::get_node_by_id::I32NodeStorageApiGetNodeById;
 use crate::ast::ast_tree::private::i32_nodes::storage::update::I32NodeStorageApiUpdate;
+use crate::ast::ast_tree::private::infix_node::node::InfixNode;
 use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::InfixOperationTypeEnum;
 use crate::ast::ast_tree::private::infix_node::node::new_with_type_and_left_child_node::InfixAstNodeInternalNewWithTypeAndLeftChildNode;
-use crate::ast::ast_tree::private::infix_node::node::InfixNode;
 use crate::ast::ast_tree::private::infix_node::storage::put::InfixNodeStorageApiPut;
 use crate::ast::ast_tree::private::node_catalog::storage::get_node_type::NodeCatalogInternalApiGetType;
-use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::parser::parser_error::ParseError;
 
 use super::CreateNewInfixNodeWithLeftChild;
@@ -78,7 +78,7 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
             _ => {
                 return Err(ParseError::new(format!(
                     "Error happened. We are at a point which should have been caught earlier."
-                )))
+                )));
             }
         };
 

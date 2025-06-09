@@ -5,9 +5,9 @@ use crate::ast::ast_tree::private::continuation_node::storage::update_continuati
 use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::parser::parser_error::ParseError;
 
-use super::node::new_from_id_and_type::UpdateContinuationNodeIdAndTypeResultApiNewFromIdAndType;
-use super::node::UpdateContinuationNodeIdAndTypeResult;
 use super::UpdateContinuationNodeIdAndType;
+use super::node::UpdateContinuationNodeIdAndTypeResult;
+use super::node::new_from_id_and_type::UpdateContinuationNodeIdAndTypeResultApiNewFromIdAndType;
 
 impl UpdateContinuationNodeIdAndType for MathPotatoAstTree {
     fn update_continuation_node_id_and_type(
@@ -21,11 +21,10 @@ impl UpdateContinuationNodeIdAndType for MathPotatoAstTree {
             Ok(_) => Ok(UpdateContinuationNodeIdAndTypeResult::new_from_id_and_type(
                 id, node_type,
             )),
-            Err(e) => Err(ParseError::new(
-                format!("Error happened while executing updating continuation node with input: id: {}, node_type: {}. Details: {}", 
-                    id,
-                    node_type,
-                    e)))
+            Err(e) => Err(ParseError::new(format!(
+                "Error happened while executing updating continuation node with input: id: {}, node_type: {}. Details: {}",
+                id, node_type, e
+            ))),
         }
     }
 }

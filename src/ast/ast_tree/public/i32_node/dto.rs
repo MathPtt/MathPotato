@@ -2,10 +2,10 @@ use derive_more::Display;
 use uuid::Uuid;
 
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
+use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
 use crate::ast::ast_tree::private::i32_nodes::node::get_parent_id::I32NodeApiGetParentId;
 use crate::ast::ast_tree::private::i32_nodes::node::get_parent_type::I32NodeApiGetParentType;
 use crate::ast::ast_tree::private::i32_nodes::node::get_value::I32NodeApiGetValue;
-use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
 
 #[derive(Clone, Debug, Display)]
 #[display(

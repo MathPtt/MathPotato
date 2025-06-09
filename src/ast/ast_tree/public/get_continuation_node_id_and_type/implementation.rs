@@ -1,14 +1,14 @@
 use crate::ast::ast_tree::{
+    MathPotatoAstTree,
     private::continuation_node::{
         node::{get_id::ContinuationNodeApiGetId, get_type::ContinuationNodeApiGetType},
         storage::get_node::ContinuationNodeStorageApiGetNode,
     },
-    MathPotatoAstTree,
 };
 
 use super::{
-    node::{from_id_and_type::ContinuationNodeFromIdAndType, GetContinuationNodeIdAndTypeResult},
     ContinuationNodeStorageApiGetIdAndType,
+    node::{GetContinuationNodeIdAndTypeResult, from_id_and_type::ContinuationNodeFromIdAndType},
 };
 
 impl ContinuationNodeStorageApiGetIdAndType for MathPotatoAstTree {

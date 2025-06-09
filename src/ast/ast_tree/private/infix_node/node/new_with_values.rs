@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{infix_operation_type_enum::InfixOperationTypeEnum, InfixNode, InfixNodeApi};
+use super::{InfixNode, InfixNodeApi, infix_operation_type_enum::InfixOperationTypeEnum};
 
 pub trait InfixNodeApiNewWithValues: InfixNodeApi {
     fn new_with_values(

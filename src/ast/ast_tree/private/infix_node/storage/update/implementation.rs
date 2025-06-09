@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 use super::InfixNodeStorageApiUpdate;
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
+use crate::ast::ast_tree::private::infix_node::node::InfixNode;
 use crate::ast::ast_tree::private::infix_node::node::get_left_id::InfixNodeApiGetLeftId;
 use crate::ast::ast_tree::private::infix_node::node::get_left_type::InfixNodeApiGetLeftType;
 use crate::ast::ast_tree::private::infix_node::node::get_operation_type::InfixNodeApiGetOperationType;
@@ -14,9 +15,8 @@ use crate::ast::ast_tree::private::infix_node::node::set_left_id::InfixNodeApiSe
 use crate::ast::ast_tree::private::infix_node::node::set_left_type::InfixNodeApiSetLeftType;
 use crate::ast::ast_tree::private::infix_node::node::set_right_id::InfixNodeApiSetRightId;
 use crate::ast::ast_tree::private::infix_node::node::set_right_type::InfixNodeApiSetRightType;
-use crate::ast::ast_tree::private::infix_node::node::InfixNode;
-use crate::ast::ast_tree::private::infix_node::storage::does_node_exist::InfixNodeStorageApiDoesNodeExist;
 use crate::ast::ast_tree::private::infix_node::storage::InfixNodeStorage;
+use crate::ast::ast_tree::private::infix_node::storage::does_node_exist::InfixNodeStorageApiDoesNodeExist;
 use crate::parser::parser_error::ParseError;
 
 impl InfixNodeStorageApiUpdate for InfixNodeStorage {

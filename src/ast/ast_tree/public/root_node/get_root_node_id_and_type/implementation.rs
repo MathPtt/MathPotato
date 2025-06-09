@@ -1,8 +1,8 @@
+use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::ast::ast_tree::private::root_node::node::get_id::RootNodeApiGetId;
 use crate::ast::ast_tree::private::root_node::node::get_node_type::RootNodeApiGetNodeType;
 use crate::ast::ast_tree::private::root_node::storage::get::RootNodeStorageApiGet;
 use crate::ast::ast_tree::public::root_node::dto::RootNodeDto;
-use crate::ast::ast_tree::MathPotatoAstTree;
 use crate::parser::parser_error::ParseError;
 
 use super::GetRootNodeIdAndType;

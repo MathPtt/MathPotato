@@ -84,7 +84,11 @@ pub fn parse_i32_statement_expression(
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
                         _ => {
-                            panic!("The first character right after the `=` was {:#?} than the expected: {:#?}.", token, PotatoTokenTypes::LiteralIntegerValue);
+                            panic!(
+                                "The first character right after the `=` was {:#?} than the expected: {:#?}.",
+                                token,
+                                PotatoTokenTypes::LiteralIntegerValue
+                            );
                         }
                     }
                 }
@@ -148,10 +152,12 @@ pub fn parse_i32_statement_expression(
 
                             match previous_processed_node.get_type() {
                                 AstNodeType::InfixOperationAstNode => {
-                                    panic!("Cannot be an {} right after another one. Actual node type by token: {}; AST tree {:#?}", 
+                                    panic!(
+                                        "Cannot be an {} right after another one. Actual node type by token: {}; AST tree {:#?}",
                                         previous_processed_node.get_type(),
                                         token,
-                                        ast);
+                                        ast
+                                    );
                                 }
                                 AstNodeType::None => {
                                     panic!(
@@ -173,10 +179,10 @@ pub fn parse_i32_statement_expression(
                                     ast,
                                     e
                                 ));
-                            let removed_left_node_id = ast
+                            let _ = ast
                                 .remove_continuation_node_left_node_and_return_id()
                                 .unwrap_or_else(|e| panic!("Error happened while removing left if of infix node: {}. Details: {}", parent_infix_node_id, e));
-                            let multiplication_infix_node_id = ast
+                            let _ = ast
                                 .create_new_infix_node_with_parent_node(
                                     parent_infix_node_id,
                                     InfixOperationTypeEnum::Multiplication,
@@ -202,17 +208,38 @@ pub fn parse_i32_statement_expression(
                                     let new_infix_node_id = ast.create_new_infix_node_with_left_child(
                                         InfixOperationTypeEnum::Addition,
                                         previous_processed_node.get_id()?)
-                                        .unwrap_or_else(|e|panic!("Error happened while creating new {} node with left child. Left node id: {}", 
+                                        .unwrap_or_else(|e|panic!("Error happened while creating new {} node with left child. Left node id: {}. Details: {}", 
                                             AstNodeType::InfixOperationAstNode,
-                                            previous_processed_node.get_id().unwrap()
+                                            previous_processed_node.get_id().unwrap(),
+                                            e
                                         ));
-                                    ast.update_continuation_node_id_and_type(new_infix_node_id, AstNodeType::InfixOperationAstNode)
-                                        .unwrap_or_else(|e|panic!("Error happened while updating continutaion node. Details: {}", e));
+
+                                    ast.update_continuation_node_id_and_type(
+                                        new_infix_node_id, 
+                                        AstNodeType::InfixOperationAstNode)
+                                        .unwrap_or_else(|e|{
+                                            panic!(
+                                                "Error happened while updating continutaion node. Details: {}", 
+                                                e)
+                                        });
+
+                                    ast.create_or_update_root_node_id_and_type(
+                                        new_infix_node_id,
+                                        AstNodeType::InfixOperationAstNode,
+                                    )
+                                    .unwrap_or_else(|e| {
+                                        panic!(
+                                            "Error happened while updating root node. Details: {}",
+                                            e
+                                        )
+                                    });
 
                                     parse_i32_statement_expression(i + 1, tokens, ast)
                                 }
                                 AstNodeType::InfixOperationAstNode => {
-                                    panic!("Syntax error! Infix operation node cannot follow another one.")
+                                    panic!(
+                                        "Syntax error! Infix operation node cannot follow another one."
+                                    )
                                 }
                                 AstNodeType::None => {
                                     panic!("The continuation node type is None.")
@@ -247,19 +274,17 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 
 #[cfg(test)]
 mod test {
-    use uuid::Uuid;
-
+    use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
     use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::InfixOperationTypeEnum;
+    use crate::ast::ast_tree::public::get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType;
     use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_id::GetContinuationNodeIdAndTypeResultGetId;
     use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_type::GetContinuationNodeIdAndTypeResultGetType;
-    use crate::ast::ast_tree::public::get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType;
     use crate::ast::ast_tree::public::get_infix_node_by_id::GetInfixNodeById;
     use crate::ast::ast_tree::public::get_infix_node_count::GetInfixNodeCount;
     use crate::ast::ast_tree::public::i32_node::get_i32_node_by_id::GetI32NodeById;
     use crate::ast::ast_tree::public::i32_node::get_i32_node_count::GetI32NodeCount;
     use crate::ast::ast_tree::public::root_node::get_root_node_id_and_type::GetRootNodeIdAndType;
-    use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::lexer::lexer::lexing;
     use crate::parser::parse_i32_statement_expression::parse_i32_statement_expression;
 
@@ -447,7 +472,10 @@ mod test {
             .unwrap_or_else(|e| panic!("There is no root node id! Details: {}", e));
         assert_eq!(
             root_node.node_type().clone(),
-            AstNodeType::InfixOperationAstNode
+            AstNodeType::InfixOperationAstNode,
+            "Root node type must be {} but it was: {}",
+            AstNodeType::InfixOperationAstNode,
+            root_node.node_type().clone()
         );
         let the_infix_node_which_is_the_root_node = result
             .get_infix_node_by_id(root_node.id())

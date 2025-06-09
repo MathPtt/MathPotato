@@ -1,12 +1,12 @@
 use uuid::Uuid;
 
+use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
 use crate::ast::ast_tree::private::i32_nodes::node::get_parent_id::I32NodeApiGetParentId;
 use crate::ast::ast_tree::private::i32_nodes::node::get_parent_type::I32NodeApiGetParentType;
 use crate::ast::ast_tree::private::i32_nodes::node::get_value::I32NodeApiGetValue;
 use crate::ast::ast_tree::private::i32_nodes::node::set_parent_id::I32NodeApiSetParentId;
 use crate::ast::ast_tree::private::i32_nodes::node::set_parent_type::I32NodeApiSetParentType;
 use crate::ast::ast_tree::private::i32_nodes::node::set_value::I32NodeApiSetValue;
-use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
 use crate::ast::ast_tree::private::i32_nodes::storage::I32NodeStorage;
 use crate::parser::parser_error::ParseError;
 

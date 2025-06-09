@@ -1,7 +1,5 @@
 use uuid::Uuid;
 
-use crate::parser::parser_error::ParseError;
-
 use super::{InfixNode, InfixNodeApi};
 
 pub trait InfixNodeApiSetLeftId: InfixNodeApi {

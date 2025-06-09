@@ -1,5 +1,6 @@
 use uuid::Uuid;
 
+use crate::ast::ast_tree::private::infix_node::node::InfixNode;
 use crate::ast::ast_tree::private::infix_node::node::get_left_id::InfixNodeApiGetLeftId;
 use crate::ast::ast_tree::private::infix_node::node::get_left_type::InfixNodeApiGetLeftType;
 use crate::ast::ast_tree::private::infix_node::node::get_operation_type::InfixNodeApiGetOperationType;
@@ -7,7 +8,6 @@ use crate::ast::ast_tree::private::infix_node::node::get_parent_id::InfixNodeApi
 use crate::ast::ast_tree::private::infix_node::node::get_parent_type::InfixNodeApiGetParentType;
 use crate::ast::ast_tree::private::infix_node::node::get_right_id::InfixNodeApiGetRightId;
 use crate::ast::ast_tree::private::infix_node::node::get_right_type::InfixNodeApiGetRightType;
-use crate::ast::ast_tree::private::infix_node::node::InfixNode;
 
 use super::GetInfixNodeByIdResult;
 use super::GetInfixNodeByIdResultApi;

@@ -1,6 +1,4 @@
-use crate::parser::parser_error::ParseError;
-
-use super::{infix_operation_type_enum::InfixOperationTypeEnum, InfixNode, InfixNodeApi};
+use super::{InfixNode, InfixNodeApi, infix_operation_type_enum::InfixOperationTypeEnum};
 
 pub trait InfixNodeApiGetOperationType: InfixNodeApi {
     /// Returns a reference of the operation type of the infix node.

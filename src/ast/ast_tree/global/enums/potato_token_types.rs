@@ -1,5 +1,3 @@
-use core::fmt;
-
 use derive_more::Display;
 
 #[derive(PartialEq, Clone, Eq, Debug, Default, Display)]

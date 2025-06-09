@@ -1,8 +1,8 @@
 use crate::{
     ast::ast_tree::private::root_node::{
         node::{
-            get_id::RootNodeApiGetId, get_node_type::RootNodeApiGetNodeType,
-            new_from_id_and_type::RootNodeApiNewFromIdAndType, RootNode,
+            RootNode, get_id::RootNodeApiGetId, get_node_type::RootNodeApiGetNodeType,
+            new_from_id_and_type::RootNodeApiNewFromIdAndType,
         },
         storage::RootNodeStorage,
     },

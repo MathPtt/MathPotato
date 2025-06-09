@@ -1,5 +1,5 @@
-use crate::ast::ast_tree::private::root_node::node::new_from_id_and_type::RootNodeApiNewFromIdAndType;
 use crate::ast::ast_tree::private::root_node::node::RootNode;
+use crate::ast::ast_tree::private::root_node::node::new_from_id_and_type::RootNodeApiNewFromIdAndType;
 use crate::ast::ast_tree::private::root_node::storage::RootNodeStorage;
 
 use super::RootNodeStorageApiGet;

@@ -1,8 +1,8 @@
 use uuid::Uuid;
 
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
-use crate::ast::ast_tree::private::i32_nodes::node::new_with_value::I32AstNodeInternalApiNewWithValue;
 use crate::ast::ast_tree::private::i32_nodes::node::I32Node;
+use crate::ast::ast_tree::private::i32_nodes::node::new_with_value::I32AstNodeInternalApiNewWithValue;
 use crate::ast::ast_tree::private::i32_nodes::storage::I32NodeStorage;
 use crate::parser::parser_error::ParseError;
 
