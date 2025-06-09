@@ -12,7 +12,7 @@ pub mod set_parent_type;
 pub mod set_value;
 
 /// Represents an i32 value of the language.
-#[derive(Clone, Debug, Display)]
+#[derive(Clone, Copy, Debug, Display)]
 #[display(
     "I32Node(value: {}, parent_id: {}, parent_type: {})",
     value,

@@ -13,6 +13,7 @@ pub mod lexer;
 pub mod parser;
 
 fn main() {
+    color_backtrace::install();
     let tokens: Vec<PotatoToken> = lexing("dummy code");
     let _parsed = parse(tokens);
 }

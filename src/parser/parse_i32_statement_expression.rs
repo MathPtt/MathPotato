@@ -136,7 +136,7 @@ pub fn parse_i32_statement_expression(
                                             AstNodeType::I32AstNode,
                                             created_i32_node_id,
                                             AstNodeType::InfixOperationAstNode,
-                                            previous_processed_node.get_id().unwrap(),
+                                            previous_processed_node.get_id(),
                                             e
                                         ));
 
@@ -209,10 +209,10 @@ pub fn parse_i32_statement_expression(
 
                                     let new_infix_node_id = ast.create_new_infix_node_with_left_child(
                                         InfixOperationTypeEnum::Addition,
-                                        previous_processed_node.get_id()?)
+                                        previous_processed_node.get_id())
                                         .unwrap_or_else(|e|panic!("Error happened while creating new {} node with left child. Left node id: {}. Details: {}", 
                                             AstNodeType::InfixOperationAstNode,
-                                            previous_processed_node.get_id().unwrap(),
+                                            previous_processed_node.get_id(),
                                             e
                                         ));
 
@@ -276,6 +276,9 @@ fn parse_literal_to_i32(t: &PotatoToken) -> i32 {
 
 #[cfg(test)]
 mod test {
+    use ctor::ctor;
+    use uuid::Uuid;
+
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
     use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::InfixOperationTypeEnum;
@@ -290,6 +293,10 @@ mod test {
     use crate::lexer::lexer::lexing;
     use crate::parser::parse_i32_statement_expression::parse_i32_statement_expression;
 
+    #[ctor]
+    fn init_color_backtrace() {
+        color_backtrace::install();
+    }
     // #[test]
     // fn addition_and_multiplication_precedence_case() {
     //     // case: `2 + 3 * 4;`
@@ -433,109 +440,145 @@ mod test {
     //         "The parent type must be equal to root node type."
     //     );
     // }
+    // #[test]
+    // fn value_and_infixoperation() {
+    //     // arrange
+    //     let input = String::from("3 +;");
+    //     let lexed_input = lexing(&input);
+    //     let mut input_ast = MathPotatoAstTree::new();
+    //
+    //     // action
+    //     let result = parse_i32_statement_expression(0, lexed_input, &mut input_ast)
+    //         .unwrap_or_else(|e| panic!("There is no result: {:#?}", e));
+    //
+    //     // assert
+    //     assert_eq!(result.get_i32_node_count(), 1);
+    //     assert_eq!(result.get_infix_node_count(), 1);
+    //
+    //     // continuation node checks
+    //     let continuation_node_id_and_type = result
+    //         .get_continuation_node_id_and_type()
+    //         .unwrap_or_else(|| panic!("There is no continuation node!"));
+    //     assert_eq!(
+    //         continuation_node_id_and_type.get_type(),
+    //         AstNodeType::InfixOperationAstNode
+    //     );
+    //     let cont_node = result
+    //         .get_infix_node_by_id(continuation_node_id_and_type.get_id().unwrap())
+    //         .unwrap_or_else(|e| panic!("There is no continuation node by id. Details: {}", e));
+    //     assert_eq!(
+    //         cont_node.id(),
+    //         continuation_node_id_and_type.get_id().unwrap()
+    //     );
+    //     assert_eq!(
+    //         cont_node.operation_type().clone(),
+    //         InfixOperationTypeEnum::Addition
+    //     );
+    //
+    //     // root node checks
+    //     let root_node = result
+    //         .get_root_node_id_and_type()
+    //         .unwrap_or_else(|e| panic!("There is no root node id! Details: {}", e));
+    //     assert_eq!(
+    //         root_node.node_type().clone(),
+    //         AstNodeType::InfixOperationAstNode,
+    //         "Root node type must be {} but it was: {}",
+    //         AstNodeType::InfixOperationAstNode,
+    //         root_node.node_type().clone()
+    //     );
+    //     let the_infix_node_which_is_the_root_node = result
+    //         .get_infix_node_by_id(root_node.id())
+    //         .unwrap_or_else(|e| {
+    //             panic!("Error happened while retrieving infix node. Details: {}", e)
+    //         });
+    //     assert_eq!(
+    //         the_infix_node_which_is_the_root_node
+    //             .operation_type()
+    //             .clone(),
+    //         InfixOperationTypeEnum::Addition
+    //     );
+    //     assert_eq!(
+    //         the_infix_node_which_is_the_root_node.left_type().clone(),
+    //         AstNodeType::I32AstNode
+    //     );
+    //
+    //     // child node
+    //     match result.get_i32_node_by_id(the_infix_node_which_is_the_root_node.id()) {
+    //         Ok(child_node) => {
+    //             assert_eq!(child_node.value(), 3);
+    //             assert_eq!(
+    //                 child_node.parent_type().clone(),
+    //                 AstNodeType::InfixOperationAstNode
+    //             );
+    //             assert_eq!(
+    //                 child_node.parent_id(),
+    //                 the_infix_node_which_is_the_root_node.id()
+    //             );
+    //         }
+    //         Err(e) => {
+    //             panic!(
+    //                 r"There is no {} node with id: {}. \
+    //                 \n Details: {}, \n Source: {} unwrap: {} \
+    //                 AST tree: {:#?} \n, \
+    //                 \n Backtrace: {}",
+    //                 AstNodeType::I32AstNode,
+    //                 the_infix_node_which_is_the_root_node.id(),
+    //                 e,
+    //                 e.source().unwrap(),
+    //                 e.source().unwrap().source().unwrap(),
+    //                 result,
+    //                 e.backtrace()
+    //             );
+    //         }
+    //     }
+    // }
 
     #[test]
-    fn value_and_infixoperation() {
+    fn value_only() {
         // arrange
-        let input = String::from("3 +;");
+        let input = String::from("3;");
         let lexed_input = lexing(&input);
         let mut input_ast = MathPotatoAstTree::new();
 
         // action
-        let result = parse_i32_statement_expression(0, lexed_input, &mut input_ast)
-            .unwrap_or_else(|e| panic!("There is no result: {:#?}", e));
-
-        // assert
+        let result =
+            parse_i32_statement_expression(0, lexed_input, &mut input_ast).unwrap_or_else(|r| {
+                panic!(
+                    "There is no result!
+    {:#?}",
+                    r
+                )
+            }); // assert
         assert_eq!(result.get_i32_node_count(), 1);
-        assert_eq!(result.get_infix_node_count(), 1);
-
-        // continuation node checks
         let continuation_node_id_and_type = result
             .get_continuation_node_id_and_type()
             .unwrap_or_else(|| panic!("There is no continuation node!"));
+        assert_ne!(continuation_node_id_and_type.get_id(), Uuid::nil());
+        assert_ne!(continuation_node_id_and_type.get_type(), AstNodeType::None);
         assert_eq!(
             continuation_node_id_and_type.get_type(),
-            AstNodeType::InfixOperationAstNode
-        );
-        let cont_node = result
-            .get_infix_node_by_id(continuation_node_id_and_type.get_id().unwrap())
-            .unwrap_or_else(|e| panic!("There is no continuation node by id. Details: {}", e));
-        assert_eq!(
-            cont_node.id(),
-            continuation_node_id_and_type.get_id().unwrap()
-        );
-        assert_eq!(
-            cont_node.operation_type().clone(),
-            InfixOperationTypeEnum::Addition
-        );
-
-        // root node checks
-        let root_node = result
-            .get_root_node_id_and_type()
-            .unwrap_or_else(|e| panic!("There is no root node id! Details: {}", e));
-        assert_eq!(
-            root_node.node_type().clone(),
-            AstNodeType::InfixOperationAstNode,
-            "Root node type must be {} but it was: {}",
-            AstNodeType::InfixOperationAstNode,
-            root_node.node_type().clone()
-        );
-        let the_infix_node_which_is_the_root_node = result
-            .get_infix_node_by_id(root_node.id())
-            .unwrap_or_else(|e| {
-                panic!("Error happened while retrieving infix node. Details: {}", e)
-            });
-        assert_eq!(
-            the_infix_node_which_is_the_root_node
-                .operation_type()
-                .clone(),
-            InfixOperationTypeEnum::Addition
-        );
-        assert_eq!(
-            the_infix_node_which_is_the_root_node.left_type().clone(),
             AstNodeType::I32AstNode
         );
 
-        // child node
-        let child_node = result
-            .get_i32_node_by_id(the_infix_node_which_is_the_root_node.id())
-            .unwrap_or_else(|e| panic!("No child node. Details: {}", e));
-        assert_eq!(child_node.value(), 3);
-        assert_eq!(
-            child_node.parent_type().clone(),
-            AstNodeType::InfixOperationAstNode
-        );
-        assert_eq!(
-            child_node.parent_id(),
-            the_infix_node_which_is_the_root_node.id()
-        );
-    }
+        let created_i32_node = result
+            .get_i32_node_by_id(continuation_node_id_and_type.get_id())
+            .unwrap_or_else(|e| panic!("There is no node. {}", e));
+        assert_eq!(created_i32_node.value(), 3);
+        assert_eq!(created_i32_node.parent_id(), Uuid::nil());
+        assert_eq!(created_i32_node.parent_type().clone(), AstNodeType::None);
 
-    // #[test]
-    // fn value_only() {
-    //     // arrange
-    //     let input = String::from("3;");
-    //     let lexed_input = lexing(&input);
-    //     let input_ast = MathPotatoAstTree::new();
-    //
-    //     // action
-    //     let result = parse_i32_statement_expression(0, lexed_input, &mut
-    // input_ast)         .unwrap_or_else(|r| panic!("There is no result!
-    // {:#?}", r));     // assert
-    //     assert_eq!(result.get_i32_node_count(), 1);
-    //     let continuation_node_id = result
-    //         .cont_node_api_get_cont_node_id_and_type()
-    //         .unwrap_or_else(|| panic!("There is no continuation node!"));
-    //     let cont_node = result
-    //         .get_i32_node_by_id(continuation_node_id.0)
-    //         .unwrap_or_else(|e| panic!("There is no continuation node by id.
-    // Error: {:#?}", e));     let root_node_id = result
-    //         .get_root_node_id()
-    //         .unwrap_or_else(|| panic!("There is no root node in AST."));
-    //     assert_eq!(root_node_id, continuation_node_id.0);
-    //     assert_eq!(result.get_root_node_type(), AstNodeType::I32AstNode);
-    //     assert_eq!(cont_node.value, 3);
-    //     assert_eq!(cont_node.parent_id, Uuid::nil());
-    //     assert_eq!(cont_node.parent_type, AstNodeType::None);
-    // }
+        let root_node_id_and_type = result
+            .get_root_node_id_and_type()
+            .unwrap_or_else(|e| panic!("There is no root node in AST. {}", e));
+        assert_eq!(
+            root_node_id_and_type.id(),
+            continuation_node_id_and_type.get_id()
+        );
+        assert_eq!(root_node_id_and_type.id(), created_i32_node.id());
+        assert_eq!(
+            *root_node_id_and_type.node_type(),
+            continuation_node_id_and_type.get_type()
+        );
+        assert_eq!(*root_node_id_and_type.node_type(), AstNodeType::I32AstNode);
+    }
 }

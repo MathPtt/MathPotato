@@ -1,3 +1,6 @@
+use anyhow::Context;
+use anyhow::Ok;
+use anyhow::Result;
 use uuid::Uuid;
 
 use crate::ast::ast_tree::MathPotatoAstTree;
@@ -11,7 +14,6 @@ use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::
 use crate::ast::ast_tree::private::infix_node::node::new_with_type_and_left_child_node::InfixAstNodeInternalNewWithTypeAndLeftChildNode;
 use crate::ast::ast_tree::private::infix_node::storage::put::InfixNodeStorageApiPut;
 use crate::ast::ast_tree::private::node_catalog::storage::get_node_type::NodeCatalogInternalApiGetType;
-use crate::parser::parser_error::ParseError;
 
 use super::CreateNewInfixNodeWithLeftChild;
 
@@ -20,7 +22,7 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
         &mut self,
         operation_type: InfixOperationTypeEnum,
         left_node_id: uuid::Uuid,
-    ) -> Result<Uuid, ParseError> {
+    ) -> Result<Uuid> {
         let left_node_type = self
             .node_catalog
             .get_node_type(left_node_id)
@@ -31,10 +33,10 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
                 )
             });
         if left_node_type.clone() != AstNodeType::I32AstNode {
-            return Err(ParseError::new(format!(
+            return Err(anyhow::anyhow!(
                 "The left node type, {}, is incorrect at this point.",
                 left_node_type
-            )));
+            ));
         }
         let new_infix_node_id = self
             .infix_nodes
@@ -55,13 +57,13 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
                 let mut actual_i32_node = self
                     .i32_nodes
                     .get_node_by_id(left_node_id)
-                    .unwrap_or_else(|| {
-                        panic!(
-                            "There is no {} node with id: {}.",
+                    .with_context(|| {
+                        format!(
+                            "Didn't receive {} with id {}.",
                             AstNodeType::I32AstNode,
-                            left_node_id,
-                        );
-                    });
+                            left_node_id
+                        )
+                    })?;
                 actual_i32_node.set_parent_id(new_infix_node_id);
                 actual_i32_node.set_parent_type(AstNodeType::InfixOperationAstNode);
                 self.i32_nodes.update(left_node_id, actual_i32_node).unwrap_or_else(|e|{
@@ -76,9 +78,9 @@ impl CreateNewInfixNodeWithLeftChild for MathPotatoAstTree {
                 });
             }
             _ => {
-                return Err(ParseError::new(format!(
+                return Err(anyhow::anyhow!(
                     "Error happened. We are at a point which should have been caught earlier."
-                )));
+                ));
             }
         };
 

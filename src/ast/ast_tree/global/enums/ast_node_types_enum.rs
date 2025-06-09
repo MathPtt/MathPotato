@@ -15,7 +15,7 @@ use derive_more::Display;
 /// the Uuid value of the parent and what is the type of it. The type is marked
 /// with this AstNodeType. This way the interpreter will know in which HashMap
 /// it should do a search for the child or the parent.
-#[derive(Clone, Default, PartialEq, Eq, Debug, Display)]
+#[derive(Clone, Copy, Default, PartialEq, Eq, Debug, Display)]
 #[display("AstNodeType(value: {_value})", _value)]
 pub enum AstNodeType {
     #[display("I32AstNode")]

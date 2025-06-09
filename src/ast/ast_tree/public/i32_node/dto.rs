@@ -15,21 +15,24 @@ use crate::ast::ast_tree::private::i32_nodes::node::get_value::I32NodeApiGetValu
     parent_type
 )]
 pub struct I32NodeDto {
+    id: Uuid,
     value: i32,
     parent_id: Uuid,
     parent_type: AstNodeType,
 }
 
 impl I32NodeDto {
-    pub fn new(value: i32, parent_id: Uuid, parent_type: AstNodeType) -> Self {
+    pub fn new(id: Uuid, value: i32, parent_id: Uuid, parent_type: AstNodeType) -> Self {
         Self {
+            id,
             value,
             parent_id,
             parent_type,
         }
     }
-    pub fn new_from_i32_node(i32_node: I32Node) -> Self {
+    pub fn new_from_i32_node(id: Uuid, i32_node: I32Node) -> Self {
         Self {
+            id,
             value: i32_node.get_value(),
             parent_id: i32_node.get_parent_id(),
             parent_type: i32_node.get_parent_type(),
@@ -58,5 +61,13 @@ impl I32NodeDto {
 
     pub fn set_parent_type(&mut self, parent_type: AstNodeType) {
         self.parent_type = parent_type;
+    }
+
+    pub fn set_id(&mut self, id: Uuid) {
+        self.id = id;
+    }
+
+    pub fn id(&self) -> Uuid {
+        self.id
     }
 }
