@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{ContinuationNode, ContinuationNodeApi};
+use super::ContinuationNode;
+use super::ContinuationNodeApi;
 
 pub trait ContinuationNodeApiSetId: ContinuationNodeApi {
     fn set_id(&mut self, id: Uuid) -> Uuid;

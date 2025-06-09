@@ -1,6 +1,7 @@
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{InfixNode, InfixNodeApi};
+use super::InfixNode;
+use super::InfixNodeApi;
 
 pub trait InfixNodeApiGetParentType: InfixNodeApi {
     fn get_parent_type(&self) -> &AstNodeType;

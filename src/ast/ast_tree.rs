@@ -17,19 +17,21 @@ use self::private::root_node::storage::new::RootNodeStorageApiNew;
 ///
 /// ## Tree vs HashMap
 ///
-/// The tree is not a tree. It is a wrapper over many HashMaps. The reason is simple: managing a
-/// tree in Rust a particular pain. Managing a HashMap in Rust is less pain than that. The
-/// difference between representing a tree in HashMap and a tree is not that significant to eat the
-/// pain of dealing with the borrow checker.
+/// The tree is not a tree. It is a wrapper over many HashMaps. The reason is
+/// simple: managing a tree in Rust a particular pain. Managing a HashMap in
+/// Rust is less pain than that. The difference between representing a tree in
+/// HashMap and a tree is not that significant to eat the pain of dealing with
+/// the borrow checker.
 ///
 /// The nodes are connected via their UUID values.
 ///
 /// ## Generics or concrete types
 ///
-/// I chose concrete types. Dealing with generics in Rust is not as easy as it is in, for example,
-/// C#. What is an interface hierarchy in C#, it is a major pain here. So, I have concrete types
-/// and there are methods, with the same functionality, but for different types. This way seemed
-/// way easier than dealing with generics. Maybe later I'll do the generics.
+/// I chose concrete types. Dealing with generics in Rust is not as easy as it
+/// is in, for example, C#. What is an interface hierarchy in C#, it is a major
+/// pain here. So, I have concrete types and there are methods, with the same
+/// functionality, but for different types. This way seemed way easier than
+/// dealing with generics. Maybe later I'll do the generics.
 pub mod global;
 pub mod private;
 pub mod public;
@@ -38,7 +40,8 @@ pub mod public;
 pub struct MathPotatoAstTree {
     root_node: RootNodeStorage,
     /// Represents the point where the AST processing is right now.
-    /// As the parser moves ahead it lefts the pointer here to pick it up in the next round.
+    /// As the parser moves ahead it lefts the pointer here to pick it up in the
+    /// next round.
     continuation_node: ContinuationNodeStorage,
     /// The node tree to represent the i32 data type.
     i32_nodes: I32NodeStorage,

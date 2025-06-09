@@ -22,7 +22,8 @@ use crate::ast::ast_tree::MathPotatoAstTree;
 
 use super::parser_error::ParseError;
 
-/// Parses integer, i32, statement expression based on the tokens provided by the lexer.
+/// Parses integer, i32, statement expression based on the tokens provided by
+/// the lexer.
 ///
 /// # Parameters
 ///
@@ -32,7 +33,8 @@ use super::parser_error::ParseError;
 ///
 /// # Returns
 ///
-/// Abstract Syntax Tree, `VariableValueExpressionNode` representing the processed tokens.
+/// Abstract Syntax Tree, `VariableValueExpressionNode` representing the
+/// processed tokens.
 ///
 /// # Examples
 ///
@@ -215,7 +217,7 @@ pub fn parse_i32_statement_expression(
                                         ));
 
                                     ast.update_continuation_node_id_and_type(
-                                        new_infix_node_id, 
+                                        new_infix_node_id,
                                         AstNodeType::InfixOperationAstNode)
                                         .unwrap_or_else(|e|{
                                             panic!(
@@ -357,7 +359,8 @@ mod test {
     //     );
     //     let _ = result
     //         .get_i32_node_by_id(continuation_node_id_and_type.0)
-    //         .unwrap_or_else(|e| panic!("There is no i32 continuation node by id. Error: {:#?}", e));
+    //         .unwrap_or_else(|e| panic!("There is no i32 continuation node by id.
+    // Error: {:#?}", e));
     //
     //     // root node checks
     //     let root_node_id = result
@@ -375,12 +378,12 @@ mod test {
     //         .unwrap_or_else(|e| panic!("{:#?}", e));
     //     assert!(
     //         root_node.is_left_occupied(),
-    //         "The left node of the root InfixOperationAstNode must be occupied at this point.",
-    //     );
+    //         "The left node of the root InfixOperationAstNode must be occupied at
+    // this point.",     );
     //     assert!(
     //         root_node.is_right_occupied(),
-    //         "The left node of the root InfixOperationAstNode must be occupied at this point.",
-    //     );
+    //         "The left node of the root InfixOperationAstNode must be occupied at
+    // this point.",     );
     //     let left_children_id_and_type = root_node
     //         .get_left_node_id_and_type()
     //         .unwrap_or_else(|| panic!("There is no left children."));
@@ -516,17 +519,17 @@ mod test {
     //     let input_ast = MathPotatoAstTree::new();
     //
     //     // action
-    //     let result = parse_i32_statement_expression(0, lexed_input, &mut input_ast)
-    //         .unwrap_or_else(|r| panic!("There is no result! {:#?}", r));
-    //     // assert
+    //     let result = parse_i32_statement_expression(0, lexed_input, &mut
+    // input_ast)         .unwrap_or_else(|r| panic!("There is no result!
+    // {:#?}", r));     // assert
     //     assert_eq!(result.get_i32_node_count(), 1);
     //     let continuation_node_id = result
     //         .cont_node_api_get_cont_node_id_and_type()
     //         .unwrap_or_else(|| panic!("There is no continuation node!"));
     //     let cont_node = result
     //         .get_i32_node_by_id(continuation_node_id.0)
-    //         .unwrap_or_else(|e| panic!("There is no continuation node by id. Error: {:#?}", e));
-    //     let root_node_id = result
+    //         .unwrap_or_else(|e| panic!("There is no continuation node by id.
+    // Error: {:#?}", e));     let root_node_id = result
     //         .get_root_node_id()
     //         .unwrap_or_else(|| panic!("There is no root node in AST."));
     //     assert_eq!(root_node_id, continuation_node_id.0);

@@ -2,7 +2,8 @@ use uuid::Uuid;
 
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{UpdateContinuationNodeIdAndTypeResult, UpdateContinuationNodeIdAndTypeResultApi};
+use super::UpdateContinuationNodeIdAndTypeResult;
+use super::UpdateContinuationNodeIdAndTypeResultApi;
 
 pub trait UpdateContinuationNodeIdAndTypeResultApiNewFromIdAndType:
     UpdateContinuationNodeIdAndTypeResultApi

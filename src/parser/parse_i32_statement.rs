@@ -23,8 +23,8 @@ use super::parser_error::ParseError;
 /// # Returns
 ///
 /// * (usize, IntegerVariableAssignmentNode) tuple where:
-/// * usize value represents the continuation position (after the `;` closing the variable
-///     assignment)
+/// * usize value represents the continuation position (after the `;` closing
+///   the variable assignment)
 /// * IntegerVariableAssignmentNode represents the Abstract Syntax Tree
 pub fn parse_i32_statement(
     i: usize,

@@ -1,15 +1,11 @@
-use crate::ast::ast_tree::{
-    MathPotatoAstTree,
-    private::continuation_node::{
-        node::{get_id::ContinuationNodeApiGetId, get_type::ContinuationNodeApiGetType},
-        storage::get_node::ContinuationNodeStorageApiGetNode,
-    },
-};
+use crate::ast::ast_tree::MathPotatoAstTree;
+use crate::ast::ast_tree::private::continuation_node::node::get_id::ContinuationNodeApiGetId;
+use crate::ast::ast_tree::private::continuation_node::node::get_type::ContinuationNodeApiGetType;
+use crate::ast::ast_tree::private::continuation_node::storage::get_node::ContinuationNodeStorageApiGetNode;
 
-use super::{
-    ContinuationNodeStorageApiGetIdAndType,
-    node::{GetContinuationNodeIdAndTypeResult, from_id_and_type::ContinuationNodeFromIdAndType},
-};
+use super::ContinuationNodeStorageApiGetIdAndType;
+use super::node::GetContinuationNodeIdAndTypeResult;
+use super::node::from_id_and_type::ContinuationNodeFromIdAndType;
 
 impl ContinuationNodeStorageApiGetIdAndType for MathPotatoAstTree {
     fn get_continuation_node_id_and_type(&self) -> Option<GetContinuationNodeIdAndTypeResult> {

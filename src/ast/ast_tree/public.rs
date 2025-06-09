@@ -16,17 +16,20 @@ pub mod i32_node;
 pub mod root_node;
 /// Public Abstract Syntax Tree Api
 ///
-/// This is the layer where the so-called business logic of the tree management lives. The methods
-/// of this Api takes care all of the language specific logic. Another specific thing of this Api
-/// is that when something fails it tries to collect all the information to debug, but it doesn't
-/// panic out. Panic is pushed to the logic of the consumer (parser and interpreter) of this Api.
+/// This is the layer where the so-called business logic of the tree management
+/// lives. The methods of this Api takes care all of the language specific
+/// logic. Another specific thing of this Api is that when something fails it
+/// tries to collect all the information to debug, but it doesn't panic out.
+/// Panic is pushed to the logic of the consumer (parser and interpreter) of
+/// this Api.
 ///
 /// # Abstract Syntax Tree internals
 /// ## Continuation Node
 ///
-/// Continuation node plays a role during building the tree. The parser is set of methods called
-/// recursively. Every single call has to know where the previous call finished processing. This
-/// information is stored in the `ContinuationNode`. Obviously the picture is not this simple, but
+/// Continuation node plays a role during building the tree. The parser is set
+/// of methods called recursively. Every single call has to know where the
+/// previous call finished processing. This information is stored in the
+/// `ContinuationNode`. Obviously the picture is not this simple, but
 /// finding the real continuation point is the task of the parser.
 ///
 /// See [`ContinuationNode`](ContinuationNode) for details.

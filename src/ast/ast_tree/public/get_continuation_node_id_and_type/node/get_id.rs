@@ -2,7 +2,8 @@ use uuid::Uuid;
 
 use crate::parser::parser_error::ParseError;
 
-use super::{GetContinuationNodeIdAndTypeResult, GetContinuationNodeIdAndTypeResultApi};
+use super::GetContinuationNodeIdAndTypeResult;
+use super::GetContinuationNodeIdAndTypeResultApi;
 
 pub trait GetContinuationNodeIdAndTypeResultGetId: GetContinuationNodeIdAndTypeResultApi {
     fn get_id(&self) -> Result<Uuid, ParseError>;

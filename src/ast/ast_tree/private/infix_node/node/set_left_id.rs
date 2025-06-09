@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{InfixNode, InfixNodeApi};
+use super::InfixNode;
+use super::InfixNodeApi;
 
 pub trait InfixNodeApiSetLeftId: InfixNodeApi {
     fn set_left_id(&mut self, left_id: Uuid);

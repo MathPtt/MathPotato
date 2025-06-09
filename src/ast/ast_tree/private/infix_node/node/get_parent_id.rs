@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{InfixNode, InfixNodeApi};
+use super::InfixNode;
+use super::InfixNodeApi;
 
 pub trait InfixNodeApiGetParentId: InfixNodeApi {
     fn get_parent_id(&self) -> Uuid;

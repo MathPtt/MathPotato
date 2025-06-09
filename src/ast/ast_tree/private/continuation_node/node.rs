@@ -12,9 +12,10 @@ pub mod set_type;
 
 /// Continuation Node
 ///
-/// This node has an `id` and `node_type` value and these represents continuation information in
-/// the processing of tokens. The parser is recursive method and every single call has to know
-/// where the previous one finished processing. This information is stored here.
+/// This node has an `id` and `node_type` value and these represents
+/// continuation information in the processing of tokens. The parser is
+/// recursive method and every single call has to know where the previous one
+/// finished processing. This information is stored here.
 #[derive(Clone, Debug, Display)]
 #[display("ContinuationNode(id: {}, node_type: {}", id, node_type)]
 pub struct ContinuationNode {

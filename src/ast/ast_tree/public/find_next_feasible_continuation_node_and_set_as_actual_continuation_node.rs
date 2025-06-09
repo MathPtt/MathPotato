@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use crate::{ast::ast_tree::public::AstApi, parser::parser_error::ParseError};
+use crate::ast::ast_tree::public::AstApi;
+use crate::parser::parser_error::ParseError;
 
 pub mod implementation;
 

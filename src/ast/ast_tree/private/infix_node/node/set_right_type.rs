@@ -1,6 +1,7 @@
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{InfixNode, InfixNodeApi};
+use super::InfixNode;
+use super::InfixNodeApi;
 
 pub trait InfixNodeApiSetRightType: InfixNodeApi {
     fn set_right_type(&mut self, right_type: AstNodeType);

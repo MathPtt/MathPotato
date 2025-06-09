@@ -1,12 +1,9 @@
 use uuid::Uuid;
 
-use crate::ast::ast_tree::{
-    global::enums::ast_node_types_enum::AstNodeType,
-    private::continuation_node::{
-        node::{ContinuationNode, new_from_id_and_type::ContinuationNodeApiNewFromIdAndType},
-        storage::ContinuationNodeStorage,
-    },
-};
+use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
+use crate::ast::ast_tree::private::continuation_node::node::ContinuationNode;
+use crate::ast::ast_tree::private::continuation_node::node::new_from_id_and_type::ContinuationNodeApiNewFromIdAndType;
+use crate::ast::ast_tree::private::continuation_node::storage::ContinuationNodeStorage;
 
 use super::ContinuationNodeStorageApiGetNode;
 

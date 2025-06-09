@@ -1,7 +1,7 @@
 //! # MathPotato Programming Language
 //!
-//! This programming language is about mathematics, you know the calculus, numerical
-//! analysis and stuff. Because why not!?
+//! This programming language is about mathematics, you know the calculus,
+//! numerical analysis and stuff. Because why not!?
 
 use lexer::lexer::lexing;
 use parser::parse;

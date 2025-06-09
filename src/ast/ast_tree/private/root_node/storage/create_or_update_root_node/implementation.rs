@@ -1,13 +1,9 @@
-use crate::{
-    ast::ast_tree::private::root_node::{
-        node::{
-            RootNode, get_id::RootNodeApiGetId, get_node_type::RootNodeApiGetNodeType,
-            new_from_id_and_type::RootNodeApiNewFromIdAndType,
-        },
-        storage::RootNodeStorage,
-    },
-    parser::parser_error::ParseError,
-};
+use crate::ast::ast_tree::private::root_node::node::RootNode;
+use crate::ast::ast_tree::private::root_node::node::get_id::RootNodeApiGetId;
+use crate::ast::ast_tree::private::root_node::node::get_node_type::RootNodeApiGetNodeType;
+use crate::ast::ast_tree::private::root_node::node::new_from_id_and_type::RootNodeApiNewFromIdAndType;
+use crate::ast::ast_tree::private::root_node::storage::RootNodeStorage;
+use crate::parser::parser_error::ParseError;
 
 use super::RootNodeStorageApiCreateOrUpdate;
 

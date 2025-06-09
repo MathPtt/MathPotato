@@ -1,6 +1,7 @@
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{RootNode, RootNodeApi};
+use super::RootNode;
+use super::RootNodeApi;
 
 pub trait RootNodeApiGetNodeType: RootNodeApi {
     fn get_node_type(&self) -> AstNodeType;

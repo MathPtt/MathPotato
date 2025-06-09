@@ -1,6 +1,7 @@
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 
-use super::{ContinuationNode, ContinuationNodeApi};
+use super::ContinuationNode;
+use super::ContinuationNodeApi;
 
 pub trait ContinuationNodeApiSetType: ContinuationNodeApi {
     fn set_type(&mut self, node_type: AstNodeType) -> AstNodeType;

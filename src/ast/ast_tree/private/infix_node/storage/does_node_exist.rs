@@ -5,7 +5,8 @@ use super::InfixNodeStorageApi;
 pub mod implementation;
 
 pub trait InfixNodeStorageApiDoesNodeExist: InfixNodeStorageApi {
-    /// Checks if there is an `InfixAstNodeInternal` in the AST tree with the provided id.
+    /// Checks if there is an `InfixAstNodeInternal` in the AST tree with the
+    /// provided id.
     ///
     /// # Parameters
     /// - `id` - `Uuid`: the node id.

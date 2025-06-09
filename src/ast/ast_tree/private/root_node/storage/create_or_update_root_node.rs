@@ -1,4 +1,5 @@
-use crate::{ast::ast_tree::private::root_node::node::RootNode, parser::parser_error::ParseError};
+use crate::ast::ast_tree::private::root_node::node::RootNode;
+use crate::parser::parser_error::ParseError;
 
 use super::RootNodeStorageApi;
 

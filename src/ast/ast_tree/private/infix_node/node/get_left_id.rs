@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{InfixNode, InfixNodeApi};
+use super::InfixNode;
+use super::InfixNodeApi;
 
 pub trait InfixNodeApiGetLeftId: InfixNodeApi {
     fn get_left_id(&self) -> Uuid;

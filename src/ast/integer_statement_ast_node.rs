@@ -2,14 +2,16 @@ use uuid::Uuid;
 
 use super::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
 
-/// The `IntegerStatementAstNode` represents a code block where the result is an Integer, `i32`,
-/// value and this value gets assigned to a literal, `String`, value.
+/// The `IntegerStatementAstNode` represents a code block where the result is an
+/// Integer, `i32`, value and this value gets assigned to a literal, `String`,
+/// value.
 ///
 /// # Example
 ///
-/// In the below example the `Integer` marks that an integer value will be assigned to the `asd`
-/// string literal value. The `a + b` operation is going to be executed and the resulting value
-/// will be referrable through the code as `asd`.
+/// In the below example the `Integer` marks that an integer value will be
+/// assigned to the `asd` string literal value. The `a + b` operation is going
+/// to be executed and the resulting value will be referrable through the code
+/// as `asd`.
 ///
 /// ```
 /// Integer asd = a + b;

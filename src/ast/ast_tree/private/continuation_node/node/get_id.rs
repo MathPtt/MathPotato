@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{ContinuationNode, ContinuationNodeApi};
+use super::ContinuationNode;
+use super::ContinuationNodeApi;
 
 pub trait ContinuationNodeApiGetId: ContinuationNodeApi {
     fn get_id(&self) -> Uuid;

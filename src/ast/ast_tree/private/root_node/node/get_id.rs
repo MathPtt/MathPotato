@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
-use super::{RootNode, RootNodeApi};
+use super::RootNode;
+use super::RootNodeApi;
 
 pub trait RootNodeApiGetId: RootNodeApi {
     fn get_id(&self) -> Uuid;

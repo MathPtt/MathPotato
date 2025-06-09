@@ -1,14 +1,9 @@
-use crate::{
-    ast::ast_tree::private::continuation_node::{
-        node::{
-            ContinuationNode, get_id::ContinuationNodeApiGetId,
-            get_type::ContinuationNodeApiGetType,
-            new_from_id_and_type::ContinuationNodeApiNewFromIdAndType,
-        },
-        storage::ContinuationNodeStorage,
-    },
-    parser::parser_error::ParseError,
-};
+use crate::ast::ast_tree::private::continuation_node::node::ContinuationNode;
+use crate::ast::ast_tree::private::continuation_node::node::get_id::ContinuationNodeApiGetId;
+use crate::ast::ast_tree::private::continuation_node::node::get_type::ContinuationNodeApiGetType;
+use crate::ast::ast_tree::private::continuation_node::node::new_from_id_and_type::ContinuationNodeApiNewFromIdAndType;
+use crate::ast::ast_tree::private::continuation_node::storage::ContinuationNodeStorage;
+use crate::parser::parser_error::ParseError;
 
 use super::ContinuationNodeStorageApiUpdateContinuationNodeIdAndType;
 
