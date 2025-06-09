@@ -8,7 +8,7 @@ pub trait InfixNodeStorageApiNew: InfixNodeStorageApi {
 impl InfixNodeStorageApiNew for InfixNodeStorage {
     fn new() -> Self {
         InfixNodeStorage {
-            tree: HashMap::new(),
+            nodes: HashMap::new(),
         }
     }
 }

@@ -9,5 +9,5 @@ pub trait RemoveContinuationNodeLeftNodeAndReturnId: AstApi {
     /// left node.
     ///
     /// The left node remains in the tree as it will be picked up later.
-    fn remove_continuation_node_left_node_and_return_id(&self) -> Result<Uuid, ParseError>;
+    fn remove_continuation_node_left_node_and_return_id(&mut self) -> Result<Uuid, ParseError>;
 }

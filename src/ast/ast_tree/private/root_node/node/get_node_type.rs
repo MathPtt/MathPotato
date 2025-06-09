@@ -7,6 +7,6 @@ pub trait RootNodeApiGetNodeType: RootNodeApi {
 }
 impl RootNodeApiGetNodeType for RootNode {
     fn get_node_type(&self) -> AstNodeType {
-        &self.node_type.clone()
+        self.node_type.clone()
     }
 }

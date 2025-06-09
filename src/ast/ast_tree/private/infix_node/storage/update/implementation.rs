@@ -28,24 +28,27 @@ impl InfixNodeStorageApiUpdate for InfixNodeStorage {
                 id
             ))),
             true => {
-                self.nodes.entry(&id).and_modify(|orig| {
+                self.nodes.entry(id).and_modify(|orig| {
                     if orig.get_infix_node_operation_type() != node.get_infix_node_operation_type()
                     {
-                        orig.set_infix_node_operation_type(node.get_infix_node_operation_type())
+                        orig.set_infix_node_operation_type(
+                            node.get_infix_node_operation_type().clone(),
+                        )
                     }
                     if orig.get_left_id() != node.get_left_id() {
                         orig.set_left_id(node.get_left_id());
                     }
                     if orig.get_left_type() != node.get_left_type() {
-                        orig.set_left_type(node.get_left_type());
+                        orig.set_left_type(node.get_left_type().clone());
                     }
                     if orig.get_right_id() != node.get_right_id() {
                         orig.set_right_id(node.get_right_id());
                     }
                     if orig.get_right_type() != node.get_right_type() {
-                        orig.set_right_type(node.get_right_type());
+                        orig.set_right_type(node.get_right_type().clone());
                     }
                 });
+                Ok(id)
             }
         }
     }

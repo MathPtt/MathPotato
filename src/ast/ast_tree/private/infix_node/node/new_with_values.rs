@@ -24,7 +24,7 @@ impl InfixNodeApiNewWithValues for InfixNode {
         right_id: Uuid,
         right_type: AstNodeType,
         parent_id: Uuid,
-        paren_type: AstNodeType,
+        parent_type: AstNodeType,
     ) -> Self {
         InfixNode {
             operation_type,

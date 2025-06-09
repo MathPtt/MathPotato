@@ -2,6 +2,7 @@ use uuid::Uuid;
 
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 use crate::ast::ast_tree::private::i32_nodes::storage::create::I32NodeStorageApiCreate;
+use crate::ast::ast_tree::private::node_catalog::storage::add::NodeCatalogApiAddNode;
 use crate::{ast::ast_tree::MathPotatoAstTree, parser::parser_error::ParseError};
 
 use super::CreateI32NodeWithValue;

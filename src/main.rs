@@ -3,9 +3,10 @@
 //! This programming language is about mathematics, you know the calculus, numerical
 //! analysis and stuff. Because why not!?
 
-use ast::potato_token::PotatoToken;
 use lexer::lexer::lexing;
 use parser::parse;
+
+use self::ast::ast_tree::global::enums::potato_token::PotatoToken;
 
 pub mod ast;
 pub mod lexer;

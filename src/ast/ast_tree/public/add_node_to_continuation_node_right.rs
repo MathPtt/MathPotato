@@ -21,5 +21,5 @@ pub trait AddNodeToContinuationNodeRight: AstApi {
     /// - `Ok(Uuid)` where the id value is the added node's id.
     /// - `Err(ParseError)` - If any error happens during execution. The `ParseError` includes as
     /// many details as possible.
-    fn add_node_to_continuation_node_right(&self, id: Uuid) -> Result<Uuid, ParseError>;
+    fn add_node_to_continuation_node_right(&mut self, id: Uuid) -> Result<Uuid, ParseError>;
 }

@@ -1,33 +1,34 @@
 use uuid::Uuid;
 
-use crate::ast::ast_tree::private::infix_node::{
-    node::{
-        get_left_id::InfixNodeApiGetLeftId, get_left_type::InfixNodeApiGetLeftType,
-        get_operation_type::InfixNodeApiGetOperationType, get_right_id::InfixNodeApiGetRightId,
-        get_right_type::InfixNodeApiGetRightType, new_with_values::InfixNodeApiNewWithValues,
-        InfixNode,
-    },
-    storage::InfixNodeStorage,
-};
+use crate::ast::ast_tree::private::infix_node::node::get_left_id::InfixNodeApiGetLeftId;
+use crate::ast::ast_tree::private::infix_node::node::get_left_type::InfixNodeApiGetLeftType;
+use crate::ast::ast_tree::private::infix_node::node::get_operation_type::InfixNodeApiGetOperationType;
+use crate::ast::ast_tree::private::infix_node::node::get_parent_id::InfixNodeApiGetParentId;
+use crate::ast::ast_tree::private::infix_node::node::get_parent_type::InfixNodeApiGetParentType;
+use crate::ast::ast_tree::private::infix_node::node::get_right_id::InfixNodeApiGetRightId;
+use crate::ast::ast_tree::private::infix_node::node::get_right_type::InfixNodeApiGetRightType;
+use crate::ast::ast_tree::private::infix_node::node::new_with_values::InfixNodeApiNewWithValues;
+use crate::ast::ast_tree::private::infix_node::node::InfixNode;
+use crate::ast::ast_tree::private::infix_node::storage::InfixNodeStorage;
+use crate::parser::parser_error::ParseError;
 
 use super::InfixNodeStorageApiGetNodeById;
 
 impl InfixNodeStorageApiGetNodeById for InfixNodeStorage {
-    fn get_node_by_id(
-        &self,
-        &id: Uuid,
-    ) -> Result<
-        crate::ast::ast_tree::private::infix_node::node::InfixNode,
-        crate::parser::parser_error::ParseError,
-    > {
+    fn get_node_by_id(&self, id: Uuid) -> Result<InfixNode, ParseError> {
         match self.nodes.get(&id) {
-            Some(r) => Ok(InfixNode::new_with_values(
-                *r.get_infix_node_operation_type(),
-                *r.get_left_id(),
-                *r.get_left_type(),
-                *r.get_right_id(),
-                *r.get_right_type(),
-            )),
+            Some(r) => {
+                let rr = r.clone();
+                Ok(InfixNode::new_with_values(
+                    rr.get_infix_node_operation_type().clone(),
+                    rr.get_left_id(),
+                    rr.get_left_type().clone(),
+                    rr.get_right_id(),
+                    rr.get_right_type().clone(),
+                    rr.get_parent_id(),
+                    rr.get_parent_type().clone(),
+                ))
+            }
             None => todo!(),
         }
     }

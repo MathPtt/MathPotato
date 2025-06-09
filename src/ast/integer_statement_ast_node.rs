@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use super::{potato_token_types::PotatoTokenTypes, variable_state_enum::VariableState};
+use super::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
 
 /// The `IntegerStatementAstNode` represents a code block where the result is an Integer, `i32`,
 /// value and this value gets assigned to a literal, `String`, value.
@@ -19,6 +19,5 @@ pub struct IntegerStatementAstNode {
     pub guid: Uuid,
     pub variable_name: String,
     pub variable_value: i32,
-    pub variable_state: VariableState,
     pub token_type: PotatoTokenTypes,
 }

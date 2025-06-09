@@ -10,7 +10,7 @@ use crate::parser::parser_error::ParseError;
 use super::RemoveContinuationNodeLeftNodeAndReturnId;
 
 impl RemoveContinuationNodeLeftNodeAndReturnId for MathPotatoAstTree {
-    fn remove_continuation_node_left_node_and_return_id(&self) -> Result<Uuid, ParseError> {
+    fn remove_continuation_node_left_node_and_return_id(&mut self) -> Result<Uuid, ParseError> {
         match self.continuation_node.get_type() {
             AstNodeType::InfixOperationAstNode => {
                 let continuation_node_id = self.continuation_node.get_id();

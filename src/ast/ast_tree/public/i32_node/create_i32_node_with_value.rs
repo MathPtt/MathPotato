@@ -3,6 +3,8 @@ use uuid::Uuid;
 use crate::ast::ast_tree::public::AstApi;
 use crate::parser::parser_error::ParseError;
 
+pub mod implementation;
+
 pub trait CreateI32NodeWithValue: AstApi {
     /// Creates an `I32Node` in the Abstract Syntax Tree wit the provided value.
     ///

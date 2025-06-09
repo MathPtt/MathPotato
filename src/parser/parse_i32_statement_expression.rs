@@ -15,6 +15,7 @@ use crate::ast::ast_tree::public::find_next_feasible_continuation_node_and_set_a
 use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_id::GetContinuationNodeIdAndTypeResultGetId;
 use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_type::GetContinuationNodeIdAndTypeResultGetType;
 use crate::ast::ast_tree::public::get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType;
+use crate::ast::ast_tree::public::i32_node::create_i32_node_with_value::CreateI32NodeWithValue;
 use crate::ast::ast_tree::public::remove_continuation_node_left_node_and_return_id::RemoveContinuationNodeLeftNodeAndReturnId;
 use crate::ast::ast_tree::public::update_continuation_node_id_and_type::UpdateContinuationNodeIdAndType;
 use crate::ast::ast_tree::MathPotatoAstTree;
@@ -50,15 +51,22 @@ pub fn parse_i32_statement_expression(
 
         Ok(token) => {
             match ast.get_continuation_node_id_and_type() {
-            // match ast.cont_node_api_get_cont_node_id_and_type() {
+                // match ast.cont_node_api_get_cont_node_id_and_type() {
                 // this means that we are processing the first character!
                 None => {
                     match token.token_type {
                         PotatoTokenTypes::LiteralIntegerValue => {
                             // this is the case when we right after the `=` sign and the expression
                             // tree is empty
-                            let recorded_node_id = ast.create_i32_node_with_value(parse_literal_to_i32(&token))
-                                .unwrap_or_else(|e|panic!("Creating new {:#?} node failed. Details: {:#?}", AstNodeType::I32AstNode, e));
+                            let recorded_node_id = ast
+                                .create_i32_node_with_value(parse_literal_to_i32(&token))
+                                .unwrap_or_else(|e| {
+                                    panic!(
+                                        "Creating new {:#?} node failed. Details: {:#?}",
+                                        AstNodeType::I32AstNode,
+                                        e
+                                    )
+                                });
                             let _ = ast.create_or_update_root_node_id_and_type(recorded_node_id, AstNodeType::I32AstNode)
                                 .unwrap_or_else(|e|panic!("Updating root node id and type failed for node type: {:#?} with id: {}. Details: {:#?}", 
                                     AstNodeType::I32AstNode,
@@ -88,10 +96,14 @@ pub fn parse_i32_statement_expression(
                         PotatoTokenTypes::LiteralIntegerValue => {
                             match previous_processed_node.get_type() {
                                 AstNodeType::I32AstNode => {
-                                    panic!(r"Syntax error! Two {} cannot follow each other! \
+                                    panic!(
+                                        r"Syntax error! Two {} cannot follow each other! \
                                     Token: {}, \
                                     previously processed node: {}",
-                                        PotatoTokenTypes::LiteralIntegerValue, token, previous_processed_node);
+                                        PotatoTokenTypes::LiteralIntegerValue,
+                                        token,
+                                        previous_processed_node
+                                    );
                                 }
                                 AstNodeType::InfixOperationAstNode => {
                                     // this happens when we are right after the `+` sign in the
@@ -99,13 +111,15 @@ pub fn parse_i32_statement_expression(
                                     // `i32 variable_name = 1 + 3;`
 
                                     ast.check_continuation_node_consistency()
-                                        .unwrap_or_else(|e|
-                                            panic!(r"Continuation node consistency check failed. \
+                                        .unwrap_or_else(|e| {
+                                            panic!(
+                                                r"Continuation node consistency check failed. \
                                             It has its left side empty, but right side occupied. \ 
                                             Node details: {}. \
                                             Error details: {}",
-                                        previous_processed_node, 
-                                        e));
+                                                previous_processed_node, e
+                                            )
+                                        });
 
                                     let created_i32_node_id = ast.create_i32_node_with_value(parse_literal_to_i32(&token))
                                         .unwrap_or_else(|e|panic!("Error happened while creating an {} node with value: {}. Details: {}",
@@ -136,21 +150,21 @@ pub fn parse_i32_statement_expression(
                                 AstNodeType::InfixOperationAstNode => {
                                     panic!("Cannot be an {} right after another one. Actual node type by token: {}; AST tree {:#?}", 
                                         previous_processed_node.get_type(),
-                                        token, 
+                                        token,
                                         ast);
                                 }
                                 AstNodeType::None => {
                                     panic!(
                                         "Continuation node type is None: {}, token: {}",
-                                        previous_processed_node.get_type(), 
+                                        previous_processed_node.get_type(),
                                         token
                                     );
                                 }
-                                _ => {                                }
+                                _ => {}
                             };
                             let parent_infix_node_id = ast.find_next_feasible_continuation_node_and_set_as_actual_continuation_node()
                                 .unwrap_or_else(|e|panic!("Error while looking for the next feasible continutaion node. Actual continuation node details: {}, Ast: {:#?}, error details: {}", 
-                                    previous_processed_node.clone(), 
+                                    previous_processed_node.clone(),
                                     ast,
                                     e));
                             ast.check_continuation_node_consistency()
@@ -159,11 +173,20 @@ pub fn parse_i32_statement_expression(
                                     ast,
                                     e
                                 ));
-                            let removed_left_node_id = ast 
+                            let removed_left_node_id = ast
                                 .remove_continuation_node_left_node_and_return_id()
                                 .unwrap_or_else(|e| panic!("Error happened while removing left if of infix node: {}. Details: {}", parent_infix_node_id, e));
-                            let multiplication_infix_node_id = ast.create_new_infix_node_with_parent_node(parent_infix_node_id, InfixOperationTypeEnum::Multiplication)
-                                .unwrap_or_else(|e|panic!("Error happened while creating infix node. Details: {}", e));
+                            let multiplication_infix_node_id = ast
+                                .create_new_infix_node_with_parent_node(
+                                    parent_infix_node_id,
+                                    InfixOperationTypeEnum::Multiplication,
+                                )
+                                .unwrap_or_else(|e| {
+                                    panic!(
+                                        "Error happened while creating infix node. Details: {}",
+                                        e
+                                    )
+                                });
 
                             parse_i32_statement_expression(i + 1, tokens, ast)
                         }
@@ -177,7 +200,7 @@ pub fn parse_i32_statement_expression(
                                     // and the new node will be the parent of the continuation node
 
                                     let new_infix_node_id = ast.create_new_infix_node_with_left_child(
-                                        InfixOperationTypeEnum::Addition, 
+                                        InfixOperationTypeEnum::Addition,
                                         previous_processed_node.get_id()?)
                                         .unwrap_or_else(|e|panic!("Error happened while creating new {} node with left child. Left node id: {}", 
                                             AstNodeType::InfixOperationAstNode,
@@ -197,7 +220,7 @@ pub fn parse_i32_statement_expression(
                             }
                         }
                         PotatoTokenTypes::SignSemicolon => Ok(ast),
-                        _ => parse_i32_statement_expression(i + 1, tokens, ast)
+                        _ => parse_i32_statement_expression(i + 1, tokens, ast),
                     }
                 }
             }
@@ -239,7 +262,6 @@ mod test {
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::lexer::lexer::lexing;
     use crate::parser::parse_i32_statement_expression::parse_i32_statement_expression;
-
 
     // #[test]
     // fn addition_and_multiplication_precedence_case() {
@@ -389,7 +411,7 @@ mod test {
         // arrange
         let input = String::from("3 +;");
         let lexed_input = lexing(&input);
-        let input_ast = MathPotatoAstTree::new();
+        let mut input_ast = MathPotatoAstTree::new();
 
         // action
         let result = parse_i32_statement_expression(0, lexed_input, &mut input_ast)
@@ -410,7 +432,10 @@ mod test {
         let cont_node = result
             .get_infix_node_by_id(continuation_node_id_and_type.get_id().unwrap())
             .unwrap_or_else(|e| panic!("There is no continuation node by id. Details: {}", e));
-        assert_eq!(cont_node.id(), continuation_node_id_and_type.get_id().unwrap());
+        assert_eq!(
+            cont_node.id(),
+            continuation_node_id_and_type.get_id().unwrap()
+        );
         assert_eq!(
             cont_node.operation_type().clone(),
             InfixOperationTypeEnum::Addition
@@ -424,24 +449,35 @@ mod test {
             root_node.node_type().clone(),
             AstNodeType::InfixOperationAstNode
         );
-        let the_infix_node_which_is_the_root_node = 
-        result.get_infix_node_by_id(root_node.id())
-            .unwrap_or_else(|e|panic!("Error happened while retrieving infix node. Details: {}", e));
+        let the_infix_node_which_is_the_root_node = result
+            .get_infix_node_by_id(root_node.id())
+            .unwrap_or_else(|e| {
+                panic!("Error happened while retrieving infix node. Details: {}", e)
+            });
         assert_eq!(
-            the_infix_node_which_is_the_root_node.operation_type().clone(),
+            the_infix_node_which_is_the_root_node
+                .operation_type()
+                .clone(),
             InfixOperationTypeEnum::Addition
         );
         assert_eq!(
             the_infix_node_which_is_the_root_node.left_type().clone(),
-            AstNodeType::I32AstNode);
+            AstNodeType::I32AstNode
+        );
 
         // child node
         let child_node = result
             .get_i32_node_by_id(the_infix_node_which_is_the_root_node.id())
-            .unwrap_or_else(|e|panic!("No child node. Details: {}", e));
+            .unwrap_or_else(|e| panic!("No child node. Details: {}", e));
         assert_eq!(child_node.value(), 3);
-        assert_eq!(child_node.parent_type().clone(), AstNodeType::InfixOperationAstNode);
-        assert_eq!(child_node.parent_id(), the_infix_node_which_is_the_root_node.id());
+        assert_eq!(
+            child_node.parent_type().clone(),
+            AstNodeType::InfixOperationAstNode
+        );
+        assert_eq!(
+            child_node.parent_id(),
+            the_infix_node_which_is_the_root_node.id()
+        );
     }
 
     // #[test]
