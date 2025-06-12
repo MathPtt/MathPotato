@@ -1,7 +1,7 @@
-use crate::ast::{
-    ast_tree::MathPotatoAstTree, integer_statement_ast_node::IntegerStatementAstNode,
-    potato_token::PotatoToken, potato_token_types::PotatoTokenTypes,
-};
+use crate::ast::ast_tree::MathPotatoAstTree;
+use crate::ast::ast_tree::global::enums::potato_token::PotatoToken;
+use crate::ast::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
+use crate::ast::integer_statement_ast_node::IntegerStatementAstNode;
 
 use super::parser_error::ParseError;
 
@@ -23,8 +23,8 @@ use super::parser_error::ParseError;
 /// # Returns
 ///
 /// * (usize, IntegerVariableAssignmentNode) tuple where:
-/// * usize value represents the continuation position (after the `;` closing the variable
-///     assignment)
+/// * usize value represents the continuation position (after the `;` closing
+///   the variable assignment)
 /// * IntegerVariableAssignmentNode represents the Abstract Syntax Tree
 pub fn parse_i32_statement(
     i: usize,
