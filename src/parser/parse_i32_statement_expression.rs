@@ -1,6 +1,8 @@
 use core::panic;
 use std::any::type_name;
 
+use log::debug;
+
 use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
 use crate::ast::ast_tree::global::enums::potato_token::PotatoToken;
 use crate::ast::ast_tree::global::enums::potato_token_types::PotatoTokenTypes;
@@ -47,7 +49,9 @@ pub fn parse_i32_statement_expression(
     i: usize,
     tokens: Vec<PotatoToken>,
     ast: &mut MathPotatoAstTree,
+    counter: i32,
 ) -> Result<&MathPotatoAstTree, ParseError> {
+    debug!("=== Processing round {}", counter);
     match tokens.get(i).cloned().ok_or_else(|| error_message(i)) {
         Err(e) => panic!("{}", e),
 
@@ -69,12 +73,18 @@ pub fn parse_i32_statement_expression(
                                         e
                                     )
                                 });
+                            debug!(
+                                "{} node has been created with id: {}",
+                                AstNodeType::I32AstNode,
+                                recorded_node_id
+                            );
                             let _ = ast.create_or_update_root_node_id_and_type(recorded_node_id, AstNodeType::I32AstNode)
                                 .unwrap_or_else(|e|panic!("Updating root node id and type failed for node type: {:#?} with id: {}. Details: {:#?}", 
                                     AstNodeType::I32AstNode,
                                     recorded_node_id,
                                     e
                                 ));
+                            debug!("Root node has been updated with id: {}", recorded_node_id);
                             let _ = ast.update_continuation_node_id_and_type(
                                 recorded_node_id,
                                 AstNodeType::I32AstNode,
@@ -83,7 +93,7 @@ pub fn parse_i32_statement_expression(
                                 AstNodeType::I32AstNode,
                                 e
                             ));
-                            parse_i32_statement_expression(i + 1, tokens, ast)
+                            parse_i32_statement_expression(i + 1, tokens, ast, counter + 1)
                         }
                         _ => {
                             panic!(
@@ -140,7 +150,7 @@ pub fn parse_i32_statement_expression(
                                             e
                                         ));
 
-                                    parse_i32_statement_expression(i + 1, tokens, ast)
+                                    parse_i32_statement_expression(i + 1, tokens, ast, counter + 1)
                                 }
                                 AstNodeType::None => {
                                     panic!("we have a cont node, but the type is none")
@@ -196,7 +206,7 @@ pub fn parse_i32_statement_expression(
                                     )
                                 });
 
-                            parse_i32_statement_expression(i + 1, tokens, ast)
+                            parse_i32_statement_expression(i + 1, tokens, ast, counter + 1)
                         }
                         PotatoTokenTypes::OperationAddition => {
                             match previous_processed_node.get_type() {
@@ -236,7 +246,7 @@ pub fn parse_i32_statement_expression(
                                         )
                                     });
 
-                                    parse_i32_statement_expression(i + 1, tokens, ast)
+                                    parse_i32_statement_expression(i + 1, tokens, ast, counter + 1)
                                 }
                                 AstNodeType::InfixOperationAstNode => {
                                     panic!(
@@ -249,7 +259,7 @@ pub fn parse_i32_statement_expression(
                             }
                         }
                         PotatoTokenTypes::SignSemicolon => Ok(ast),
-                        _ => parse_i32_statement_expression(i + 1, tokens, ast),
+                        _ => parse_i32_statement_expression(i + 1, tokens, ast, counter + 1),
                     }
                 }
             }
@@ -281,12 +291,9 @@ mod test {
 
     use crate::ast::ast_tree::MathPotatoAstTree;
     use crate::ast::ast_tree::global::enums::ast_node_types_enum::AstNodeType;
-    use crate::ast::ast_tree::private::infix_node::node::infix_operation_type_enum::InfixOperationTypeEnum;
     use crate::ast::ast_tree::public::get_continuation_node_id_and_type::ContinuationNodeStorageApiGetIdAndType;
     use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_id::GetContinuationNodeIdAndTypeResultGetId;
     use crate::ast::ast_tree::public::get_continuation_node_id_and_type::node::get_type::GetContinuationNodeIdAndTypeResultGetType;
-    use crate::ast::ast_tree::public::get_infix_node_by_id::GetInfixNodeById;
-    use crate::ast::ast_tree::public::get_infix_node_count::GetInfixNodeCount;
     use crate::ast::ast_tree::public::i32_node::get_i32_node_by_id::GetI32NodeById;
     use crate::ast::ast_tree::public::i32_node::get_i32_node_count::GetI32NodeCount;
     use crate::ast::ast_tree::public::root_node::get_root_node_id_and_type::GetRootNodeIdAndType;
@@ -296,6 +303,7 @@ mod test {
     #[ctor]
     fn init_color_backtrace() {
         color_backtrace::install();
+        let _ = env_logger::builder().is_test(true).try_init();
     }
     // #[test]
     // fn addition_and_multiplication_precedence_case() {
@@ -541,8 +549,8 @@ mod test {
         let mut input_ast = MathPotatoAstTree::new();
 
         // action
-        let result =
-            parse_i32_statement_expression(0, lexed_input, &mut input_ast).unwrap_or_else(|r| {
+        let result = parse_i32_statement_expression(0, lexed_input, &mut input_ast, 0)
+            .unwrap_or_else(|r| {
                 panic!(
                     "There is no result!
     {:#?}",

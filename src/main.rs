@@ -14,6 +14,8 @@ pub mod parser;
 
 fn main() {
     color_backtrace::install();
+    env_logger::init();
+
     let tokens: Vec<PotatoToken> = lexing("dummy code");
     let _parsed = parse(tokens);
 }
